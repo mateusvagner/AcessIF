@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">AcessIF</string>
+
+    <string name="no_internet">Your are not connected to the internet</string>
+    <string name="timeout">Request timeout</string>
+    <string name="bad_request">Bad request</string>
+    <string name="unauthorized">The user is unauthorized</string>
+    <string name="not_found">Not found</string>
+    <string name="token_expired">The token has expired</string>
+    <string name="internal_server_error">Internal server error</string>
+    <string name="server_unavailable">The server is unavailable</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="permission_denied">Permission denied</string>
+    <string name="serialization_error">Serialization Error</string>
+    <string name="back_to">Back to %s</string>
+    <string name="previous_screen">Previous screen</string>
+    <string name="close">Close</string>
+</resources>
