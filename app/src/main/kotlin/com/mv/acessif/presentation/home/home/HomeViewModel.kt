@@ -12,9 +12,7 @@ class HomeViewModel(
     private val userName: String,
 ) : ViewModel() {
     @Inject
-    constructor(
-        savedStateHandle: SavedStateHandle,
-    ) : this(
+    constructor(savedStateHandle: SavedStateHandle) : this(
         userName = "Mateus Vagner",
     )
 
