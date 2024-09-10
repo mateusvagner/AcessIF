@@ -90,13 +90,6 @@ fun NavGraphBuilder.signUpScreen(
                 }
             },
         )
-//            rootNavController.navigate(HomeNavGraph) {
-//                rootNavController.currentBackStackEntry?.destination?.route?.let { screenRoute ->
-//                    popUpTo(screenRoute) {
-//                        inclusive = true
-//                    }
-//                }
-//            }
     }
 }
 
