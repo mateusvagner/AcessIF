@@ -11,3 +11,5 @@ val M = 16.dp
 val L = 24.dp
 val XL = 32.dp
 val XXL = 40.dp
+
+val BaseButtonHeight = 56.dp

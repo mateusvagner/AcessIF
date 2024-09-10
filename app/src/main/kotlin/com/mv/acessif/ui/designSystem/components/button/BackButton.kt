@@ -32,7 +32,7 @@ fun BackButton(
             label ?: defaultLabel,
         )
 
-    ButtonComponent(
+    TextButtonComponent(
         modifier = modifier,
         leadingImage = {
             Image(
