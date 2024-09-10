@@ -4,12 +4,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,15 +22,14 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mv.acessif.R
+import com.mv.acessif.ui.designSystem.components.button.common.ButtonContent
 import com.mv.acessif.ui.theme.Black
-import com.mv.acessif.ui.theme.DarkGrey
-import com.mv.acessif.ui.theme.LabelLarge
-import com.mv.acessif.ui.theme.M
+import com.mv.acessif.ui.theme.LightGrey
 import com.mv.acessif.ui.theme.S
 import com.mv.acessif.ui.theme.XS
 
 @Composable
-fun ButtonComponent(
+fun TextButtonComponent(
     modifier: Modifier = Modifier,
     label: String? = null,
     semantics: String,
@@ -52,43 +49,28 @@ fun ButtonComponent(
                 .clip(RoundedCornerShape(percent = 50)),
         onClick = onClick,
     ) {
-        Row(
-            modifier =
-                Modifier
-                    .padding(horizontal = M)
-                    .padding(vertical = S),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(XS),
-        ) {
-            if (leadingImage != null) {
-                leadingImage()
-            }
-
-            if (label != null) {
-                Text(
-                    text = label,
-                    style = LabelLarge,
-                )
-            }
-
-            if (trailingImage != null) {
-                trailingImage()
-            }
-        }
+        ButtonContent(
+            label = label,
+            mainColor = Black,
+            leadingImage = leadingImage,
+            trailingImage = trailingImage,
+            imageSpacing = XS,
+        )
     }
 }
 
 @Composable
 @Preview
-private fun BackComponentPreview() {
+private fun TextButtonComponentPreview() {
     Column(
         modifier =
             Modifier
-                .background(color = DarkGrey)
+                .background(color = LightGrey)
                 .padding(S),
+        horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(S),
     ) {
-        ButtonComponent(
+        TextButtonComponent(
             label = "Back",
             semantics = "Back to previous screen",
             leadingImage = {
@@ -101,7 +83,7 @@ private fun BackComponentPreview() {
             onClick = {},
         )
 
-        ButtonComponent(
+        TextButtonComponent(
             label = "Close",
             semantics = "Close screen",
             trailingImage = {
@@ -114,7 +96,7 @@ private fun BackComponentPreview() {
             onClick = {},
         )
 
-        ButtonComponent(
+        TextButtonComponent(
             semantics = "Close screen",
             trailingImage = {
                 Image(

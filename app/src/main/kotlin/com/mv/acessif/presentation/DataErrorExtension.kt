@@ -4,7 +4,7 @@ import com.mv.acessif.R
 import com.mv.acessif.domain.returnModel.DataError
 import com.mv.acessif.domain.returnModel.Result
 
-private fun DataError.asUiText(): UiText {
+fun DataError.asUiText(): UiText {
     return when (this) {
         is DataError.Network -> {
             when (this) {
