@@ -12,7 +12,28 @@
     <string name="unknown_error">Unknown error</string>
     <string name="permission_denied">Permission denied</string>
     <string name="serialization_error">Serialization Error</string>
+
     <string name="back_to">Back to %s</string>
     <string name="previous_screen">Previous screen</string>
     <string name="close">Close</string>
+
+    <string name="show_password">Show password</string>
+    <string name="hide_password">Hide password</string>
+
+    <string name="sign_in">Sign in</string>
+    <string name="sign_up">Sign up</string>
+
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+
+    <string name="welcome_screen">Welcome Screen</string>
+
+    <string name="name_is_too_short">Name is too short</string>
+    <string name="name_is_required">Name is required</string>
+
+    <string name="email_is_required">Email is required</string>
+    <string name="email_is_invalid">Email is invalid</string>
+
+    <string name="password_is_required">Password is required</string>
 </resources>
