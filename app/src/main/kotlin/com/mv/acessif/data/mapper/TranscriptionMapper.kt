@@ -1,5 +1,6 @@
 package com.mv.acessif.data.mapper
 
+import com.mv.acessif.data.util.DateConverter
 import com.mv.acessif.domain.Transcription
 import com.mv.acessif.network.dto.TranscriptionDto
 
@@ -12,6 +13,7 @@ object TranscriptionMapper {
             segments = SegmentMapper.mapSegmentsDtoToSegments(transcriptionDto.segments),
             summary = SummaryMapper.mapSummaryDtoToSummary(transcriptionDto.summary),
             text = transcriptionDto.text,
+            createdAt = DateConverter.isoStringToDate(transcriptionDto.createdAt),
         )
     }
 

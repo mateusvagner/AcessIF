@@ -12,4 +12,6 @@ data class TranscriptionDto(
     val segments: List<SegmentDto>,
     val summary: SummaryDto? = null,
     val text: String,
+    @SerialName("created_at")
+    val createdAt: String,
 )
