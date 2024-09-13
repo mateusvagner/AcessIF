@@ -48,7 +48,6 @@ fun HomeNavGraph(
     rootNavController: NavHostController,
 ) {
     val navController = rememberNavController()
-
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
     Scaffold(

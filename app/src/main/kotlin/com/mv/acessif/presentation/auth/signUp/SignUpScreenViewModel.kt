@@ -9,6 +9,9 @@ import com.mv.acessif.domain.SignUp
 import com.mv.acessif.domain.returnModel.Result
 import com.mv.acessif.domain.useCase.SignUpUseCase
 import com.mv.acessif.presentation.asErrorUiText
+import com.mv.acessif.presentation.auth.commonState.EmailError
+import com.mv.acessif.presentation.auth.commonState.NameError
+import com.mv.acessif.presentation.auth.commonState.PasswordError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -32,7 +35,7 @@ class SignUpScreenViewModel(
         dispatcher = Dispatchers.IO,
     )
 
-    var signUpScreenState by mutableStateOf(SignUpScreenState())
+    var signupScreenState by mutableStateOf(SignUpScreenState())
         private set
 
     private val _onSignupSuccess = Channel<Unit>()
@@ -40,10 +43,10 @@ class SignUpScreenViewModel(
         _onSignupSuccess.receiveAsFlow().shareIn(viewModelScope, SharingStarted.Lazily)
 
     fun onNameChanged(name: String) {
-        signUpScreenState =
-            signUpScreenState.copy(
+        signupScreenState =
+            signupScreenState.copy(
                 nameTextFieldState =
-                    signUpScreenState.nameTextFieldState.copy(
+                    signupScreenState.nameTextFieldState.copy(
                         value = name,
                         isError = false,
                     ),
@@ -51,10 +54,10 @@ class SignUpScreenViewModel(
     }
 
     fun onEmailChanged(email: String) {
-        signUpScreenState =
-            signUpScreenState.copy(
+        signupScreenState =
+            signupScreenState.copy(
                 emailTextFieldState =
-                    signUpScreenState.emailTextFieldState.copy(
+                    signupScreenState.emailTextFieldState.copy(
                         email = email,
                         isError = false,
                     ),
@@ -62,10 +65,10 @@ class SignUpScreenViewModel(
     }
 
     fun onPasswordChanged(password: String) {
-        signUpScreenState =
-            signUpScreenState.copy(
+        signupScreenState =
+            signupScreenState.copy(
                 passwordTextFieldState =
-                    signUpScreenState.passwordTextFieldState.copy(
+                    signupScreenState.passwordTextFieldState.copy(
                         password = password,
                         isError = false,
                     ),
@@ -73,25 +76,25 @@ class SignUpScreenViewModel(
     }
 
     fun onTogglePasswordVisibility() {
-        signUpScreenState =
-            signUpScreenState.copy(
+        signupScreenState =
+            signupScreenState.copy(
                 passwordTextFieldState =
-                    signUpScreenState.passwordTextFieldState.copy(
-                        isVisible = !signUpScreenState.passwordTextFieldState.isVisible,
+                    signupScreenState.passwordTextFieldState.copy(
+                        isVisible = !signupScreenState.passwordTextFieldState.isVisible,
                     ),
             )
     }
 
-    fun onSignUpPressed() {
-        if (isNameValid(signUpScreenState.nameTextFieldState.value) &&
-            isEmailValid(signUpScreenState.emailTextFieldState.email) &&
-            isPasswordValid(signUpScreenState.passwordTextFieldState.password)
+    fun onSignupPressed() {
+        if (isNameValid(signupScreenState.nameTextFieldState.value) &&
+            isEmailValid(signupScreenState.emailTextFieldState.email) &&
+            isPasswordValid(signupScreenState.passwordTextFieldState.password)
         ) {
             val signupBody =
                 SignUp(
-                    name = signUpScreenState.nameTextFieldState.value,
-                    email = signUpScreenState.emailTextFieldState.email,
-                    password = signUpScreenState.passwordTextFieldState.password,
+                    name = signupScreenState.nameTextFieldState.value,
+                    email = signupScreenState.emailTextFieldState.email,
+                    password = signupScreenState.passwordTextFieldState.password,
                 )
 
             viewModelScope.launch(dispatcher) {
@@ -106,8 +109,8 @@ class SignUpScreenViewModel(
                     }
 
                     is Result.Error -> {
-                        signUpScreenState =
-                            signUpScreenState.copy(
+                        signupScreenState =
+                            signupScreenState.copy(
                                 signUpError = result.asErrorUiText(),
                             )
                     }
@@ -118,10 +121,10 @@ class SignUpScreenViewModel(
 
     private fun isNameValid(name: String): Boolean {
         if (name.isEmpty()) {
-            signUpScreenState =
-                signUpScreenState.copy(
+            signupScreenState =
+                signupScreenState.copy(
                     nameTextFieldState =
-                        signUpScreenState.nameTextFieldState.copy(
+                        signupScreenState.nameTextFieldState.copy(
                             isError = true,
                             nameError = NameError.EMPTY,
                         ),
@@ -130,10 +133,10 @@ class SignUpScreenViewModel(
         }
 
         if (name.length < 3) {
-            signUpScreenState =
-                signUpScreenState.copy(
+            signupScreenState =
+                signupScreenState.copy(
                     nameTextFieldState =
-                        signUpScreenState.nameTextFieldState.copy(
+                        signupScreenState.nameTextFieldState.copy(
                             isError = true,
                             nameError = NameError.SHORT,
                         ),
@@ -146,10 +149,10 @@ class SignUpScreenViewModel(
 
     private fun isEmailValid(email: String): Boolean {
         if (email.isEmpty()) {
-            signUpScreenState =
-                signUpScreenState.copy(
+            signupScreenState =
+                signupScreenState.copy(
                     emailTextFieldState =
-                        signUpScreenState.emailTextFieldState.copy(
+                        signupScreenState.emailTextFieldState.copy(
                             isError = true,
                             emailError = EmailError.EMPTY,
                         ),
@@ -158,10 +161,10 @@ class SignUpScreenViewModel(
         }
 
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            signUpScreenState =
-                signUpScreenState.copy(
+            signupScreenState =
+                signupScreenState.copy(
                     emailTextFieldState =
-                        signUpScreenState.emailTextFieldState.copy(
+                        signupScreenState.emailTextFieldState.copy(
                             isError = true,
                             emailError = EmailError.INVALID,
                         ),
@@ -174,10 +177,10 @@ class SignUpScreenViewModel(
 
     private fun isPasswordValid(password: String): Boolean {
         if (password.isEmpty()) {
-            signUpScreenState =
-                signUpScreenState.copy(
+            signupScreenState =
+                signupScreenState.copy(
                     passwordTextFieldState =
-                        signUpScreenState.passwordTextFieldState.copy(
+                        signupScreenState.passwordTextFieldState.copy(
                             isError = true,
                             passwordError = PasswordError.EMPTY,
                         ),

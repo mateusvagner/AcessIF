@@ -9,7 +9,9 @@ sealed interface SignUpScreenIntent {
 
     data object OnTogglePasswordVisibility : SignUpScreenIntent
 
-    data object OnSignUpPressed : SignUpScreenIntent
+    data object OnSignupPressed : SignUpScreenIntent
 
     data object OnNavigateBack : SignUpScreenIntent
+
+    data object OnTryAgain : SignUpScreenIntent
 }

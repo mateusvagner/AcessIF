@@ -36,4 +36,15 @@
     <string name="email_is_invalid">Email is invalid</string>
 
     <string name="password_is_required">Password is required</string>
+
+    <string name="creating_account">Creating account</string>
+    <string name="signing_in">Signing in</string>
+
+    <string name="an_error">An error</string>
+    <string name="try_again">Try again</string>
+
+    <string name="welcome_to">Welcome to</string>
+
+    <string name="speech_to_text">Speech to text</string>
+    <string name="start_a_transcription">Start a transcription</string>
 </resources>

@@ -1,27 +1,45 @@
 package com.mv.acessif.presentation.root.welcome
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import com.mv.acessif.R
 import com.mv.acessif.presentation.auth.login.LoginScreen
 import com.mv.acessif.presentation.auth.signUp.SignUpScreen
-import com.mv.acessif.presentation.home.home.HomeNavGraph
 import com.mv.acessif.presentation.root.demoTranscription.DemoTranscriptionScreen
+import com.mv.acessif.ui.designSystem.components.button.MainActionButton
+import com.mv.acessif.ui.designSystem.components.button.SecondaryActionButton
+import com.mv.acessif.ui.designSystem.components.button.TertiaryActionButton
+import com.mv.acessif.ui.theme.IconBigSize
+import com.mv.acessif.ui.theme.L
+import com.mv.acessif.ui.theme.NeutralBackground
+import com.mv.acessif.ui.theme.Purple40
+import com.mv.acessif.ui.theme.S
+import com.mv.acessif.ui.theme.TitleLarge
+import com.mv.acessif.ui.theme.XL
+import com.mv.acessif.ui.theme.XXXL
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -32,25 +50,22 @@ fun NavGraphBuilder.welcomeScreen(
     rootNavController: NavHostController,
 ) {
     composable<WelcomeScreen> {
+        val viewModel: WelcomeScreenViewModel = hiltViewModel()
+
         WelcomeScreen(
             modifier = modifier,
-            onNavigateToDemoTranscription = {
-                rootNavController.navigate(DemoTranscriptionScreen)
-            },
-            onNavigateToHome = {
-                rootNavController.navigate(HomeNavGraph) {
-                    rootNavController.currentBackStackEntry?.destination?.route?.let { screenRoute ->
-                        popUpTo(screenRoute) {
-                            inclusive = true
-                        }
+            onIntent = { intent ->
+                when (intent) {
+                    WelcomeScreenIntent.OnTranscriptPressed -> {
+                        rootNavController.navigate(DemoTranscriptionScreen)
+                    }
+                    WelcomeScreenIntent.OnLoginPressed -> {
+                        rootNavController.navigate(LoginScreen)
+                    }
+                    WelcomeScreenIntent.OnSignupPressed -> {
+                        rootNavController.navigate(SignUpScreen)
                     }
                 }
-            },
-            onNavigateToLogin = {
-                rootNavController.navigate(LoginScreen)
-            },
-            onNavigateToSignUp = {
-                rootNavController.navigate(SignUpScreen)
             },
         )
     }
@@ -59,46 +74,89 @@ fun NavGraphBuilder.welcomeScreen(
 @Composable
 fun WelcomeScreen(
     modifier: Modifier = Modifier,
-    onNavigateToDemoTranscription: () -> Unit,
-    onNavigateToHome: () -> Unit,
-    onNavigateToLogin: () -> Unit,
-    onNavigateToSignUp: () -> Unit,
+    onIntent: (WelcomeScreenIntent) -> Unit,
 ) {
     Column(
         modifier =
             modifier
                 .fillMaxSize()
-                .background(Color.LightGray),
-        verticalArrangement = Arrangement.Center,
+                .background(color = NeutralBackground)
+                .padding(vertical = XL),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text(
-            text = "Welcome to AcessIF",
-            style = MaterialTheme.typography.bodyLarge.copy(color = Color.Black),
-        )
+        Row(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = L),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+        ) {
+            Text(
+                text = stringResource(id = R.string.welcome_to),
+                style = TitleLarge,
+            )
 
-        Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.width(S))
 
-        Button(onClick = { onNavigateToDemoTranscription() }) {
-            Text(text = "Demo Transcription")
+            Text(
+                text = stringResource(id = R.string.app_name),
+                style = TitleLarge.copy(fontWeight = FontWeight.Black),
+                color = Purple40,
+            )
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Column(
+            modifier = Modifier.fillMaxSize().weight(1f),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Image(
+                modifier = Modifier.size(IconBigSize),
+                painter = painterResource(id = R.drawable.ic_speech_to_text),
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(color = Purple40),
+            )
 
-        Button(onClick = { onNavigateToHome() }) {
-            Text(text = "Go to Home")
+            Spacer(modifier = Modifier.height(S))
+
+            MainActionButton(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = XL),
+                label = stringResource(id = R.string.start_a_transcription),
+            ) {
+                onIntent(WelcomeScreenIntent.OnTranscriptPressed)
+            }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Column(
+            modifier = Modifier.fillMaxSize().weight(1f),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            TertiaryActionButton(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = XXXL),
+                label = stringResource(id = R.string.sign_in),
+            ) {
+                onIntent(WelcomeScreenIntent.OnLoginPressed)
+            }
 
-        Button(onClick = { onNavigateToLogin() }) {
-            Text(text = "Go to Login")
-        }
+            Spacer(modifier = Modifier.height(L))
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(onClick = { onNavigateToSignUp() }) {
-            Text(text = "Go to Sign Up")
+            SecondaryActionButton(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = XXXL),
+                label = stringResource(id = R.string.sign_up),
+            ) {
+                onIntent(WelcomeScreenIntent.OnLoginPressed)
+            }
         }
     }
 }
@@ -108,9 +166,6 @@ fun WelcomeScreen(
 private fun WelcomeScreenPreview() {
     WelcomeScreen(
         modifier = Modifier,
-        onNavigateToDemoTranscription = {},
-        onNavigateToHome = {},
-        onNavigateToLogin = {},
-        onNavigateToSignUp = {},
+        onIntent = {},
     )
 }
