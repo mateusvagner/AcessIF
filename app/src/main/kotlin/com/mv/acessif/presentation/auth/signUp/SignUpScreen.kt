@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -33,6 +32,7 @@ import com.mv.acessif.ui.designSystem.components.button.MainActionButton
 import com.mv.acessif.ui.designSystem.components.textField.EmailTextField
 import com.mv.acessif.ui.designSystem.components.textField.PasswordTextField
 import com.mv.acessif.ui.designSystem.components.textField.SimpleTextField
+import com.mv.acessif.ui.theme.AcessIFTheme
 import com.mv.acessif.ui.theme.L
 import com.mv.acessif.ui.theme.NeutralBackground
 import com.mv.acessif.ui.theme.XL
@@ -88,7 +88,7 @@ fun NavGraphBuilder.signUpScreen(
                     }
 
                     SignUpScreenIntent.OnTryAgain -> {
-                        viewModel.onSignupPressed()
+                        viewModel.onTryAgain()
                     }
                 }
             },
@@ -208,7 +208,7 @@ fun SignUpScreen(
 @Composable
 @Preview
 private fun SignUpScreenPreview() {
-    Surface {
+    AcessIFTheme {
         SignUpScreen(
             modifier = Modifier,
             screenState = SignUpScreenState(),
@@ -220,7 +220,7 @@ private fun SignUpScreenPreview() {
 @Composable
 @Preview
 private fun SignUpScreenLoadingPreview() {
-    Surface {
+    AcessIFTheme {
         SignUpScreen(
             modifier = Modifier,
             screenState =
@@ -235,7 +235,7 @@ private fun SignUpScreenLoadingPreview() {
 @Composable
 @Preview
 private fun SignUpScreenErrorPreview() {
-    Surface {
+    AcessIFTheme {
         SignUpScreen(
             modifier = Modifier,
             screenState =

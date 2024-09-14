@@ -119,6 +119,14 @@ class SignUpScreenViewModel(
         }
     }
 
+    fun onTryAgain() {
+        signupScreenState =
+            signupScreenState.copy(
+                signUpError = null,
+                isLoading = false,
+            )
+    }
+
     private fun isNameValid(name: String): Boolean {
         if (name.isEmpty()) {
             signupScreenState =
