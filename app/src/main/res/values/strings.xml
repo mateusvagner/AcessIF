@@ -12,6 +12,7 @@
     <string name="unknown_error">Unknown error</string>
     <string name="permission_denied">Permission denied</string>
     <string name="serialization_error">Serialization Error</string>
+    <string name="file_not_found">File not found</string>
 
     <string name="back_to">Back to %s</string>
     <string name="previous_screen">Previous screen</string>
@@ -22,12 +23,14 @@
 
     <string name="sign_in">Sign in</string>
     <string name="sign_up">Sign up</string>
+    <string name="logout">Logout</string>
 
     <string name="name">Name</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
 
     <string name="welcome_screen">Welcome Screen</string>
+    <string name="home_screen">Home Screen</string>
 
     <string name="name_is_too_short">Name is too short</string>
     <string name="name_is_required">Name is required</string>
@@ -47,13 +50,27 @@
 
     <string name="speech_to_text">Speech to text</string>
     <string name="start_a_transcription">Start a transcription</string>
+    <string name="start_a_new_transcription">Start a new transcription</string>
+    <string name="check_my_transcriptions">Check my transcriptions</string>
 
-    <string name="send_audio_file">Send Audio File</string>
     <string name="transcription">Transcription</string>
     <string name="make_transcription">Make Transcription</string>
+
+    <string name="send_audio_file">Send Audio File</string>
     <string name="attach_audio_file">Attach Audio File</string>
     <string name="your_audio_is_been_processed">Your audio is been processed</string>
+
     <string name="semantics_decrease_font_size">Decrease font size</string>
     <string name="semantics_increase_font_size">Increase font size</string>
+
+    <string name="share_transcription">Share transcription</string>
+    <string name="share">Share</string>
+    <string name="transcribe_again">Transcribe again</string>
+
+    <string name="file_picker_error">Error picking file</string>
+
+    <string name="new_transcription">New Transcription</string>
+    <string name="summarize">Summarize</string>
+
 
 </resources>
