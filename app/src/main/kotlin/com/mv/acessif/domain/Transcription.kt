@@ -3,11 +3,11 @@ package com.mv.acessif.domain
 import java.util.Date
 
 data class Transcription(
-    val audioId: Int,
+    val audioId: String? = null,
     val id: Int,
-    val language: String,
+    val language: Language,
     val segments: List<Segment>,
     val summary: Summary? = null,
     val text: String,
-    val createdAt: Date,
+    val createdAt: Date? = null,
 )
