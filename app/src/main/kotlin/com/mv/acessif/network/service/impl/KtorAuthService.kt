@@ -11,6 +11,8 @@ import io.ktor.client.call.body
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.request.url
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
 import javax.inject.Inject
 
 class KtorAuthService
@@ -20,6 +22,7 @@ class KtorAuthService
             return client.post {
                 removeAuthHeader()
                 url(HttpRoutes.LOGIN)
+                contentType(ContentType.Application.Json)
                 setBody(login)
             }.body()
         }
@@ -28,6 +31,7 @@ class KtorAuthService
             return client.post {
                 removeAuthHeader()
                 url(HttpRoutes.SIGN_UP)
+                contentType(ContentType.Application.Json)
                 setBody(signUp)
             }.body()
         }
