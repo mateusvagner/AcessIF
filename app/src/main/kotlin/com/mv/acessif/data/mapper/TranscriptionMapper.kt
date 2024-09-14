@@ -1,5 +1,7 @@
 package com.mv.acessif.data.mapper
 
+import com.mv.acessif.data.util.DateConverter
+import com.mv.acessif.domain.Language
 import com.mv.acessif.domain.Transcription
 import com.mv.acessif.network.dto.TranscriptionDto
 
@@ -8,10 +10,11 @@ object TranscriptionMapper {
         return Transcription(
             audioId = transcriptionDto.audioId,
             id = transcriptionDto.id,
-            language = transcriptionDto.language,
+            language = Language.fromShortName(transcriptionDto.language),
             segments = SegmentMapper.mapSegmentsDtoToSegments(transcriptionDto.segments),
             summary = SummaryMapper.mapSummaryDtoToSummary(transcriptionDto.summary),
             text = transcriptionDto.text,
+            createdAt = transcriptionDto.createdAt?.let { DateConverter.isoStringToDate(it) },
         )
     }
 

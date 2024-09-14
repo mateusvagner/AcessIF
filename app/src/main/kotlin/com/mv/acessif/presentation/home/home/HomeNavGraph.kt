@@ -23,8 +23,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.mv.acessif.presentation.home.transcription.TranscriptionScreen
-import com.mv.acessif.presentation.home.transcription.transcriptionScreen
+import com.mv.acessif.presentation.home.newTranscription.newTranscriptionScreen
+import com.mv.acessif.presentation.home.transcriptions.TranscriptionsScreen
+import com.mv.acessif.presentation.home.transcriptions.transcriptionsScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -48,12 +49,10 @@ fun HomeNavGraph(
     rootNavController: NavHostController,
 ) {
     val navController = rememberNavController()
-
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
     Scaffold(
         modifier = modifier,
-        bottomBar = { BottomNavigationBar(navBackStackEntry, navController) },
     ) { contentPadding ->
         NavHost(
             modifier = Modifier.padding(contentPadding),
@@ -66,7 +65,13 @@ fun HomeNavGraph(
                 rootNavController = rootNavController,
             )
 
-            transcriptionScreen(
+            transcriptionsScreen(
+                modifier = Modifier,
+                navController = navController,
+                rootNavController = rootNavController,
+            )
+
+            newTranscriptionScreen(
                 modifier = Modifier,
                 navController = navController,
                 rootNavController = rootNavController,
@@ -133,6 +138,6 @@ val items =
             title = "Transcription Screen",
             selectedIcon = Icons.Filled.Star,
             unselectedIcon = Icons.Outlined.Star,
-            tab = TranscriptionScreen,
+            tab = TranscriptionsScreen,
         ),
     )

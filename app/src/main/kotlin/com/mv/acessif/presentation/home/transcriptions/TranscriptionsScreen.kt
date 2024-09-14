@@ -1,4 +1,4 @@
-package com.mv.acessif.presentation.home.transcription
+package com.mv.acessif.presentation.home.transcriptions
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -21,14 +21,14 @@ import com.mv.acessif.presentation.home.home.HomeGraphTab
 import kotlinx.serialization.Serializable
 
 @Serializable
-object TranscriptionScreen : HomeGraphTab
+object TranscriptionsScreen : HomeGraphTab
 
-fun NavGraphBuilder.transcriptionScreen(
+fun NavGraphBuilder.transcriptionsScreen(
     modifier: Modifier,
     navController: NavHostController,
     rootNavController: NavHostController,
 ) {
-    composable<TranscriptionScreen> {
+    composable<TranscriptionsScreen> {
         TranscriptionScreen(modifier = modifier)
     }
 }

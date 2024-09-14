@@ -26,7 +26,7 @@ fun CloseButton(
             id = R.string.close,
         )
 
-    ButtonComponent(
+    TextButtonComponent(
         modifier = modifier,
         trailingImage = {
             Image(

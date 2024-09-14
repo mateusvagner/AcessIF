@@ -1,23 +1,30 @@
 package com.mv.acessif.presentation.home.home
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.mv.acessif.data.local.SharedPreferencesManager
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel(
-    private val userName: String,
+class HomeViewModel @Inject constructor(
+    private val sharedPreferencesManager: SharedPreferencesManager
 ) : ViewModel() {
-    @Inject
-    constructor(
-        savedStateHandle: SavedStateHandle,
-    ) : this(
-        userName = "Mateus Vagner",
-    )
 
-    private val _name = MutableStateFlow(userName)
-    val name = _name.asStateFlow()
+    private val _onLogoutSuccess = Channel<Unit>()
+    val onLogoutSuccess =
+        _onLogoutSuccess.receiveAsFlow().shareIn(viewModelScope, SharingStarted.Lazily)
+
+    fun logoutUser() {
+        sharedPreferencesManager.clearAccessToken()
+
+        viewModelScope.launch {
+            _onLogoutSuccess.send(Unit)
+        }
+    }
 }

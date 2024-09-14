@@ -4,7 +4,7 @@ import com.mv.acessif.R
 import com.mv.acessif.domain.returnModel.DataError
 import com.mv.acessif.domain.returnModel.Result
 
-private fun DataError.asUiText(): UiText {
+fun DataError.asUiText(): UiText {
     return when (this) {
         is DataError.Network -> {
             when (this) {
@@ -23,6 +23,7 @@ private fun DataError.asUiText(): UiText {
         is DataError.Local -> {
             when (this) {
                 DataError.Local.PERMISSION_DENIED -> UiText.StringResource(R.string.permission_denied)
+                DataError.Local.FILE_NOT_FOUND -> UiText.StringResource(R.string.file_not_found)
             }
         }
     }
