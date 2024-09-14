@@ -23,6 +23,7 @@ fun DataError.asUiText(): UiText {
         is DataError.Local -> {
             when (this) {
                 DataError.Local.PERMISSION_DENIED -> UiText.StringResource(R.string.permission_denied)
+                DataError.Local.FILE_NOT_FOUND -> UiText.StringResource(R.string.file_not_found)
             }
         }
     }
