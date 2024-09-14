@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -32,6 +31,7 @@ import com.mv.acessif.ui.designSystem.components.ScreenHeader
 import com.mv.acessif.ui.designSystem.components.button.MainActionButton
 import com.mv.acessif.ui.designSystem.components.textField.EmailTextField
 import com.mv.acessif.ui.designSystem.components.textField.PasswordTextField
+import com.mv.acessif.ui.theme.AcessIFTheme
 import com.mv.acessif.ui.theme.L
 import com.mv.acessif.ui.theme.NeutralBackground
 import com.mv.acessif.ui.theme.XL
@@ -65,20 +65,25 @@ fun NavGraphBuilder.loginScreen(
                     is LoginScreenIntent.OnEmailChanged -> {
                         viewModel.onEmailChanged(it.email)
                     }
+
                     is LoginScreenIntent.OnPasswordChanged -> {
                         viewModel.onPasswordChanged(it.password)
                     }
+
                     LoginScreenIntent.OnTogglePasswordVisibility -> {
                         viewModel.onTogglePasswordVisibility()
                     }
+
                     LoginScreenIntent.OnSigninPressed -> {
                         viewModel.onSigninPressed()
                     }
+
                     LoginScreenIntent.OnNavigateBack -> {
                         rootNavController.navigateUp()
                     }
+
                     LoginScreenIntent.OnTryAgain -> {
-                        viewModel.onSigninPressed()
+                        viewModel.onTryAgain()
                     }
                 }
             },
@@ -182,7 +187,7 @@ fun LoginScreen(
 @Composable
 @Preview
 private fun LoginScreenPreview() {
-    Surface {
+    AcessIFTheme {
         LoginScreen(
             modifier = Modifier,
             screenState = LoginScreenState(),
@@ -194,7 +199,7 @@ private fun LoginScreenPreview() {
 @Composable
 @Preview
 private fun LoginScreenLoadingPreview() {
-    Surface {
+    AcessIFTheme {
         LoginScreen(
             modifier = Modifier,
             screenState =
@@ -209,7 +214,7 @@ private fun LoginScreenLoadingPreview() {
 @Composable
 @Preview
 private fun LoginScreenErrorPreview() {
-    Surface {
+    AcessIFTheme {
         LoginScreen(
             modifier = Modifier,
             screenState =
