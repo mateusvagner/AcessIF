@@ -32,10 +32,11 @@ import com.mv.acessif.presentation.root.demoTranscription.DemoTranscriptionScree
 import com.mv.acessif.ui.designSystem.components.button.MainActionButton
 import com.mv.acessif.ui.designSystem.components.button.SecondaryActionButton
 import com.mv.acessif.ui.designSystem.components.button.TertiaryActionButton
+import com.mv.acessif.ui.theme.AcessIFTheme
 import com.mv.acessif.ui.theme.IconBigSize
 import com.mv.acessif.ui.theme.L
+import com.mv.acessif.ui.theme.LightPrimary
 import com.mv.acessif.ui.theme.NeutralBackground
-import com.mv.acessif.ui.theme.Purple40
 import com.mv.acessif.ui.theme.S
 import com.mv.acessif.ui.theme.TitleLarge
 import com.mv.acessif.ui.theme.XL
@@ -102,7 +103,7 @@ fun WelcomeScreen(
             Text(
                 text = stringResource(id = R.string.app_name),
                 style = TitleLarge.copy(fontWeight = FontWeight.Black),
-                color = Purple40,
+                color = LightPrimary,
             )
         }
 
@@ -115,7 +116,7 @@ fun WelcomeScreen(
                 modifier = Modifier.size(IconBigSize),
                 painter = painterResource(id = R.drawable.ic_speech_to_text),
                 contentDescription = null,
-                colorFilter = ColorFilter.tint(color = Purple40),
+                colorFilter = ColorFilter.tint(color = LightPrimary),
             )
 
             Spacer(modifier = Modifier.height(S))
@@ -155,7 +156,7 @@ fun WelcomeScreen(
                         .padding(horizontal = XXXL),
                 label = stringResource(id = R.string.sign_up),
             ) {
-                onIntent(WelcomeScreenIntent.OnLoginPressed)
+                onIntent(WelcomeScreenIntent.OnSignupPressed)
             }
         }
     }
@@ -164,8 +165,10 @@ fun WelcomeScreen(
 @Composable
 @Preview
 private fun WelcomeScreenPreview() {
-    WelcomeScreen(
-        modifier = Modifier,
-        onIntent = {},
-    )
+    AcessIFTheme {
+        WelcomeScreen(
+            modifier = Modifier,
+            onIntent = {},
+        )
+    }
 }
