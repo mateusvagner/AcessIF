@@ -17,7 +17,7 @@ import com.mv.acessif.R
 import com.mv.acessif.ui.designSystem.components.button.common.ButtonContent
 import com.mv.acessif.ui.theme.BaseButtonHeight
 import com.mv.acessif.ui.theme.LightGrey
-import com.mv.acessif.ui.theme.PurpleGrey40
+import com.mv.acessif.ui.theme.LightSecondary
 import com.mv.acessif.ui.theme.S
 
 @Composable
@@ -34,7 +34,7 @@ fun TertiaryActionButton(
         enabled = isEnabled,
         colors =
             ButtonDefaults.buttonColors(
-                containerColor = PurpleGrey40,
+                containerColor = LightSecondary,
             ),
         onClick = onClick,
     ) {

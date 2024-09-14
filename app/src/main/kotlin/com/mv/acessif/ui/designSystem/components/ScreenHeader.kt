@@ -57,7 +57,7 @@ fun ScreenHeader(
         }
 
         Text(
-            modifier = Modifier.padding(S),
+            modifier = Modifier.padding(horizontal = S),
             text = screenTitle,
             style = TitleMedium,
         )
@@ -70,8 +70,7 @@ private fun ScreenHeaderPreview() {
     Column(
         modifier =
             Modifier
-                .background(color = DarkGrey)
-                .padding(S),
+                .background(color = DarkGrey),
     ) {
         ScreenHeader(
             screenTitle = "My Transcriptions",

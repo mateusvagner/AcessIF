@@ -17,7 +17,7 @@ import com.mv.acessif.R
 import com.mv.acessif.ui.designSystem.components.button.common.ButtonContent
 import com.mv.acessif.ui.theme.BaseButtonHeight
 import com.mv.acessif.ui.theme.LightGrey
-import com.mv.acessif.ui.theme.PurpleGrey40
+import com.mv.acessif.ui.theme.LightSecondary
 import com.mv.acessif.ui.theme.S
 
 @Composable
@@ -38,7 +38,7 @@ fun SecondaryActionButton(
 
         ButtonContent(
             label = label,
-            mainColor = PurpleGrey40,
+            mainColor = LightSecondary,
             leadingImage = leadingImage,
             trailingImage = trailingImage,
         )
@@ -70,7 +70,7 @@ private fun SecondaryActionButtonPreview() {
                             id = R.drawable.ic_summarize,
                         ),
                     contentDescription = null,
-                    colorFilter = ColorFilter.tint(color = PurpleGrey40),
+                    colorFilter = ColorFilter.tint(color = LightSecondary),
                 )
             },
             onClick = {},
@@ -85,7 +85,7 @@ private fun SecondaryActionButtonPreview() {
                             id = R.drawable.ic_summarize,
                         ),
                     contentDescription = null,
-                    colorFilter = ColorFilter.tint(color = PurpleGrey40),
+                    colorFilter = ColorFilter.tint(color = LightSecondary),
                 )
             },
             onClick = {},
