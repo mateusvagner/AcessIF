@@ -12,19 +12,20 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(
-    private val sharedPreferencesManager: SharedPreferencesManager
-) : ViewModel() {
+class HomeViewModel
+    @Inject
+    constructor(
+        private val sharedPreferencesManager: SharedPreferencesManager,
+    ) : ViewModel() {
+        private val _onLogoutSuccess = Channel<Unit>()
+        val onLogoutSuccess =
+            _onLogoutSuccess.receiveAsFlow().shareIn(viewModelScope, SharingStarted.Lazily)
 
-    private val _onLogoutSuccess = Channel<Unit>()
-    val onLogoutSuccess =
-        _onLogoutSuccess.receiveAsFlow().shareIn(viewModelScope, SharingStarted.Lazily)
+        fun logoutUser() {
+            sharedPreferencesManager.clearAccessToken()
 
-    fun logoutUser() {
-        sharedPreferencesManager.clearAccessToken()
-
-        viewModelScope.launch {
-            _onLogoutSuccess.send(Unit)
+            viewModelScope.launch {
+                _onLogoutSuccess.send(Unit)
+            }
         }
     }
-}
