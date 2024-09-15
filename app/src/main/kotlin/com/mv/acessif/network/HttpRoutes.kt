@@ -8,7 +8,7 @@ object HttpRoutes {
     const val LOGIN = "signin"
 
     // Transcription
-    const val TRANSCRIPTIONS = "transcription"
+    const val TRANSCRIPTIONS = "transcriptions"
     const val TRANSCRIBE = "transcribe"
 
     // Audio File
