@@ -27,6 +27,18 @@ class TranscriptionRepositoryImpl
             }
         }
 
+        override suspend fun getTranscriptionById(id: Int): Result<Transcription, DataError> {
+            return try {
+                val transcriptionDto = transcriptionService.getTranscriptionById(id)
+                val transcription = TranscriptionMapper.mapTranscriptionDtoToTranscription(transcriptionDto)
+                Result.Success(transcription)
+            } catch (e: Exception) {
+                Result.Error(
+                    ErrorMapper.mapNetworkExceptionToNetworkDataError(e),
+                )
+            }
+        }
+
         override suspend fun postTranscribe(
             file: File,
             isAuthorized: Boolean,
