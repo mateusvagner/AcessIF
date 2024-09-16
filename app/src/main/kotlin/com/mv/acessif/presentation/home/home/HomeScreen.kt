@@ -157,7 +157,7 @@ fun HomeScreen(
             horizontalAlignment = Alignment.End,
         ) {
             TextButtonComponent(
-                leadingImage = {
+                trailingImage = {
                     Image(
                         painter = painterResource(id = R.drawable.ic_logout),
                         colorFilter = ColorFilter.tint(color = Color.Black),
