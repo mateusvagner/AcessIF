@@ -5,5 +5,5 @@ import com.mv.acessif.domain.returnModel.DataError
 import com.mv.acessif.domain.returnModel.Result
 
 interface SummaryRepository {
-    suspend fun summarizeTranscription(transcriptionId: Int): Result<Summary?, DataError>
+    suspend fun summarizeTranscription(transcriptionId: Int): Result<Summary, DataError>
 }
