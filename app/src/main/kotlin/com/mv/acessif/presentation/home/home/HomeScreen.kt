@@ -33,7 +33,6 @@ import com.mv.acessif.ui.designSystem.components.button.SecondaryActionButton
 import com.mv.acessif.ui.designSystem.components.button.TextButtonComponent
 import com.mv.acessif.ui.theme.AcessIFTheme
 import com.mv.acessif.ui.theme.IconBigSize
-import com.mv.acessif.ui.theme.L
 import com.mv.acessif.ui.theme.LightPrimary
 import com.mv.acessif.ui.theme.NeutralBackground
 import com.mv.acessif.ui.theme.S
@@ -52,6 +51,8 @@ fun NavGraphBuilder.homeScreen(
     composable<HomeScreen> {
         val viewModel: HomeViewModel = hiltViewModel()
 
+        val context = navController.context
+
         LaunchedEffect(key1 = Unit) {
             viewModel.onLogoutSuccess.collect {
                 rootNavController.navigate(WelcomeScreen) {
@@ -68,7 +69,11 @@ fun NavGraphBuilder.homeScreen(
             onIntent = { intent ->
                 when (intent) {
                     HomeIntent.OnNewTranscription -> {
-                        navController.navigate(NewTranscriptionScreen)
+                        navController.navigate(
+                            NewTranscriptionScreen(
+                                originScreen = context.getString(R.string.home_screen),
+                            ),
+                        )
                     }
 
                     HomeIntent.OnMyTranscriptions -> {
@@ -81,7 +86,6 @@ fun NavGraphBuilder.homeScreen(
                 }
             },
         )
-
     }
 }
 
@@ -92,21 +96,22 @@ fun HomeScreen(
 ) {
     Column(
         modifier =
-        modifier
-            .fillMaxSize()
-            .background(color = NeutralBackground)
-            .padding(bottom = XL),
+            modifier
+                .fillMaxSize()
+                .background(color = NeutralBackground)
+                .padding(bottom = XL),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         ScreenHeader(
             modifier = Modifier.padding(top = XXXL),
-            screenTitle = stringResource(id = R.string.home_screen)
+            screenTitle = stringResource(id = R.string.home_screen),
         )
 
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .weight(1f),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .weight(1f),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
@@ -121,9 +126,9 @@ fun HomeScreen(
 
             MainActionButton(
                 modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = XL),
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = XL),
                 label = stringResource(id = R.string.start_a_new_transcription),
             ) {
                 onIntent(HomeIntent.OnNewTranscription)
@@ -133,9 +138,9 @@ fun HomeScreen(
 
             SecondaryActionButton(
                 modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = XL),
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = XL),
                 label = stringResource(id = R.string.check_my_transcriptions),
             ) {
                 onIntent(HomeIntent.OnMyTranscriptions)
@@ -143,15 +148,16 @@ fun HomeScreen(
         }
 
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(end = S)
-                .weight(1f),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(end = S)
+                    .weight(1f),
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.End,
         ) {
             TextButtonComponent(
-                leadingImage = {
+                trailingImage = {
                     Image(
                         painter = painterResource(id = R.drawable.ic_logout),
                         colorFilter = ColorFilter.tint(color = Color.Black),
@@ -159,7 +165,7 @@ fun HomeScreen(
                     )
                 },
                 label = stringResource(R.string.logout),
-                semantics = stringResource(R.string.logout)
+                semantics = stringResource(R.string.logout),
             ) {
                 onIntent(HomeIntent.OnLogout)
             }

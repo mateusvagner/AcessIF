@@ -23,6 +23,12 @@ class KtorTranscriptionService
             }.body()
         }
 
+        override suspend fun getTranscriptionById(id: Int): TranscriptionDto {
+            return client.get {
+                url("${HttpRoutes.TRANSCRIPTIONS}/$id")
+            }.body()
+        }
+
         override suspend fun postTranscribe(
             file: File,
             isAuthorized: Boolean,

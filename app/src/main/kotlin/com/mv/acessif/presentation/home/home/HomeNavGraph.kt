@@ -24,6 +24,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.mv.acessif.presentation.home.newTranscription.newTranscriptionScreen
+import com.mv.acessif.presentation.home.transcriptionDetail.transcriptionDetailScreen
 import com.mv.acessif.presentation.home.transcriptions.TranscriptionsScreen
 import com.mv.acessif.presentation.home.transcriptions.transcriptionsScreen
 import kotlinx.serialization.Serializable
@@ -72,6 +73,12 @@ fun HomeNavGraph(
             )
 
             newTranscriptionScreen(
+                modifier = Modifier,
+                navController = navController,
+                rootNavController = rootNavController,
+            )
+
+            transcriptionDetailScreen(
                 modifier = Modifier,
                 navController = navController,
                 rootNavController = rootNavController,

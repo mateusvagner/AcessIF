@@ -8,7 +8,6 @@ import io.ktor.client.engine.android.Android
 import io.ktor.client.plugins.HttpSend
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
-import io.ktor.client.plugins.logging.DEFAULT
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
@@ -43,11 +42,12 @@ object HttpClientFactory {
 //            }
 
             install(Logging) {
-                logger = object : Logger {
-                    override fun log(message: String) {
-                        Log.d("HTTP call: ", message)
+                logger =
+                    object : Logger {
+                        override fun log(message: String) {
+                            Log.d("HTTP call: ", message)
+                        }
                     }
-                }
                 level = LogLevel.ALL
             }
 

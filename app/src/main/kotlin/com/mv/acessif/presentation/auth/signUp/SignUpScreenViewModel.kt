@@ -98,6 +98,11 @@ class SignUpScreenViewModel(
                 )
 
             viewModelScope.launch(dispatcher) {
+                signupScreenState =
+                    signupScreenState.copy(
+                        isLoading = true,
+                    )
+
                 val result =
                     signUpUseCase.execute(
                         signUp = signupBody,
@@ -105,12 +110,19 @@ class SignUpScreenViewModel(
 
                 when (result) {
                     is Result.Success -> {
+                        signupScreenState =
+                            signupScreenState.copy(
+                                isLoading = false,
+                                signUpError = null,
+                            )
+
                         _onSignupSuccess.send(Unit)
                     }
 
                     is Result.Error -> {
                         signupScreenState =
                             signupScreenState.copy(
+                                isLoading = false,
                                 signUpError = result.asErrorUiText(),
                             )
                     }

@@ -45,10 +45,10 @@ class LoginScreenViewModel(
         loginScreenState =
             loginScreenState.copy(
                 emailTextFieldState =
-                    loginScreenState.emailTextFieldState.copy(
-                        email = email,
-                        isError = false,
-                    ),
+                loginScreenState.emailTextFieldState.copy(
+                    email = email,
+                    isError = false,
+                ),
             )
     }
 
@@ -56,10 +56,10 @@ class LoginScreenViewModel(
         loginScreenState =
             loginScreenState.copy(
                 passwordTextFieldState =
-                    loginScreenState.passwordTextFieldState.copy(
-                        password = password,
-                        isError = false,
-                    ),
+                loginScreenState.passwordTextFieldState.copy(
+                    password = password,
+                    isError = false,
+                ),
             )
     }
 
@@ -67,9 +67,9 @@ class LoginScreenViewModel(
         loginScreenState =
             loginScreenState.copy(
                 passwordTextFieldState =
-                    loginScreenState.passwordTextFieldState.copy(
-                        isVisible = !loginScreenState.passwordTextFieldState.isVisible,
-                    ),
+                loginScreenState.passwordTextFieldState.copy(
+                    isVisible = !loginScreenState.passwordTextFieldState.isVisible,
+                ),
             )
     }
 
@@ -84,17 +84,28 @@ class LoginScreenViewModel(
                 )
 
             viewModelScope.launch(dispatcher) {
+                loginScreenState =
+                    loginScreenState.copy(
+                        isLoading = true,
+                    )
                 val result =
                     loginUseCase.execute(login = loginBody)
 
                 when (result) {
                     is Result.Success -> {
+                        loginScreenState =
+                            loginScreenState.copy(
+                                isLoading = false,
+                                signinError = null,
+                            )
+
                         _onSigninSuccess.send(Unit)
                     }
 
                     is Result.Error -> {
                         loginScreenState =
                             loginScreenState.copy(
+                                isLoading = false,
                                 signinError = result.asErrorUiText(),
                             )
                     }
@@ -116,10 +127,10 @@ class LoginScreenViewModel(
             loginScreenState =
                 loginScreenState.copy(
                     emailTextFieldState =
-                        loginScreenState.emailTextFieldState.copy(
-                            isError = true,
-                            emailError = EmailError.EMPTY,
-                        ),
+                    loginScreenState.emailTextFieldState.copy(
+                        isError = true,
+                        emailError = EmailError.EMPTY,
+                    ),
                 )
             return false
         }
@@ -128,10 +139,10 @@ class LoginScreenViewModel(
             loginScreenState =
                 loginScreenState.copy(
                     emailTextFieldState =
-                        loginScreenState.emailTextFieldState.copy(
-                            isError = true,
-                            emailError = EmailError.INVALID,
-                        ),
+                    loginScreenState.emailTextFieldState.copy(
+                        isError = true,
+                        emailError = EmailError.INVALID,
+                    ),
                 )
             return false
         }
@@ -144,10 +155,10 @@ class LoginScreenViewModel(
             loginScreenState =
                 loginScreenState.copy(
                     passwordTextFieldState =
-                        loginScreenState.passwordTextFieldState.copy(
-                            isError = true,
-                            passwordError = PasswordError.EMPTY,
-                        ),
+                    loginScreenState.passwordTextFieldState.copy(
+                        isError = true,
+                        passwordError = PasswordError.EMPTY,
+                    ),
                 )
             return false
         }

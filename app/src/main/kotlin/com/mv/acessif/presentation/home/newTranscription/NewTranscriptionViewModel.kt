@@ -86,4 +86,12 @@ class NewTranscriptionViewModel(
             )
     }
 
+    fun onNewTranscription() {
+        state.value =
+            state.value.copy(
+                isLoading = false,
+                error = null,
+                transcription = null,
+            )
+    }
 }
