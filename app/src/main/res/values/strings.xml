@@ -13,6 +13,7 @@
     <string name="permission_denied">Permission denied</string>
     <string name="serialization_error">Serialization Error</string>
     <string name="file_not_found">File not found</string>
+    <string name="null_pointer_error">Null pointer error</string>
 
     <string name="back_to">Back to %s</string>
     <string name="previous_screen">Previous screen</string>
@@ -63,12 +64,14 @@
     <string name="send_audio_file">Send Audio File</string>
     <string name="attach_audio_file">Attach Audio File</string>
     <string name="your_audio_is_been_processed">Your audio is been processed</string>
-    <string name="your_transcription_is_been_loaded">Your transcription is been loaded</string>
+    <string name="your_transcription_is_being_loaded">Your transcription is being loaded</string>
+    <string name="your_summary_is_being_loaded">Your transcription summary is being loaded</string>
 
     <string name="semantics_decrease_font_size">Decrease font size</string>
     <string name="semantics_increase_font_size">Increase font size</string>
 
     <string name="share_transcription">Share transcription</string>
+    <string name="share_summary">Share summary</string>
     <string name="share">Share</string>
     <string name="transcribe_again">Transcribe again</string>
 
@@ -76,6 +79,8 @@
 
     <string name="new_transcription">New Transcription</string>
     <string name="summarize">Summarize</string>
+    <string name="open_summary">Open Summary</string>
+    <string name="transcription_summary">Transcription Summary</string>
     <string name="your_transcription_is_ready">Your transcription is ready!</string>
     <string name="open_transcription">Open transcription</string>
 
