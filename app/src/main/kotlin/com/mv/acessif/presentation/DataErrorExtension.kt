@@ -24,6 +24,7 @@ fun DataError.asUiText(): UiText {
             when (this) {
                 DataError.Local.PERMISSION_DENIED -> UiText.StringResource(R.string.permission_denied)
                 DataError.Local.FILE_NOT_FOUND -> UiText.StringResource(R.string.file_not_found)
+                DataError.Local.NULL_POINTER -> UiText.StringResource(R.string.null_pointer_error)
             }
         }
     }

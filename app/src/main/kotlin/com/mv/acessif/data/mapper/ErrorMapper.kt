@@ -85,6 +85,8 @@ object ErrorMapper {
 
             is SocketTimeoutException -> DataError.Network.TIMEOUT // TODO Review this
 
+            is NullPointerException -> DataError.Local.NULL_POINTER
+
             else -> DataError.Network.UNKNOWN
 
             // TODO local errors
