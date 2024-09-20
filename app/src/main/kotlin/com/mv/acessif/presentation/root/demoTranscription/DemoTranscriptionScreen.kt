@@ -5,20 +5,14 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,11 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
@@ -46,8 +36,13 @@ import com.mv.acessif.presentation.util.shareTextIntent
 import com.mv.acessif.ui.designSystem.components.ErrorComponent
 import com.mv.acessif.ui.designSystem.components.LoadingComponent
 import com.mv.acessif.ui.designSystem.components.ScreenHeader
+import com.mv.acessif.ui.designSystem.components.button.IncreaseFontButtons
 import com.mv.acessif.ui.designSystem.components.button.MainActionButton
 import com.mv.acessif.ui.designSystem.components.button.TertiaryActionButton
+import com.mv.acessif.ui.designSystem.components.button.TextContainer
+import com.mv.acessif.ui.designSystem.components.button.util.BASE_FONT_SIZE
+import com.mv.acessif.ui.designSystem.components.button.util.MAX_FONT_SIZE
+import com.mv.acessif.ui.designSystem.components.button.util.MIN_FONT_SIZE
 import com.mv.acessif.ui.theme.AcessIFTheme
 import com.mv.acessif.ui.theme.BodyLarge
 import com.mv.acessif.ui.theme.L
@@ -187,75 +182,23 @@ private fun MainContent(
     state: DemoTranscriptionScreenState,
     onIntent: (DemoTranscriptionIntent) -> Unit,
 ) {
-    Column {
-        var fontSize by remember { mutableIntStateOf(16) }
+    Column(
+        modifier = modifier,
+    ) {
+        var fontSize by remember { mutableIntStateOf(BASE_FONT_SIZE) }
 
-        val minFontSize = 12
-        val maxFontSize = 36
-
-        Row(
-            modifier = Modifier.padding(horizontal = XL),
-            horizontalArrangement = Arrangement.End,
-        ) {
-            Spacer(modifier = Modifier.weight(1f))
-
-            val semanticsDecreaseFontSize =
-                stringResource(R.string.semantics_decrease_font_size)
-            val semanticsIncreaseFontSize =
-                stringResource(R.string.semantics_increase_font_size)
-
-            OutlinedButton(
-                modifier =
-                    Modifier
-                        .height(48.dp)
-                        .width(86.dp)
-                        .padding(bottom = S)
-                        .semantics {
-                            contentDescription = semanticsDecreaseFontSize
-                        },
-                onClick = {
-                    fontSize = (fontSize - 1).coerceIn(minFontSize, maxFontSize)
-                },
-                content = {
-                    Text(
-                        text = "A -",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Black,
-                    )
-                },
-            )
-
-            Spacer(modifier = Modifier.width(S))
-
-            OutlinedButton(
-                modifier =
-                    Modifier
-                        .height(48.dp)
-                        .width(86.dp)
-                        .padding(bottom = S)
-                        .semantics {
-                            contentDescription = semanticsIncreaseFontSize
-                        },
-                onClick = {
-                    fontSize = (fontSize + 1).coerceIn(minFontSize, maxFontSize)
-                },
-                content = {
-                    Text(
-                        text = "A +",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Black,
-                    )
-                },
-            )
+        IncreaseFontButtons(
+            fontSize = fontSize,
+            minFontSize = MIN_FONT_SIZE,
+            maxFontSize = MAX_FONT_SIZE,
+        ) { newSize ->
+            fontSize = newSize
         }
 
-        Box(
-            modifier =
-                modifier
-                    .padding(horizontal = L)
-                    .fillMaxSize()
-                    .weight(1f)
-                    .background(color = White, shape = RoundedCornerShape(8.dp)),
+        Spacer(modifier = Modifier.height(S))
+
+        TextContainer(
+            modifier = Modifier.weight(1f),
         ) {
             Text(
                 modifier =

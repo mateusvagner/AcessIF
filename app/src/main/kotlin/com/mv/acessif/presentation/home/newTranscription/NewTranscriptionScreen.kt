@@ -129,10 +129,10 @@ fun NewTranscriptionScreen(
 ) {
     Column(
         modifier =
-        modifier
-            .fillMaxSize()
-            .background(color = NeutralBackground)
-            .padding(bottom = XL),
+            modifier
+                .fillMaxSize()
+                .background(color = NeutralBackground)
+                .padding(bottom = XL),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         ScreenHeader(
@@ -146,9 +146,9 @@ fun NewTranscriptionScreen(
         if (state.transcription == null) {
             MainActionButton(
                 modifier =
-                Modifier
-                    .padding(horizontal = XL)
-                    .fillMaxWidth(),
+                    Modifier
+                        .padding(horizontal = XL)
+                        .fillMaxWidth(),
                 label = stringResource(R.string.attach_audio_file),
                 isEnabled = !state.isLoading,
                 leadingImage = {
@@ -186,9 +186,9 @@ private fun TranscriptionContent(
     } else if (state.isLoading) {
         LoadingComponent(
             modifier =
-            Modifier
-                .padding(horizontal = XL)
-                .fillMaxSize(),
+                Modifier
+                    .padding(horizontal = XL)
+                    .fillMaxSize(),
             label = stringResource(id = R.string.your_audio_is_been_processed),
         )
     } else if (state.transcription != null) {
@@ -217,9 +217,9 @@ private fun MainContent(
 
         MainActionButton(
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(horizontal = XL),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = XL),
             label = stringResource(id = R.string.open_transcription),
         ) {
             onIntent(NewTranscriptionIntent.OnOpenTranscription(state.transcription!!.id))
@@ -229,9 +229,9 @@ private fun MainContent(
 
         SecondaryActionButton(
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(horizontal = XXXL),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = XXXL),
             label = stringResource(id = R.string.summarize),
         ) {
             onIntent(NewTranscriptionIntent.OnSummarizeTranscription(state.transcription!!.id))
@@ -241,9 +241,9 @@ private fun MainContent(
 
         SecondaryActionButton(
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(horizontal = XXXL),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = XXXL),
             label = stringResource(id = R.string.share_transcription),
         ) {
             onIntent(NewTranscriptionIntent.OnShareTranscription)
@@ -253,9 +253,9 @@ private fun MainContent(
 
         TertiaryActionButton(
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(horizontal = XXXL),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = XXXL),
             label = stringResource(id = R.string.make_other_transcription),
         ) {
             onIntent(NewTranscriptionIntent.OnNewTranscription)

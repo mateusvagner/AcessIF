@@ -13,8 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,8 +23,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -45,18 +41,23 @@ import com.mv.acessif.domain.Segment
 import com.mv.acessif.domain.Transcription
 import com.mv.acessif.presentation.UiText
 import com.mv.acessif.presentation.home.newTranscription.NewTranscriptionScreen
+import com.mv.acessif.presentation.home.summary.SummaryScreen
 import com.mv.acessif.presentation.util.shareTextIntent
 import com.mv.acessif.ui.designSystem.components.ErrorComponent
 import com.mv.acessif.ui.designSystem.components.LoadingComponent
 import com.mv.acessif.ui.designSystem.components.ScreenHeader
+import com.mv.acessif.ui.designSystem.components.button.IncreaseFontButtons
 import com.mv.acessif.ui.designSystem.components.button.TertiaryActionButton
+import com.mv.acessif.ui.designSystem.components.button.TextContainer
+import com.mv.acessif.ui.designSystem.components.button.util.BASE_FONT_SIZE
+import com.mv.acessif.ui.designSystem.components.button.util.MAX_FONT_SIZE
+import com.mv.acessif.ui.designSystem.components.button.util.MIN_FONT_SIZE
 import com.mv.acessif.ui.theme.AcessIFTheme
 import com.mv.acessif.ui.theme.DarkSecondary
 import com.mv.acessif.ui.theme.L
 import com.mv.acessif.ui.theme.LightPrimary
 import com.mv.acessif.ui.theme.NeutralBackground
 import com.mv.acessif.ui.theme.S
-import com.mv.acessif.ui.theme.White
 import com.mv.acessif.ui.theme.XL
 import kotlinx.serialization.Serializable
 
@@ -106,7 +107,14 @@ fun NavGraphBuilder.transcriptionDetailScreen(
                     }
 
                     is TranscriptionDetailIntent.OnSummarizeTranscription -> {
-                        // TODO()
+                        val transcriptionId = viewModel.state.value.transcription?.id
+                        if (transcriptionId != null) {
+                            navController.navigate(
+                                SummaryScreen(
+                                    transcriptionId = transcriptionId,
+                                ),
+                            )
+                        }
                     }
 
                     TranscriptionDetailIntent.OnTryAgain -> {
@@ -127,10 +135,10 @@ fun TranscriptionDetailScreen(
 ) {
     Column(
         modifier =
-        modifier
-            .fillMaxSize()
-            .background(color = NeutralBackground)
-            .padding(bottom = XL),
+            modifier
+                .fillMaxSize()
+                .background(color = NeutralBackground)
+                .padding(bottom = XL),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         ScreenHeader(
@@ -150,10 +158,10 @@ fun TranscriptionDetailScreen(
         } else if (state.isLoading) {
             LoadingComponent(
                 modifier =
-                Modifier
-                    .padding(horizontal = XL)
-                    .fillMaxSize(),
-                label = stringResource(id = R.string.your_transcription_is_been_loaded),
+                    Modifier
+                        .padding(horizontal = XL)
+                        .fillMaxSize(),
+                label = stringResource(id = R.string.your_transcription_is_being_loaded),
             )
         } else if (state.transcription != null) {
             TranscriptionContent(
@@ -170,106 +178,56 @@ private fun TranscriptionContent(
     transcription: Transcription,
     onIntent: (TranscriptionDetailIntent) -> Unit,
 ) {
-    Column {
-        var fontSize by remember { mutableIntStateOf(16) }
-
-        val minFontSize = 12
-        val maxFontSize = 36
+    Column(
+        modifier = modifier,
+    ) {
+        var fontSize by remember { mutableIntStateOf(BASE_FONT_SIZE) }
 
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = L)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = L),
         ) {
             // TODO Audio player
             Surface(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(48.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .height(48.dp),
                 color = DarkSecondary,
             ) { Text(text = "Audio Player") }
         }
 
         Spacer(modifier = Modifier.height(L))
 
-        Row(
-            modifier = Modifier.padding(horizontal = XL),
-            horizontalArrangement = Arrangement.End,
-        ) {
-            val semanticsDecreaseFontSize =
-                stringResource(R.string.semantics_decrease_font_size)
-            val semanticsIncreaseFontSize =
-                stringResource(R.string.semantics_increase_font_size)
-
-            Spacer(modifier = Modifier.weight(1f))
-
-            OutlinedButton(
-                modifier =
-                Modifier
-                    .height(48.dp)
-                    .width(86.dp)
-                    .semantics {
-                        contentDescription = semanticsDecreaseFontSize
-                    },
-                onClick = {
-                    fontSize = (fontSize - 1).coerceIn(minFontSize, maxFontSize)
-                },
-                content = {
-                    Text(
-                        text = "A -",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Black,
-                    )
-                },
-            )
-
-            Spacer(modifier = Modifier.width(S))
-
-            OutlinedButton(
-                modifier =
-                Modifier
-                    .height(48.dp)
-                    .width(86.dp)
-                    .semantics {
-                        contentDescription = semanticsIncreaseFontSize
-                    },
-                onClick = {
-                    fontSize = (fontSize + 1).coerceIn(minFontSize, maxFontSize)
-                },
-                content = {
-                    Text(
-                        text = "A +",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Black,
-                    )
-                },
-            )
+        IncreaseFontButtons(
+            fontSize = fontSize,
+            minFontSize = MIN_FONT_SIZE,
+            maxFontSize = MAX_FONT_SIZE,
+        ) { newSize ->
+            fontSize = newSize
         }
 
         Spacer(modifier = Modifier.height(S))
 
-        Box(
-            modifier =
-            modifier
-                .padding(horizontal = L)
-                .fillMaxSize()
-                .weight(1f)
-                .background(color = White, shape = RoundedCornerShape(8.dp)),
+        TextContainer(
+            modifier = Modifier.weight(1f),
         ) {
             LazyColumn(
                 modifier =
-                Modifier
-                    .padding(S),
+                    Modifier
+                        .padding(S),
             ) {
                 items(transcription.segments) { segment ->
                     Text(
                         buildAnnotatedString {
                             withStyle(
                                 style =
-                                SpanStyle(
-                                    fontWeight = FontWeight.Bold,
-                                    color = LightPrimary,
-                                ),
+                                    SpanStyle(
+                                        fontWeight = FontWeight.Bold,
+                                        color = LightPrimary,
+                                    ),
                             ) {
                                 append("[${segment.start} - ${segment.end}] ")
                             }
@@ -287,17 +245,17 @@ private fun TranscriptionContent(
 
         Row(
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(horizontal = XL),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = XL),
             horizontalArrangement = Arrangement.SpaceEvenly,
         ) {
             TertiaryActionButton(
                 modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-                label = stringResource(id = R.string.summarize),
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                label = stringResource(id = if (transcription.summary == null) R.string.summarize else R.string.open_summary),
             ) {
                 onIntent(TranscriptionDetailIntent.OnSummarizeTranscription(transcription.id))
             }
@@ -306,9 +264,9 @@ private fun TranscriptionContent(
 
             TertiaryActionButton(
                 modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
                 label = stringResource(id = R.string.share),
             ) {
                 onIntent(TranscriptionDetailIntent.OnShareTranscription)
@@ -338,10 +296,10 @@ private fun TranscriptionDetailScreenLoadingPreview() {
             modifier = Modifier,
             originScreen = "Home Screen",
             state =
-            TranscriptionDetailScreenState(
-                isLoading = true,
-                error = null,
-            ),
+                TranscriptionDetailScreenState(
+                    isLoading = true,
+                    error = null,
+                ),
             onIntent = {},
         )
     }
@@ -355,10 +313,10 @@ private fun TranscriptionDetailScreenErrorPreview() {
             modifier = Modifier,
             originScreen = "Home Screen",
             state =
-            TranscriptionDetailScreenState(
-                isLoading = false,
-                error = UiText.StringResource(id = R.string.no_internet),
-            ),
+                TranscriptionDetailScreenState(
+                    isLoading = false,
+                    error = UiText.StringResource(id = R.string.no_internet),
+                ),
             onIntent = {},
         )
     }
@@ -367,31 +325,31 @@ private fun TranscriptionDetailScreenErrorPreview() {
 private fun fakeTranscriptionState() =
     TranscriptionDetailScreenState(
         transcription =
-        Transcription(
-            audioId = "audioId.mp3",
-            id = 1,
-            language = Language.PT,
-            text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-            segments =
-            listOf(
-                Segment(
-                    id = 1,
-                    text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-                    start = 0.0F,
-                    end = 1.5F,
-                ),
-                Segment(
-                    id = 2,
-                    text = "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, ",
-                    start = 1.5F,
-                    end = 2.0F,
-                ),
-                Segment(
-                    id = 3,
-                    text = "when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-                    start = 2.0F,
-                    end = 2.5F,
-                ),
+            Transcription(
+                audioId = "audioId.mp3",
+                id = 1,
+                language = Language.PT,
+                text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                segments =
+                    listOf(
+                        Segment(
+                            id = 1,
+                            text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                            start = 0.0F,
+                            end = 1.5F,
+                        ),
+                        Segment(
+                            id = 2,
+                            text = "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, ",
+                            start = 1.5F,
+                            end = 2.0F,
+                        ),
+                        Segment(
+                            id = 3,
+                            text = "when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                            start = 2.0F,
+                            end = 2.5F,
+                        ),
+                    ),
             ),
-        ),
     )
