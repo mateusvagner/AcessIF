@@ -34,6 +34,7 @@
     <string name="home_screen">Home Screen</string>
     <string name="new_transcription_screen">New Transcription Screen</string>
     <string name="my_transcriptions_screen">My Transcriptions Screen</string>
+    <string name="my_transcriptions">My Transcriptions</string>
 
     <string name="name_is_too_short">Name is too short</string>
     <string name="name_is_required">Name is required</string>
@@ -59,12 +60,14 @@
     <string name="transcription">Transcription</string>
     <string name="transcription_detail">Transcription Detail</string>
     <string name="make_transcription">Make Transcription</string>
+    <string name="make_first_transcription">Make your first transcription</string>
     <string name="make_other_transcription">Make other transcription</string>
 
     <string name="send_audio_file">Send Audio File</string>
     <string name="attach_audio_file">Attach Audio File</string>
     <string name="your_audio_is_been_processed">Your audio is been processed</string>
     <string name="your_transcription_is_being_loaded">Your transcription is being loaded</string>
+    <string name="your_transcriptions_are_being_loaded">Your transcriptions are being loaded</string>
     <string name="your_summary_is_being_loaded">Your transcription summary is being loaded</string>
 
     <string name="semantics_decrease_font_size">Decrease font size</string>
@@ -83,6 +86,12 @@
     <string name="transcription_summary">Transcription Summary</string>
     <string name="your_transcription_is_ready">Your transcription is ready!</string>
     <string name="open_transcription">Open transcription</string>
+
+    <string name="you_dont_have_transcriptions">You don\'t have transcriptions yet.</string>
+
+    <string name="open_transcription_from">Open transcription from day %s</string>
+    <string name="unknown_date">Unknown date</string>
+    <string name="unknown_audio_id">Unknown audio id</string>
 
 
 </resources>
