@@ -1,9 +1,9 @@
 package com.mv.acessif.domain.useCase.impl
 
-import com.mv.acessif.data.local.SharedPreferencesManager
-import com.mv.acessif.domain.AccessToken
+import com.mv.acessif.domain.AuthToken
 import com.mv.acessif.domain.SignUp
 import com.mv.acessif.domain.repository.AuthRepository
+import com.mv.acessif.domain.repository.SharedPreferencesRepository
 import com.mv.acessif.domain.returnModel.DataError
 import com.mv.acessif.domain.returnModel.Result
 import com.mv.acessif.domain.useCase.SignUpUseCase
@@ -13,17 +13,34 @@ class SignUpUseCaseImpl
     @Inject
     constructor(
         private val authRepository: AuthRepository,
-        private val sharedPreferencesManager: SharedPreferencesManager,
+        private val sharedPreferencesRepository: SharedPreferencesRepository,
     ) : SignUpUseCase {
-        override suspend fun execute(signUp: SignUp): Result<AccessToken, DataError.Network> {
-            when (val result = authRepository.signUp(signUp)) {
+        override suspend fun execute(signUp: SignUp): Result<Unit, DataError> {
+            return when (val result = authRepository.signUp(signUp)) {
                 is Result.Success -> {
-                    sharedPreferencesManager.saveAccessToken(result.data.accessToken)
-                    return result
+                    handleNetworkSuccess(result)
                 }
 
                 is Result.Error -> {
-                    return result
+                    Result.Error(result.error)
+                }
+            }
+        }
+
+        private fun handleNetworkSuccess(result: Result.Success<AuthToken, DataError.Network>): Result<Unit, DataError> {
+            return when (
+                val localResult =
+                    sharedPreferencesRepository.saveTokens(
+                        result.data.accessToken,
+                        result.data.refreshToken,
+                    )
+            ) {
+                is Result.Success -> {
+                    Result.Success(Unit)
+                }
+
+                is Result.Error -> {
+                    Result.Error(localResult.error)
                 }
             }
         }

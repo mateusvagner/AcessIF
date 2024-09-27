@@ -1,10 +1,9 @@
 package com.mv.acessif.domain.useCase
 
-import com.mv.acessif.domain.AccessToken
 import com.mv.acessif.domain.Login
 import com.mv.acessif.domain.returnModel.DataError
 import com.mv.acessif.domain.returnModel.Result
 
 interface LoginUseCase {
-    suspend fun execute(login: Login): Result<AccessToken, DataError.Network>
+    suspend fun execute(login: Login): Result<Unit, DataError>
 }
