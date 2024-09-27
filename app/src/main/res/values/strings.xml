@@ -14,6 +14,7 @@
     <string name="serialization_error">Serialization Error</string>
     <string name="file_not_found">File not found</string>
     <string name="null_pointer_error">Null pointer error</string>
+    <string name="empty_result_error">Empty result</string>
 
     <string name="back_to">Back to %s</string>
     <string name="previous_screen">Previous screen</string>
