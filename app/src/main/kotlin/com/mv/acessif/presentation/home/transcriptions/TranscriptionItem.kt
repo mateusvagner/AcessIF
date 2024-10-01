@@ -61,7 +61,7 @@ fun TranscriptionItem(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = audioId,
+                text = transcription.name,
                 style = BodyMedium,
             )
             Image(
@@ -82,6 +82,7 @@ private fun TranscriptionItemPreview() {
             transcription =
                 Transcription(
                     audioId = "audioId.mp3",
+                    name = "Lecture Transcription",
                     id = 1,
                     language = Language.PT,
                     createdAt =

@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 data class TranscriptionDto(
     @SerialName("audio_id")
     val audioId: String? = null,
+    val name: String? = null,
     val id: Int,
     val language: String,
     val segments: List<SegmentDto>,

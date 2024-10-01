@@ -286,6 +286,7 @@ private fun fakeTranscriptions() =
             listOf(
                 Transcription(
                     audioId = "audioId_10_10_24.mp3",
+                    name = "Podcast Transcription",
                     id = 1,
                     language = Language.PT,
                     createdAt =
@@ -317,6 +318,7 @@ private fun fakeTranscriptions() =
                 ),
                 Transcription(
                     audioId = "audioId_10_10_24.mp3",
+                    name = "Lecture Transcription",
                     id = 1,
                     language = Language.PT,
                     createdAt =
@@ -351,6 +353,7 @@ private fun fakeTranscriptions() =
             listOf(
                 Transcription(
                     audioId = "audioId_12_10_24.mp3",
+                    name = "audioId_12_10_24.mp3",
                     id = 1,
                     language = Language.PT,
                     createdAt =
@@ -382,6 +385,7 @@ private fun fakeTranscriptions() =
                 ),
                 Transcription(
                     audioId = "audioId_12_10_24.mp3",
+                    name = "audioId_12_10_24.mp3",
                     id = 1,
                     language = Language.PT,
                     createdAt =
@@ -416,6 +420,7 @@ private fun fakeTranscriptions() =
             listOf(
                 Transcription(
                     audioId = "audioId_15_12_24.mp3",
+                    name = "audioId_15_12_24.mp3",
                     id = 1,
                     language = Language.PT,
                     createdAt =

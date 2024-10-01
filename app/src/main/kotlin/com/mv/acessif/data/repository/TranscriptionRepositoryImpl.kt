@@ -6,6 +6,7 @@ import com.mv.acessif.domain.Transcription
 import com.mv.acessif.domain.repository.TranscriptionRepository
 import com.mv.acessif.domain.returnModel.DataError
 import com.mv.acessif.domain.returnModel.Result
+import com.mv.acessif.network.dto.NewNameDto
 import com.mv.acessif.network.service.TranscriptionService
 import java.io.File
 import javax.inject.Inject
@@ -18,7 +19,8 @@ class TranscriptionRepositoryImpl
         override suspend fun getTranscriptions(): Result<List<Transcription>, DataError> {
             return try {
                 val transcriptionsDto = transcriptionService.getTranscriptions()
-                val transcriptions = TranscriptionMapper.mapTranscriptionsDtoToTranscriptions(transcriptionsDto)
+                val transcriptions =
+                    TranscriptionMapper.mapTranscriptionsDtoToTranscriptions(transcriptionsDto)
                 Result.Success(transcriptions)
             } catch (e: Exception) {
                 Result.Error(
@@ -30,7 +32,8 @@ class TranscriptionRepositoryImpl
         override suspend fun getTranscriptionById(id: Int): Result<Transcription, DataError> {
             return try {
                 val transcriptionDto = transcriptionService.getTranscriptionById(id)
-                val transcription = TranscriptionMapper.mapTranscriptionDtoToTranscription(transcriptionDto)
+                val transcription =
+                    TranscriptionMapper.mapTranscriptionDtoToTranscription(transcriptionDto)
                 Result.Success(transcription)
             } catch (e: Exception) {
                 Result.Error(
@@ -39,13 +42,42 @@ class TranscriptionRepositoryImpl
             }
         }
 
-        override suspend fun postTranscribe(
-            file: File,
-            isAuthorized: Boolean,
+        override suspend fun transcribe(file: File): Result<Transcription, DataError> {
+            return try {
+                val transcriptionDto =
+                    transcriptionService.postTranscribe(file = file)
+                val transcription =
+                    TranscriptionMapper.mapTranscriptionDtoToTranscription(transcriptionDto)
+                Result.Success(transcription)
+            } catch (e: Exception) {
+                Result.Error(
+                    ErrorMapper.mapNetworkExceptionToNetworkDataError(e),
+                )
+            }
+        }
+
+        override suspend fun transcribeDemo(file: File): Result<Transcription, DataError> {
+            return try {
+                val transcriptionDto = transcriptionService.postTranscribeDemo(file = file)
+                val transcription =
+                    TranscriptionMapper.mapTranscriptionDtoToTranscription(transcriptionDto)
+                Result.Success(transcription)
+            } catch (e: Exception) {
+                Result.Error(
+                    ErrorMapper.mapNetworkExceptionToNetworkDataError(e),
+                )
+            }
+        }
+
+        override suspend fun updateTranscriptionName(
+            id: Int,
+            name: String,
         ): Result<Transcription, DataError> {
             return try {
-                val transcriptionDto = transcriptionService.postTranscribe(file = file, isAuthorized = isAuthorized)
-                val transcription = TranscriptionMapper.mapTranscriptionDtoToTranscription(transcriptionDto)
+                val newNameDto = NewNameDto(name)
+                val transcriptionDto = transcriptionService.putUpdateTranscriptionName(id, newNameDto)
+                val transcription =
+                    TranscriptionMapper.mapTranscriptionDtoToTranscription(transcriptionDto)
                 Result.Success(transcription)
             } catch (e: Exception) {
                 Result.Error(
