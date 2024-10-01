@@ -18,10 +18,10 @@ class RefreshTokenUseCaseImpl
             return when (val refreshTokenResult = sharedPreferencesRepository.getRefreshToken()) {
                 is Result.Success -> {
                     if (refreshTokenResult.data.isEmpty()) {
-                        return Result.Error(DataError.Local.EMPTY_RESULT)
+                        Result.Error(DataError.Local.EMPTY_RESULT)
+                    } else {
+                        handleRefreshToken(refreshTokenResult.data)
                     }
-
-                    handleRefreshToken(refreshTokenResult.data)
                 }
 
                 is Result.Error -> {

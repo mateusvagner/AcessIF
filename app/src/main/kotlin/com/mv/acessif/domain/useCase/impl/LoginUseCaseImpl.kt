@@ -31,8 +31,8 @@ class LoginUseCaseImpl
             return when (
                 val localResult =
                     sharedPreferencesRepository.saveTokens(
-                        result.data.accessToken,
-                        result.data.refreshToken,
+                        accessToken = result.data.accessToken,
+                        refreshToken = result.data.refreshToken,
                     )
             ) {
                 is Result.Success -> {

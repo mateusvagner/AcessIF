@@ -92,4 +92,12 @@ object ErrorMapper {
             // TODO local errors
         }
     }
+
+    fun mapLocalExceptionToLocalDataError(exception: Exception): DataError.Local {
+        return when (exception) {
+            is NullPointerException -> DataError.Local.NULL_POINTER
+
+            else -> DataError.Local.UNKNOWN
+        }
+    }
 }

@@ -5,9 +5,8 @@ import io.ktor.client.request.header
 import io.ktor.http.HttpHeaders
 
 object HttpUtils {
-    // TODO check this
-    fun HttpRequestBuilder.addOptionalAuthHeader(accessToken: String?) {
-        accessToken?.let {
+    fun HttpRequestBuilder.addOptionalAuthHeader(token: String?) {
+        token?.let {
             header(HttpHeaders.Authorization, "Bearer $it")
         }
     }

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -19,6 +20,7 @@ import com.mv.acessif.ui.theme.S
 fun BackButton(
     modifier: Modifier = Modifier,
     label: String? = null,
+    color: Color = Black,
     onClick: () -> Unit,
 ) {
     val defaultLabel =
@@ -38,9 +40,10 @@ fun BackButton(
             Image(
                 painter = painterResource(id = R.drawable.ic_arrow_back),
                 contentDescription = null,
-                colorFilter = ColorFilter.tint(Black),
+                colorFilter = ColorFilter.tint(color),
             )
         },
+        color = color,
         label = label ?: defaultLabel,
         semantics = buttonContentDescription,
         onClick = onClick,

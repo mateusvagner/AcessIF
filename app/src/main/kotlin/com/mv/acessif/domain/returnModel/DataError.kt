@@ -18,5 +18,7 @@ sealed interface DataError : Error {
         PERMISSION_DENIED,
         FILE_NOT_FOUND,
         NULL_POINTER,
+        EMPTY_RESULT,
+        UNKNOWN,
     }
 }

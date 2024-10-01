@@ -30,6 +30,7 @@ import com.mv.acessif.domain.Language
 import com.mv.acessif.domain.Segment
 import com.mv.acessif.domain.Transcription
 import com.mv.acessif.presentation.UiText
+import com.mv.acessif.presentation.home.summary.SummaryScreen
 import com.mv.acessif.presentation.home.transcriptionDetail.TranscriptionDetailScreen
 import com.mv.acessif.presentation.util.shareTextIntent
 import com.mv.acessif.ui.designSystem.components.ErrorComponent
@@ -40,7 +41,7 @@ import com.mv.acessif.ui.designSystem.components.button.SecondaryActionButton
 import com.mv.acessif.ui.designSystem.components.button.TertiaryActionButton
 import com.mv.acessif.ui.theme.AcessIFTheme
 import com.mv.acessif.ui.theme.L
-import com.mv.acessif.ui.theme.NeutralBackground
+import com.mv.acessif.ui.theme.LightNeutralBackground
 import com.mv.acessif.ui.theme.TitleMedium
 import com.mv.acessif.ui.theme.White
 import com.mv.acessif.ui.theme.XL
@@ -101,7 +102,14 @@ fun NavGraphBuilder.newTranscriptionScreen(
                     }
 
                     is NewTranscriptionIntent.OnSummarizeTranscription -> {
-                        // TODO()
+                        val transcriptionId = viewModel.state.value.transcription?.id
+                        if (transcriptionId != null) {
+                            navController.navigate(
+                                SummaryScreen(
+                                    transcriptionId = transcriptionId,
+                                ),
+                            )
+                        }
                     }
 
                     NewTranscriptionIntent.OnShareTranscription -> {
@@ -131,7 +139,7 @@ fun NewTranscriptionScreen(
         modifier =
             modifier
                 .fillMaxSize()
-                .background(color = NeutralBackground)
+                .background(color = LightNeutralBackground)
                 .padding(bottom = XL),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -180,7 +188,10 @@ private fun TranscriptionContent(
 ) {
     if (state.error != null) {
         ErrorComponent(
-            modifier = modifier.fillMaxSize(),
+            modifier =
+                Modifier
+                    .padding(horizontal = XL)
+                    .fillMaxSize(),
             message = state.error.asString(),
         )
     } else if (state.isLoading) {

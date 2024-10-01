@@ -14,12 +14,12 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import com.mv.acessif.ui.designSystem.components.ScreenHeader
 import com.mv.acessif.ui.theme.BaseScreenPadding
-import com.mv.acessif.ui.theme.NeutralBackground
+import com.mv.acessif.ui.theme.LightNeutralBackground
 
 @Composable
 fun BaseScreenContainer(
     modifier: Modifier = Modifier,
-    backgroundColor: Color = NeutralBackground,
+    backgroundColor: Color = LightNeutralBackground,
     title: String? = null,
     content: @Composable () -> Unit,
 ) {

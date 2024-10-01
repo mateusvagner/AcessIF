@@ -10,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import com.mv.acessif.ui.theme.LabelLarge
-import com.mv.acessif.ui.theme.M
 import com.mv.acessif.ui.theme.S
 
 @Composable
@@ -24,9 +23,7 @@ fun ButtonContent(
 ) {
     Row(
         modifier =
-            modifier
-                .padding(horizontal = M)
-                .padding(vertical = S),
+            modifier.padding(vertical = S),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(imageSpacing),
     ) {

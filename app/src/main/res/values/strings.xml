@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">AcessIF</string>
+    <string name="welcome_user">Welcome %s!</string>
 
     <string name="no_internet">Your are not connected to the internet</string>
     <string name="timeout">Request timeout</string>
@@ -19,6 +20,11 @@
     <string name="back_to">Back to %s</string>
     <string name="previous_screen">Previous screen</string>
     <string name="close">Close</string>
+    <string name="menu">Menu</string>
+    <string name="see_all">See all</string>
+    <string name="see_all_my_transcription">See all my transcriptions</string>
+    <string name="increase_font">Increase font</string>
+    <string name="decrease_font">Decrease font</string>
 
     <string name="show_password">Show password</string>
     <string name="hide_password">Hide password</string>
@@ -66,9 +72,10 @@
 
     <string name="send_audio_file">Send Audio File</string>
     <string name="attach_audio_file">Attach Audio File</string>
+    <string name="attach_another_audio_file">Attach Another Audio File</string>
     <string name="your_audio_is_been_processed">Your audio is been processed</string>
-    <string name="your_transcription_is_being_loaded">Your transcription is being loaded</string>
-    <string name="your_transcriptions_are_being_loaded">Your transcriptions are being loaded</string>
+    <string name="your_transcription_is_being_loaded">Please wait while we load your transcription.</string>
+    <string name="your_transcriptions_are_being_loaded">Please wait while we load your transcriptions.</string>
     <string name="your_summary_is_being_loaded">Your transcription summary is being loaded</string>
 
     <string name="semantics_decrease_font_size">Decrease font size</string>

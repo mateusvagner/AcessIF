@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -31,19 +32,17 @@ import com.mv.acessif.R
 import com.mv.acessif.domain.Summary
 import com.mv.acessif.presentation.UiText
 import com.mv.acessif.presentation.util.shareTextIntent
+import com.mv.acessif.ui.designSystem.components.DefaultScreenHeader
 import com.mv.acessif.ui.designSystem.components.ErrorComponent
 import com.mv.acessif.ui.designSystem.components.LoadingComponent
-import com.mv.acessif.ui.designSystem.components.ScreenHeader
-import com.mv.acessif.ui.designSystem.components.button.IncreaseFontButtons
-import com.mv.acessif.ui.designSystem.components.button.TertiaryActionButton
-import com.mv.acessif.ui.designSystem.components.button.TextContainer
+import com.mv.acessif.ui.designSystem.components.SupportBottomBar
+import com.mv.acessif.ui.designSystem.components.TextContainer
 import com.mv.acessif.ui.designSystem.components.button.util.BASE_FONT_SIZE
 import com.mv.acessif.ui.designSystem.components.button.util.MAX_FONT_SIZE
 import com.mv.acessif.ui.designSystem.components.button.util.MIN_FONT_SIZE
 import com.mv.acessif.ui.theme.AcessIFTheme
 import com.mv.acessif.ui.theme.BodyLarge
 import com.mv.acessif.ui.theme.L
-import com.mv.acessif.ui.theme.NeutralBackground
 import com.mv.acessif.ui.theme.S
 import com.mv.acessif.ui.theme.White
 import com.mv.acessif.ui.theme.XL
@@ -72,9 +71,11 @@ fun NavGraphBuilder.summaryScreen(
                     SummaryIntent.OnNavigateBack -> {
                         navController.navigateUp()
                     }
+
                     SummaryIntent.OnTryAgain -> {
-                        viewModel.getsummary()
+                        viewModel.getSummary()
                     }
+
                     SummaryIntent.OnShareSummary -> {
                         val summaryText = viewModel.state.value.summary?.text
                         if (summaryText != null) {
@@ -97,21 +98,35 @@ fun SummaryScreen(
         modifier =
             modifier
                 .fillMaxSize()
-                .background(color = NeutralBackground)
-                .padding(bottom = XL),
+                .background(color = MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        ScreenHeader(
+        DefaultScreenHeader(
+            modifier =
+                Modifier
+                    .background(color = MaterialTheme.colorScheme.primary),
             origin = stringResource(id = R.string.transcription_detail),
-            screenTitle = stringResource(id = R.string.transcription_summary),
+            supportIcon = {
+                if (state.summary?.text.isNullOrEmpty().not()) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_share),
+                        contentDescription = stringResource(R.string.share_transcription),
+                        colorFilter = ColorFilter.tint(White),
+                    )
+                }
+            },
             onBackPressed = { onIntent(SummaryIntent.OnNavigateBack) },
+            onSupportIconPressed = { onIntent(SummaryIntent.OnShareSummary) },
         )
 
         Spacer(modifier = Modifier.height(L))
 
         if (state.error != null) {
             ErrorComponent(
-                modifier = modifier.fillMaxSize(),
+                modifier =
+                    Modifier
+                        .padding(horizontal = XL)
+                        .fillMaxSize(),
                 message = state.error.asString(),
                 onTryAgain = { onIntent(SummaryIntent.OnTryAgain) },
             )
@@ -125,7 +140,7 @@ fun SummaryScreen(
             )
         } else if (state.summary != null) {
             SummaryContent(
-                modifier = modifier,
+                modifier = Modifier,
                 summary = state.summary,
                 onIntent = onIntent,
             )
@@ -144,16 +159,6 @@ private fun SummaryContent(
     ) {
         var fontSize by remember { mutableIntStateOf(BASE_FONT_SIZE) }
 
-        IncreaseFontButtons(
-            fontSize = fontSize,
-            minFontSize = MIN_FONT_SIZE,
-            maxFontSize = MAX_FONT_SIZE,
-        ) { newSize ->
-            fontSize = newSize
-        }
-
-        Spacer(modifier = Modifier.height(S))
-
         TextContainer(
             modifier = Modifier.weight(1f),
         ) {
@@ -169,23 +174,15 @@ private fun SummaryContent(
 
         Spacer(modifier = Modifier.height(S))
 
-        TertiaryActionButton(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = XL),
-            label = stringResource(id = R.string.share_summary),
-            isEnabled = summary.text.isNotBlank(),
-            leadingImage = {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_share),
-                    contentDescription = null,
-                    colorFilter = ColorFilter.tint(color = White),
-                )
+        SupportBottomBar(
+            modifier = Modifier.fillMaxWidth(),
+            fontSize = fontSize,
+            minFontSize = MIN_FONT_SIZE,
+            maxFontSize = MAX_FONT_SIZE,
+            onSizeChanged = { newSize ->
+                fontSize = newSize
             },
-        ) {
-            onIntent(SummaryIntent.OnShareSummary)
-        }
+        )
     }
 }
 
@@ -203,6 +200,18 @@ private fun SummaryScreenPreview() {
                             text = "Lorem ipsum dolor sit amet, \nconsectetur adipiscing elit sed do \neiusmod tempor incididunt ut labore et dolore magna aliqua.",
                         ),
                 ),
+            onIntent = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun SummaryScreenStartPreview() {
+    AcessIFTheme {
+        SummaryScreen(
+            state =
+                SummaryScreenState(),
             onIntent = {},
         )
     }
