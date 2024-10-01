@@ -61,6 +61,7 @@ dependencies {
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.core.splash)
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
     implementation(libs.bundles.compose)
