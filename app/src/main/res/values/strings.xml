@@ -101,5 +101,9 @@
     <string name="unknown_date">Unknown date</string>
     <string name="unknown_audio_id">Unknown audio id</string>
 
+    <string name="transcribed_at">Transcribed at %s</string>
+    <string name="create_transcription">Create Transcription</string>
+    <string name="create_transcription_instruction">Upload an audio file and start transcribing right away</string>
+    <string name="send_recording">Send recording</string>
 
 </resources>
