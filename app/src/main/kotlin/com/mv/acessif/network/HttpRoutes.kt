@@ -10,6 +10,7 @@ object HttpRoutes {
 
     // Transcription
     const val TRANSCRIPTIONS = "transcriptions"
+    const val LAST_TRANSCRIPTIONS = "last-transcriptions"
     const val TRANSCRIBE = "transcribe"
     const val TRANSCRIBE_DEMO = "transcribe/demo"
 

@@ -29,6 +29,19 @@ class TranscriptionRepositoryImpl
             }
         }
 
+        override suspend fun getLastTranscriptions(): Result<List<Transcription>, DataError> {
+            return try {
+                val transcriptionsDto = transcriptionService.getLastTranscriptions()
+                val transcriptions =
+                    TranscriptionMapper.mapTranscriptionsDtoToTranscriptions(transcriptionsDto)
+                Result.Success(transcriptions)
+            } catch (e: Exception) {
+                Result.Error(
+                    ErrorMapper.mapNetworkExceptionToNetworkDataError(e),
+                )
+            }
+        }
+
         override suspend fun getTranscriptionById(id: Int): Result<Transcription, DataError> {
             return try {
                 val transcriptionDto = transcriptionService.getTranscriptionById(id)

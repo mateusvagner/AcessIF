@@ -1,4 +1,4 @@
-package com.mv.acessif.presentation.home.home
+package com.mv.acessif.presentation.home.home.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,7 +36,7 @@ fun SeeAllButton(
 ) {
     val semantics = stringResource(R.string.see_all_my_transcription)
     Surface(
-        color = Color.Transparent,
+        color = MaterialTheme.colorScheme.background,
         modifier =
             modifier
                 .sizeIn(minHeight = 48.dp)
@@ -56,12 +57,12 @@ fun SeeAllButton(
         ) {
             Text(
                 text = stringResource(R.string.see_all),
-                style = TitleSmall.copy(color = DarkGrey),
+                style = TitleSmall.copy(color = MaterialTheme.colorScheme.onBackground),
             )
 
             Image(
                 painter = painterResource(id = R.drawable.ic_arrow_right_alt),
-                colorFilter = ColorFilter.tint(color = DarkGrey),
+                colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onBackground),
                 contentDescription = null,
             )
         }

@@ -24,6 +24,12 @@ class KtorTranscriptionService
             }.body()
         }
 
+        override suspend fun getLastTranscriptions(): List<TranscriptionDto> {
+            return client.get {
+                url(HttpRoutes.LAST_TRANSCRIPTIONS)
+            }.body()
+        }
+
         override suspend fun getTranscriptionById(id: Int): TranscriptionDto {
             return client.get {
                 url("${HttpRoutes.TRANSCRIPTIONS}/$id")

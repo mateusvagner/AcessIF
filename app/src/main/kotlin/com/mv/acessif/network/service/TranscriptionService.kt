@@ -7,6 +7,8 @@ import java.io.File
 interface TranscriptionService {
     suspend fun getTranscriptions(): List<TranscriptionDto>
 
+    suspend fun getLastTranscriptions(): List<TranscriptionDto>
+
     suspend fun getTranscriptionById(id: Int): TranscriptionDto
 
     suspend fun postTranscribe(file: File): TranscriptionDto
