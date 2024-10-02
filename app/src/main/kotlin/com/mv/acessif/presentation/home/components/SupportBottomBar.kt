@@ -1,4 +1,4 @@
-package com.mv.acessif.ui.designSystem.components
+package com.mv.acessif.presentation.home.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

@@ -17,6 +17,7 @@ ktlintVersion = "12.1.1"
 hiltVersion = "2.51.1"
 hiltNavigationComposeVersion = "1.2.0"
 kspVersion = "1.9.25-1.0.20"
+exoplayerVersion = "1.4.1"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -35,6 +36,9 @@ androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "composeNavigation" }
+
+androidx-media-exoplayer = { group = "androidx.media3", name = "media3-exoplayer", version.ref = "exoplayerVersion" }
+androidx-media-ui = { group = "androidx.media3", name = "media3-ui", version.ref = "exoplayerVersion" }
 
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
@@ -79,4 +83,9 @@ compose = [
     "androidx-ui-tooling-preview",
     "androidx-material3",
     "androidx-navigation-compose"
+]
+
+exoplayer = [
+    "androidx-media-exoplayer",
+    "androidx-media-ui"
 ]

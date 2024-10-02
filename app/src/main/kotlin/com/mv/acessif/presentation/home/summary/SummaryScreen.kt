@@ -31,17 +31,16 @@ import androidx.navigation.compose.composable
 import com.mv.acessif.R
 import com.mv.acessif.domain.Summary
 import com.mv.acessif.presentation.UiText
+import com.mv.acessif.presentation.home.components.SupportBottomBar
+import com.mv.acessif.presentation.home.components.TranscriptionContainer
 import com.mv.acessif.presentation.util.shareTextIntent
 import com.mv.acessif.ui.designSystem.components.DefaultScreenHeader
 import com.mv.acessif.ui.designSystem.components.ErrorComponent
 import com.mv.acessif.ui.designSystem.components.LoadingComponent
-import com.mv.acessif.ui.designSystem.components.SupportBottomBar
-import com.mv.acessif.ui.designSystem.components.TextContainer
 import com.mv.acessif.ui.designSystem.components.button.util.BASE_FONT_SIZE
 import com.mv.acessif.ui.designSystem.components.button.util.MAX_FONT_SIZE
 import com.mv.acessif.ui.designSystem.components.button.util.MIN_FONT_SIZE
 import com.mv.acessif.ui.theme.AcessIFTheme
-import com.mv.acessif.ui.theme.BodyLarge
 import com.mv.acessif.ui.theme.L
 import com.mv.acessif.ui.theme.S
 import com.mv.acessif.ui.theme.White
@@ -142,7 +141,6 @@ fun SummaryScreen(
             SummaryContent(
                 modifier = Modifier,
                 summary = state.summary,
-                onIntent = onIntent,
             )
         }
     }
@@ -152,23 +150,22 @@ fun SummaryScreen(
 private fun SummaryContent(
     modifier: Modifier = Modifier,
     summary: Summary,
-    onIntent: (SummaryIntent) -> Unit,
 ) {
     Column(
         modifier = modifier,
     ) {
         var fontSize by remember { mutableIntStateOf(BASE_FONT_SIZE) }
 
-        TextContainer(
+        TranscriptionContainer(
             modifier = Modifier.weight(1f),
+            name = stringResource(R.string.summary),
         ) {
             Text(
-                modifier =
-                    Modifier
-                        .padding(S)
-                        .verticalScroll(rememberScrollState()),
+                modifier = Modifier.verticalScroll(rememberScrollState()),
                 text = summary.text,
-                style = BodyLarge.copy(fontSize = fontSize.sp, lineHeight = (fontSize * 1.5).sp),
+                color = MaterialTheme.colorScheme.onBackground,
+                fontSize = fontSize.sp,
+                lineHeight = (fontSize * 1.5).sp,
             )
         }
 

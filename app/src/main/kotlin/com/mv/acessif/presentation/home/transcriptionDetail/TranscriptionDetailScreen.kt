@@ -2,36 +2,45 @@ package com.mv.acessif.presentation.home.transcriptionDetail
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.media3.ui.PlayerView
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -41,25 +50,28 @@ import com.mv.acessif.domain.Language
 import com.mv.acessif.domain.Segment
 import com.mv.acessif.domain.Transcription
 import com.mv.acessif.presentation.UiText
+import com.mv.acessif.presentation.home.components.SupportBottomBar
+import com.mv.acessif.presentation.home.components.TranscriptionContainer
 import com.mv.acessif.presentation.home.newTranscription.NewTranscriptionScreen
 import com.mv.acessif.presentation.home.summary.SummaryScreen
+import com.mv.acessif.presentation.util.formatTo
 import com.mv.acessif.presentation.util.shareTextIntent
 import com.mv.acessif.ui.designSystem.components.DefaultScreenHeader
 import com.mv.acessif.ui.designSystem.components.ErrorComponent
 import com.mv.acessif.ui.designSystem.components.LoadingComponent
-import com.mv.acessif.ui.designSystem.components.SupportBottomBar
-import com.mv.acessif.ui.designSystem.components.TextContainer
 import com.mv.acessif.ui.designSystem.components.button.util.BASE_FONT_SIZE
 import com.mv.acessif.ui.designSystem.components.button.util.MAX_FONT_SIZE
 import com.mv.acessif.ui.designSystem.components.button.util.MIN_FONT_SIZE
 import com.mv.acessif.ui.theme.AcessIFTheme
-import com.mv.acessif.ui.theme.DarkSecondary
+import com.mv.acessif.ui.theme.BaseCornerRadius
 import com.mv.acessif.ui.theme.L
-import com.mv.acessif.ui.theme.LightPrimary
+import com.mv.acessif.ui.theme.M
 import com.mv.acessif.ui.theme.S
 import com.mv.acessif.ui.theme.White
 import com.mv.acessif.ui.theme.XL
+import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
+import java.util.Date
 
 @Serializable
 data class TranscriptionDetailScreen(
@@ -77,9 +89,66 @@ fun NavGraphBuilder.transcriptionDetailScreen(
 
         val context = navController.context
 
+        var lifecycle by remember {
+            mutableStateOf(Lifecycle.Event.ON_CREATE)
+        }
+
+        val lifecycleOwner = LocalLifecycleOwner.current
+
+        DisposableEffect(lifecycleOwner) {
+            val observer =
+                LifecycleEventObserver { _, event ->
+                    lifecycle = event
+                }
+
+            lifecycleOwner.lifecycle.addObserver(observer)
+
+            onDispose {
+                lifecycleOwner.lifecycle.removeObserver(observer)
+            }
+        }
+
+        var currentPosition by remember { mutableLongStateOf(0L) }
+
+        LaunchedEffect(key1 = viewModel.player) {
+            while (true) {
+                currentPosition = viewModel.player.currentPosition
+                delay(300)
+            }
+        }
+
         TranscriptionDetailScreen(
             modifier = modifier,
             originScreen = entry.toRoute<TranscriptionDetailScreen>().originScreen,
+            player = {
+                AndroidView(
+                    factory = { context ->
+                        PlayerView(context).also {
+                            it.player = viewModel.player
+                        }
+                    },
+                    update = { playerView ->
+                        when (lifecycle) {
+                            Lifecycle.Event.ON_PAUSE -> {
+                                playerView.onPause()
+                                playerView.player?.pause()
+                            }
+
+                            Lifecycle.Event.ON_RESUME -> {
+                                playerView.onResume()
+                                playerView.player?.play()
+                            }
+
+                            else -> Unit
+                        }
+                    },
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(BaseCornerRadius)),
+                )
+            },
+            playerCurrentPosition = currentPosition,
             state = viewModel.state.value,
             onIntent = { intent ->
                 when (intent) {
@@ -130,6 +199,8 @@ fun NavGraphBuilder.transcriptionDetailScreen(
 fun TranscriptionDetailScreen(
     modifier: Modifier = Modifier,
     originScreen: String,
+    player: @Composable () -> Unit,
+    playerCurrentPosition: Long,
     state: TranscriptionDetailScreenState,
     onIntent: (TranscriptionDetailIntent) -> Unit,
 ) {
@@ -180,6 +251,8 @@ fun TranscriptionDetailScreen(
         } else if (state.transcription != null) {
             TranscriptionContent(
                 transcription = state.transcription,
+                player = player,
+                playerCurrentPosition = playerCurrentPosition,
                 onIntent = onIntent,
             )
         }
@@ -190,6 +263,8 @@ fun TranscriptionDetailScreen(
 private fun TranscriptionContent(
     modifier: Modifier = Modifier,
     transcription: Transcription,
+    player: @Composable () -> Unit,
+    playerCurrentPosition: Long,
     onIntent: (TranscriptionDetailIntent) -> Unit,
 ) {
     Column(
@@ -203,44 +278,42 @@ private fun TranscriptionContent(
                     .fillMaxWidth()
                     .padding(horizontal = L),
         ) {
-            // TODO Audio player
-            Surface(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .height(48.dp),
-                color = DarkSecondary,
-            ) { Text(text = "Audio Player") }
+            player()
         }
 
         Spacer(modifier = Modifier.height(L))
 
-        TextContainer(
+        TranscriptionContainer(
             modifier = Modifier.weight(1f),
+            name = transcription.name,
+            onEditTranscriptionName = {
+                // TODO Edit transcription name
+            },
+            createdAt = transcription.createdAt?.formatTo("dd/MM/yyyy"),
         ) {
-            LazyColumn(
-                modifier =
-                    Modifier
-                        .padding(S),
-            ) {
-                items(transcription.segments) { segment ->
-                    Text(
-                        buildAnnotatedString {
-                            withStyle(
-                                style =
-                                    SpanStyle(
-                                        fontWeight = FontWeight.Bold,
-                                        color = LightPrimary,
-                                    ),
-                            ) {
-                                append("[${segment.start} - ${segment.end}] ")
-                            }
+            val listState = rememberLazyListState()
 
-                            append(segment.text)
-                        },
+            LazyColumn(
+                state = listState,
+                contentPadding = PaddingValues(bottom = L),
+                verticalArrangement = Arrangement.spacedBy(M),
+            ) {
+                itemsIndexed(transcription.segments) { index, segment ->
+                    val isHighlight = playerCurrentPosition.toFloat() in segment.start..segment.end
+
+                    Text(
+                        text = segment.text,
+                        color = MaterialTheme.colorScheme.onBackground,
                         fontSize = fontSize.sp,
                         lineHeight = (fontSize * 1.5).sp,
+                        fontWeight = if (isHighlight) FontWeight.Black else FontWeight.Normal,
                     )
+
+                    if (isHighlight) {
+                        LaunchedEffect(key1 = index) {
+                            listState.animateScrollToItem(index)
+                        }
+                    }
                 }
             }
         }
@@ -274,6 +347,8 @@ private fun TranscriptionDetailScreenPreview() {
         TranscriptionDetailScreen(
             modifier = Modifier,
             originScreen = "Home Screen",
+            player = {},
+            playerCurrentPosition = 1L,
             state = fakeTranscriptionState(),
             onIntent = {},
         )
@@ -287,6 +362,8 @@ private fun TranscriptionDetailScreenStartPreview() {
         TranscriptionDetailScreen(
             modifier = Modifier,
             originScreen = "Home Screen",
+            player = {},
+            playerCurrentPosition = 1L,
             state = TranscriptionDetailScreenState(),
             onIntent = {},
         )
@@ -300,6 +377,8 @@ private fun TranscriptionDetailScreenLoadingPreview() {
         TranscriptionDetailScreen(
             modifier = Modifier,
             originScreen = "Home Screen",
+            player = {},
+            playerCurrentPosition = 1L,
             state =
                 TranscriptionDetailScreenState(
                     isLoading = true,
@@ -317,6 +396,8 @@ private fun TranscriptionDetailScreenErrorPreview() {
         TranscriptionDetailScreen(
             modifier = Modifier,
             originScreen = "Home Screen",
+            player = {},
+            playerCurrentPosition = 1L,
             state =
                 TranscriptionDetailScreenState(
                     isLoading = false,
@@ -333,6 +414,7 @@ private fun fakeTranscriptionState() =
             Transcription(
                 audioId = "audioId.mp3",
                 name = "Transcription Name",
+                createdAt = Date(),
                 id = 1,
                 language = Language.PT,
                 text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",

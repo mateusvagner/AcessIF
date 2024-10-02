@@ -32,6 +32,7 @@
     <string name="sign_in">Sign in</string>
     <string name="sign_up">Sign up</string>
     <string name="logout">Logout</string>
+    <string name="about_us">About Us</string>
 
     <string name="name">Name</string>
     <string name="email">Email</string>
@@ -42,6 +43,7 @@
     <string name="new_transcription_screen">New Transcription Screen</string>
     <string name="my_transcriptions_screen">My Transcriptions Screen</string>
     <string name="my_transcriptions">My Transcriptions</string>
+    <string name="summary">Summary</string>
 
     <string name="name_is_too_short">Name is too short</string>
     <string name="name_is_required">Name is required</string>
@@ -75,6 +77,7 @@
     <string name="attach_another_audio_file">Attach Another Audio File</string>
     <string name="your_audio_is_been_processed">Your audio is been processed</string>
     <string name="your_transcription_is_being_loaded">Please wait while we load your transcription.</string>
+    <string name="your_last_transcription_is_being_loaded">We are loading your last transcriptions.</string>
     <string name="your_transcriptions_are_being_loaded">Please wait while we load your transcriptions.</string>
     <string name="your_summary_is_being_loaded">Your transcription summary is being loaded</string>
 
@@ -105,5 +108,7 @@
     <string name="create_transcription">Create Transcription</string>
     <string name="create_transcription_instruction">Upload an audio file and start transcribing right away</string>
     <string name="send_recording">Send recording</string>
+
+    <string name="edit_transcription_name">Edit Transcription Name</string>
 
 </resources>
