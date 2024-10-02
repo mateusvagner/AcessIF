@@ -14,14 +14,14 @@ class AudioFileRepositoryImpl
     constructor(
         private val audioFileService: AudioFileService,
     ) : AudioFileRepository {
-        override suspend fun getAudioFiles(): Result<List<AudioFile>, DataError> {
+        override suspend fun getAudioFiles(): Result<List<AudioFile>, DataError.Network> {
             return try {
                 val audioFilesDto = audioFileService.getAudioFiles()
                 val audioFile = AudioFileMapper.mapAudioFilesDtoToAudioFiles(audioFilesDto)
                 Result.Success(audioFile)
             } catch (e: Exception) {
                 Result.Error(
-                    ErrorMapper.mapExceptionToDataError(e),
+                    ErrorMapper.mapNetworkExceptionToNetworkDataError(e),
                 )
             }
         }

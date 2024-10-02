@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -14,7 +15,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -36,8 +39,10 @@ fun PasswordTextField(
     isVisible: Boolean,
     isError: Boolean,
     errorMessage: String? = null,
+    focusManager: FocusManager,
     onVisibilityChanged: (Boolean) -> Unit,
     onValueChange: (String) -> Unit,
+    onDone: () -> Unit = {},
 ) {
     Column(
         modifier = modifier,
@@ -83,6 +88,13 @@ fun PasswordTextField(
                     keyboardType = KeyboardType.Password,
                     imeAction = ImeAction.Done,
                 ),
+            keyboardActions =
+                KeyboardActions(
+                    onDone = {
+                        focusManager.clearFocus()
+                        onDone()
+                    },
+                ),
             singleLine = true,
         )
         if (isError && errorMessage != null) {
@@ -98,6 +110,7 @@ fun PasswordTextField(
 @Preview
 @Composable
 private fun PasswordTextFieldPreview() {
+    val focusManager = LocalFocusManager.current
     Column(
         modifier =
             Modifier
@@ -111,6 +124,7 @@ private fun PasswordTextFieldPreview() {
             password = "",
             isVisible = false,
             isError = false,
+            focusManager = focusManager,
             onVisibilityChanged = {},
             onValueChange = {},
         )
@@ -120,6 +134,7 @@ private fun PasswordTextFieldPreview() {
             password = "password",
             isVisible = false,
             isError = false,
+            focusManager = focusManager,
             onVisibilityChanged = {},
             onValueChange = {},
         )
@@ -129,6 +144,7 @@ private fun PasswordTextFieldPreview() {
             password = "password",
             isVisible = true,
             isError = false,
+            focusManager = focusManager,
             onVisibilityChanged = {},
             onValueChange = {},
         )
@@ -139,6 +155,7 @@ private fun PasswordTextFieldPreview() {
             isVisible = false,
             isError = true,
             errorMessage = "Invalid password",
+            focusManager = focusManager,
             onVisibilityChanged = {},
             onValueChange = {},
         )
@@ -149,6 +166,7 @@ private fun PasswordTextFieldPreview() {
             isVisible = true,
             isError = true,
             errorMessage = "Invalid password",
+            focusManager = focusManager,
             onVisibilityChanged = {},
             onValueChange = {},
         )

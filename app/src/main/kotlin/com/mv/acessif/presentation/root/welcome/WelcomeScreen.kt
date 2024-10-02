@@ -28,6 +28,7 @@ import androidx.navigation.compose.composable
 import com.mv.acessif.R
 import com.mv.acessif.presentation.auth.login.LoginScreen
 import com.mv.acessif.presentation.auth.signUp.SignUpScreen
+import com.mv.acessif.presentation.root.RootStartDestination
 import com.mv.acessif.presentation.root.demoTranscription.DemoTranscriptionScreen
 import com.mv.acessif.ui.designSystem.components.button.MainActionButton
 import com.mv.acessif.ui.designSystem.components.button.SecondaryActionButton
@@ -35,8 +36,8 @@ import com.mv.acessif.ui.designSystem.components.button.TertiaryActionButton
 import com.mv.acessif.ui.theme.AcessIFTheme
 import com.mv.acessif.ui.theme.IconBigSize
 import com.mv.acessif.ui.theme.L
+import com.mv.acessif.ui.theme.LightNeutralBackground
 import com.mv.acessif.ui.theme.LightPrimary
-import com.mv.acessif.ui.theme.NeutralBackground
 import com.mv.acessif.ui.theme.S
 import com.mv.acessif.ui.theme.TitleLarge
 import com.mv.acessif.ui.theme.XL
@@ -44,7 +45,7 @@ import com.mv.acessif.ui.theme.XXXL
 import kotlinx.serialization.Serializable
 
 @Serializable
-object WelcomeScreen
+object WelcomeScreen : RootStartDestination
 
 fun NavGraphBuilder.welcomeScreen(
     modifier: Modifier,
@@ -81,7 +82,7 @@ fun WelcomeScreen(
         modifier =
             modifier
                 .fillMaxSize()
-                .background(color = NeutralBackground)
+                .background(color = LightNeutralBackground)
                 .padding(vertical = XL),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {

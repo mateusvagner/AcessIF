@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
@@ -32,6 +31,7 @@ import com.mv.acessif.ui.theme.XS
 fun TextButtonComponent(
     modifier: Modifier = Modifier,
     label: String? = null,
+    color: Color = Black,
     semantics: String,
     leadingImage: (@Composable () -> Unit)? = null,
     trailingImage: (@Composable () -> Unit)? = null,
@@ -51,7 +51,7 @@ fun TextButtonComponent(
     ) {
         ButtonContent(
             label = label,
-            mainColor = Black,
+            mainColor = color,
             leadingImage = leadingImage,
             trailingImage = trailingImage,
             imageSpacing = XS,
@@ -65,8 +65,7 @@ private fun TextButtonComponentPreview() {
     Column(
         modifier =
             Modifier
-                .background(color = LightGrey)
-                .padding(S),
+                .background(color = LightGrey),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(S),
     ) {

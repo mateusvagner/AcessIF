@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">AcessIF</string>
+    <string name="welcome_user">Welcome %s!</string>
 
     <string name="no_internet">Your are not connected to the internet</string>
     <string name="timeout">Request timeout</string>
@@ -13,10 +14,17 @@
     <string name="permission_denied">Permission denied</string>
     <string name="serialization_error">Serialization Error</string>
     <string name="file_not_found">File not found</string>
+    <string name="null_pointer_error">Null pointer error</string>
+    <string name="empty_result_error">Empty result</string>
 
     <string name="back_to">Back to %s</string>
     <string name="previous_screen">Previous screen</string>
     <string name="close">Close</string>
+    <string name="menu">Menu</string>
+    <string name="see_all">See all</string>
+    <string name="see_all_my_transcription">See all my transcriptions</string>
+    <string name="increase_font">Increase font</string>
+    <string name="decrease_font">Decrease font</string>
 
     <string name="show_password">Show password</string>
     <string name="hide_password">Hide password</string>
@@ -33,6 +41,7 @@
     <string name="home_screen">Home Screen</string>
     <string name="new_transcription_screen">New Transcription Screen</string>
     <string name="my_transcriptions_screen">My Transcriptions Screen</string>
+    <string name="my_transcriptions">My Transcriptions</string>
 
     <string name="name_is_too_short">Name is too short</string>
     <string name="name_is_required">Name is required</string>
@@ -58,17 +67,22 @@
     <string name="transcription">Transcription</string>
     <string name="transcription_detail">Transcription Detail</string>
     <string name="make_transcription">Make Transcription</string>
+    <string name="make_first_transcription">Make your first transcription</string>
     <string name="make_other_transcription">Make other transcription</string>
 
     <string name="send_audio_file">Send Audio File</string>
     <string name="attach_audio_file">Attach Audio File</string>
+    <string name="attach_another_audio_file">Attach Another Audio File</string>
     <string name="your_audio_is_been_processed">Your audio is been processed</string>
-    <string name="your_transcription_is_been_loaded">Your transcription is been loaded</string>
+    <string name="your_transcription_is_being_loaded">Please wait while we load your transcription.</string>
+    <string name="your_transcriptions_are_being_loaded">Please wait while we load your transcriptions.</string>
+    <string name="your_summary_is_being_loaded">Your transcription summary is being loaded</string>
 
     <string name="semantics_decrease_font_size">Decrease font size</string>
     <string name="semantics_increase_font_size">Increase font size</string>
 
     <string name="share_transcription">Share transcription</string>
+    <string name="share_summary">Share summary</string>
     <string name="share">Share</string>
     <string name="transcribe_again">Transcribe again</string>
 
@@ -76,8 +90,20 @@
 
     <string name="new_transcription">New Transcription</string>
     <string name="summarize">Summarize</string>
+    <string name="open_summary">Open Summary</string>
+    <string name="transcription_summary">Transcription Summary</string>
     <string name="your_transcription_is_ready">Your transcription is ready!</string>
     <string name="open_transcription">Open transcription</string>
 
+    <string name="you_dont_have_transcriptions">You don\'t have transcriptions yet.</string>
+
+    <string name="open_transcription_from">Open transcription from day %s</string>
+    <string name="unknown_date">Unknown date</string>
+    <string name="unknown_audio_id">Unknown audio id</string>
+
+    <string name="transcribed_at">Transcribed at %s</string>
+    <string name="create_transcription">Create Transcription</string>
+    <string name="create_transcription_instruction">Upload an audio file and start transcribing right away</string>
+    <string name="send_recording">Send recording</string>
 
 </resources>

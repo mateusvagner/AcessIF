@@ -17,6 +17,7 @@ class SharedPreferencesManagerImpl
         companion object {
             private const val PREFS_NAME = "my_prefs"
             private const val ACCESS_TOKEN = "access_token"
+            private const val REFRESH_TOKEN = "refresh_token"
         }
 
         override fun saveAccessToken(token: String) {
@@ -29,5 +30,17 @@ class SharedPreferencesManagerImpl
 
         override fun clearAccessToken() {
             sharedPreferences.edit().remove(ACCESS_TOKEN).apply()
+        }
+
+        override fun saveRefreshToken(token: String) {
+            sharedPreferences.edit().putString(REFRESH_TOKEN, token).apply()
+        }
+
+        override fun getRefreshToken(): String? {
+            return sharedPreferences.getString(REFRESH_TOKEN, null)
+        }
+
+        override fun clearRefreshToken() {
+            sharedPreferences.edit().remove(REFRESH_TOKEN).apply()
         }
     }

@@ -14,14 +14,20 @@ class SummaryRepositoryImpl
     constructor(
         private val summaryService: SummaryService,
     ) : SummaryRepository {
-        override suspend fun summarizeTranscription(transcriptionId: Int): Result<Summary?, DataError> {
+        override suspend fun summarizeTranscription(transcriptionId: Int): Result<Summary, DataError.Network> {
             return try {
                 val summaryDto = summaryService.postSummarize(transcriptionId)
                 val summary = SummaryMapper.mapSummaryDtoToSummary(summaryDto)
-                Result.Success(summary)
+                if (summary == null) {
+                    Result.Error(
+                        ErrorMapper.mapNetworkExceptionToNetworkDataError(NullPointerException("Summary is null")),
+                    )
+                } else {
+                    Result.Success(summary)
+                }
             } catch (e: Exception) {
                 Result.Error(
-                    ErrorMapper.mapExceptionToDataError(e),
+                    ErrorMapper.mapNetworkExceptionToNetworkDataError(e),
                 )
             }
         }

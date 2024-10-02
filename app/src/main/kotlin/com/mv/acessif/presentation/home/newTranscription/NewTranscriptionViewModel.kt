@@ -56,7 +56,7 @@ class NewTranscriptionViewModel(
 
         viewModelScope.launch(dispatcher) {
             val transcriptionResult =
-                transcriptionRepository.postTranscribe(file, isAuthorized = false)
+                transcriptionRepository.transcribe(file)
             when (transcriptionResult) {
                 is Result.Success -> {
                     state.value =

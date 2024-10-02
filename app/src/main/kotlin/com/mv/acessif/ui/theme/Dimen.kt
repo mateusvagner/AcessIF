@@ -17,3 +17,9 @@ val BaseButtonHeight = 56.dp
 
 val ProgressIndicatorSize = 64.dp
 val IconBigSize = 72.dp
+
+val SmallCornerRadius = 4.dp
+val BaseCornerRadius = 8.dp
+val LargeCornerRadius = 16.dp
+
+val ShadowElevation = 2.dp

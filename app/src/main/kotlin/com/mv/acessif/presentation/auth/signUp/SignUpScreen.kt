@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -34,7 +35,7 @@ import com.mv.acessif.ui.designSystem.components.textField.PasswordTextField
 import com.mv.acessif.ui.designSystem.components.textField.SimpleTextField
 import com.mv.acessif.ui.theme.AcessIFTheme
 import com.mv.acessif.ui.theme.L
-import com.mv.acessif.ui.theme.NeutralBackground
+import com.mv.acessif.ui.theme.LightNeutralBackground
 import com.mv.acessif.ui.theme.XL
 import kotlinx.serialization.Serializable
 
@@ -106,7 +107,7 @@ fun SignUpScreen(
         modifier =
             modifier
                 .fillMaxSize()
-                .background(color = NeutralBackground)
+                .background(color = LightNeutralBackground)
                 .padding(bottom = XL),
     ) {
         ScreenHeader(
@@ -131,6 +132,7 @@ fun SignUpScreen(
                 },
             )
         } else {
+            val focusManager = LocalFocusManager.current
             Column(
                 modifier =
                     Modifier
@@ -150,6 +152,7 @@ fun SignUpScreen(
                         } else {
                             null
                         },
+                    focusManager = focusManager,
                 ) {
                     onIntent(SignUpScreenIntent.OnNameChanged(it))
                 }
@@ -166,6 +169,7 @@ fun SignUpScreen(
                         } else {
                             null
                         },
+                    focusManager = focusManager,
                 ) {
                     onIntent(SignUpScreenIntent.OnEmailChanged(it))
                 }
@@ -183,11 +187,15 @@ fun SignUpScreen(
                         } else {
                             null
                         },
+                    focusManager = focusManager,
                     onVisibilityChanged = {
                         onIntent(SignUpScreenIntent.OnTogglePasswordVisibility)
                     },
                     onValueChange = {
                         onIntent(SignUpScreenIntent.OnPasswordChanged(it))
+                    },
+                    onDone = {
+                        onIntent(SignUpScreenIntent.OnSignupPressed)
                     },
                 )
 

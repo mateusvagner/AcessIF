@@ -30,6 +30,7 @@ import com.mv.acessif.domain.Language
 import com.mv.acessif.domain.Segment
 import com.mv.acessif.domain.Transcription
 import com.mv.acessif.presentation.UiText
+import com.mv.acessif.presentation.home.summary.SummaryScreen
 import com.mv.acessif.presentation.home.transcriptionDetail.TranscriptionDetailScreen
 import com.mv.acessif.presentation.util.shareTextIntent
 import com.mv.acessif.ui.designSystem.components.ErrorComponent
@@ -40,7 +41,7 @@ import com.mv.acessif.ui.designSystem.components.button.SecondaryActionButton
 import com.mv.acessif.ui.designSystem.components.button.TertiaryActionButton
 import com.mv.acessif.ui.theme.AcessIFTheme
 import com.mv.acessif.ui.theme.L
-import com.mv.acessif.ui.theme.NeutralBackground
+import com.mv.acessif.ui.theme.LightNeutralBackground
 import com.mv.acessif.ui.theme.TitleMedium
 import com.mv.acessif.ui.theme.White
 import com.mv.acessif.ui.theme.XL
@@ -101,7 +102,14 @@ fun NavGraphBuilder.newTranscriptionScreen(
                     }
 
                     is NewTranscriptionIntent.OnSummarizeTranscription -> {
-                        // TODO()
+                        val transcriptionId = viewModel.state.value.transcription?.id
+                        if (transcriptionId != null) {
+                            navController.navigate(
+                                SummaryScreen(
+                                    transcriptionId = transcriptionId,
+                                ),
+                            )
+                        }
                     }
 
                     NewTranscriptionIntent.OnShareTranscription -> {
@@ -129,10 +137,10 @@ fun NewTranscriptionScreen(
 ) {
     Column(
         modifier =
-        modifier
-            .fillMaxSize()
-            .background(color = NeutralBackground)
-            .padding(bottom = XL),
+            modifier
+                .fillMaxSize()
+                .background(color = LightNeutralBackground)
+                .padding(bottom = XL),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         ScreenHeader(
@@ -146,9 +154,9 @@ fun NewTranscriptionScreen(
         if (state.transcription == null) {
             MainActionButton(
                 modifier =
-                Modifier
-                    .padding(horizontal = XL)
-                    .fillMaxWidth(),
+                    Modifier
+                        .padding(horizontal = XL)
+                        .fillMaxWidth(),
                 label = stringResource(R.string.attach_audio_file),
                 isEnabled = !state.isLoading,
                 leadingImage = {
@@ -180,15 +188,18 @@ private fun TranscriptionContent(
 ) {
     if (state.error != null) {
         ErrorComponent(
-            modifier = modifier.fillMaxSize(),
+            modifier =
+                Modifier
+                    .padding(horizontal = XL)
+                    .fillMaxSize(),
             message = state.error.asString(),
         )
     } else if (state.isLoading) {
         LoadingComponent(
             modifier =
-            Modifier
-                .padding(horizontal = XL)
-                .fillMaxSize(),
+                Modifier
+                    .padding(horizontal = XL)
+                    .fillMaxSize(),
             label = stringResource(id = R.string.your_audio_is_been_processed),
         )
     } else if (state.transcription != null) {
@@ -217,9 +228,9 @@ private fun MainContent(
 
         MainActionButton(
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(horizontal = XL),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = XL),
             label = stringResource(id = R.string.open_transcription),
         ) {
             onIntent(NewTranscriptionIntent.OnOpenTranscription(state.transcription!!.id))
@@ -229,9 +240,9 @@ private fun MainContent(
 
         SecondaryActionButton(
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(horizontal = XXXL),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = XXXL),
             label = stringResource(id = R.string.summarize),
         ) {
             onIntent(NewTranscriptionIntent.OnSummarizeTranscription(state.transcription!!.id))
@@ -241,9 +252,9 @@ private fun MainContent(
 
         SecondaryActionButton(
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(horizontal = XXXL),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = XXXL),
             label = stringResource(id = R.string.share_transcription),
         ) {
             onIntent(NewTranscriptionIntent.OnShareTranscription)
@@ -253,9 +264,9 @@ private fun MainContent(
 
         TertiaryActionButton(
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(horizontal = XXXL),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = XXXL),
             label = stringResource(id = R.string.make_other_transcription),
         ) {
             onIntent(NewTranscriptionIntent.OnNewTranscription)
@@ -328,6 +339,7 @@ private fun fakeTranscriptionState() =
         transcription =
             Transcription(
                 audioId = "audioId.mp3",
+                name = "Transcription Name",
                 id = 1,
                 language = Language.PT,
                 text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",

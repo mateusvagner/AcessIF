@@ -6,10 +6,13 @@ object HttpRoutes {
     // Auth
     const val SIGN_UP = "signup"
     const val LOGIN = "signin"
+    const val REFRESH_TOKEN = "refresh"
 
     // Transcription
     const val TRANSCRIPTIONS = "transcriptions"
+    const val LAST_TRANSCRIPTIONS = "last-transcriptions"
     const val TRANSCRIBE = "transcribe"
+    const val TRANSCRIBE_DEMO = "transcribe/demo"
 
     // Audio File
     const val AUDIO_FILES = "audio-files"

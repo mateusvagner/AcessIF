@@ -8,10 +8,16 @@ import java.io.File
 interface TranscriptionRepository {
     suspend fun getTranscriptions(): Result<List<Transcription>, DataError>
 
+    suspend fun getLastTranscriptions(): Result<List<Transcription>, DataError>
+
     suspend fun getTranscriptionById(id: Int): Result<Transcription, DataError>
 
-    suspend fun postTranscribe(
-        file: File,
-        isAuthorized: Boolean = true,
+    suspend fun transcribe(file: File): Result<Transcription, DataError>
+
+    suspend fun transcribeDemo(file: File): Result<Transcription, DataError>
+
+    suspend fun updateTranscriptionName(
+        id: Int,
+        name: String,
     ): Result<Transcription, DataError>
 }

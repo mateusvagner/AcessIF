@@ -9,6 +9,7 @@ object TranscriptionMapper {
     fun mapTranscriptionDtoToTranscription(transcriptionDto: TranscriptionDto): Transcription {
         return Transcription(
             audioId = transcriptionDto.audioId,
+            name = transcriptionDto.name.orEmpty(),
             id = transcriptionDto.id,
             language = Language.fromShortName(transcriptionDto.language),
             segments = SegmentMapper.mapSegmentsDtoToSegments(transcriptionDto.segments),

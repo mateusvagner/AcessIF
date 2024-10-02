@@ -85,9 +85,19 @@ object ErrorMapper {
 
             is SocketTimeoutException -> DataError.Network.TIMEOUT // TODO Review this
 
+            is NullPointerException -> DataError.Local.NULL_POINTER
+
             else -> DataError.Network.UNKNOWN
 
             // TODO local errors
+        }
+    }
+
+    fun mapLocalExceptionToLocalDataError(exception: Exception): DataError.Local {
+        return when (exception) {
+            is NullPointerException -> DataError.Local.NULL_POINTER
+
+            else -> DataError.Local.UNKNOWN
         }
     }
 }
