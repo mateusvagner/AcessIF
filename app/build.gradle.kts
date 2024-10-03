@@ -70,6 +70,8 @@ dependencies {
 
     implementation(libs.bundles.ktor)
 
+    implementation(libs.bundles.exoplayer)
+
     implementation(libs.dagger.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
     ksp(libs.dagger.hilt.android.compiler)

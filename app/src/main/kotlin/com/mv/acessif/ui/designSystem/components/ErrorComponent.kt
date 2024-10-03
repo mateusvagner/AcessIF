@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -13,15 +14,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.mv.acessif.R
 import com.mv.acessif.ui.designSystem.components.button.SecondaryActionButton
 import com.mv.acessif.ui.theme.AcessIFTheme
-import com.mv.acessif.ui.theme.Black
-import com.mv.acessif.ui.theme.BodyMedium
+import com.mv.acessif.ui.theme.BodyLarge
 import com.mv.acessif.ui.theme.IconBigSize
 import com.mv.acessif.ui.theme.LightGrey
-import com.mv.acessif.ui.theme.LightPrimary
 import com.mv.acessif.ui.theme.M
 import com.mv.acessif.ui.theme.S
 
@@ -39,15 +39,16 @@ fun ErrorComponent(
         Image(
             modifier = Modifier.size(IconBigSize),
             painter = painterResource(id = R.drawable.ic_error),
-            colorFilter = ColorFilter.tint(LightPrimary),
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
             contentDescription = stringResource(id = R.string.an_error),
         )
 
         Text(
             modifier = Modifier.padding(M),
             text = message,
-            style = BodyMedium,
-            color = Black,
+            textAlign = TextAlign.Center,
+            style = BodyLarge,
+            color = MaterialTheme.colorScheme.onBackground,
         )
 
         if (onTryAgain != null) {

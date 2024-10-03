@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -37,7 +38,6 @@ import com.mv.acessif.ui.theme.AcessIFTheme
 import com.mv.acessif.ui.theme.Black
 import com.mv.acessif.ui.theme.BodyMedium
 import com.mv.acessif.ui.theme.L
-import com.mv.acessif.ui.theme.LightNeutralBackground
 import com.mv.acessif.ui.theme.M
 import com.mv.acessif.ui.theme.S
 import com.mv.acessif.ui.theme.XL
@@ -99,7 +99,7 @@ fun TranscriptionsScreen(
         modifier =
             modifier
                 .fillMaxSize()
-                .background(color = LightNeutralBackground)
+                .background(color = MaterialTheme.colorScheme.background)
                 .padding(bottom = XL),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {

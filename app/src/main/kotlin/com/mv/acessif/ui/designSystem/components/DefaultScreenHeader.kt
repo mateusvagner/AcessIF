@@ -92,6 +92,7 @@ private fun DefaultScreenHeaderPreview() {
             modifier =
                 Modifier
                     .background(color = DarkGrey),
+            verticalArrangement = Arrangement.spacedBy(S),
         ) {
             DefaultScreenHeader(
                 screenTitle = "My Transcriptions",
