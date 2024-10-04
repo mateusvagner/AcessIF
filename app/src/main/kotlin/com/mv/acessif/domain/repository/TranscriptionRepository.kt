@@ -14,10 +14,14 @@ interface TranscriptionRepository {
 
     suspend fun transcribe(file: File): Result<Transcription, DataError>
 
+    suspend fun transcribeId(file: File): Result<Int, DataError>
+
     suspend fun transcribeDemo(file: File): Result<Transcription, DataError>
 
     suspend fun updateTranscriptionName(
         id: Int,
         name: String,
     ): Result<Transcription, DataError>
+
+    fun getAudioUrl(audioId: String): String
 }

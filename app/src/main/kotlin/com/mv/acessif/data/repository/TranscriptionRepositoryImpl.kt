@@ -69,6 +69,17 @@ class TranscriptionRepositoryImpl
             }
         }
 
+        override suspend fun transcribeId(file: File): Result<Int, DataError> {
+            try {
+                val transcriptionIdDto = transcriptionService.postTranscribeId(file = file)
+                return Result.Success(transcriptionIdDto.id)
+            } catch (e: Exception) {
+                return Result.Error(
+                    ErrorMapper.mapNetworkExceptionToNetworkDataError(e),
+                )
+            }
+        }
+
         override suspend fun transcribeDemo(file: File): Result<Transcription, DataError> {
             return try {
                 val transcriptionDto = transcriptionService.postTranscribeDemo(file = file)
@@ -87,8 +98,11 @@ class TranscriptionRepositoryImpl
             name: String,
         ): Result<Transcription, DataError> {
             return try {
-                val newNameDto = NewNameDto(name)
-                val transcriptionDto = transcriptionService.putUpdateTranscriptionName(id, newNameDto)
+                val transcriptionDto =
+                    transcriptionService.putUpdateTranscriptionName(
+                        id = id,
+                        name = NewNameDto(name = name),
+                    )
                 val transcription =
                     TranscriptionMapper.mapTranscriptionDtoToTranscription(transcriptionDto)
                 Result.Success(transcription)
@@ -97,5 +111,9 @@ class TranscriptionRepositoryImpl
                     ErrorMapper.mapNetworkExceptionToNetworkDataError(e),
                 )
             }
+        }
+
+        override fun getAudioUrl(audioId: String): String {
+            return transcriptionService.getAudioUrl(audioId)
         }
     }
