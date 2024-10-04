@@ -46,7 +46,7 @@ fun TranscriptionCard(
         onClick = { onTranscriptionClick(transcription) },
     ) {
         Column(
-            modifier = Modifier.padding(M).width(200.dp).height(180.dp),
+            modifier = Modifier.padding(M).width(180.dp).height(164.dp),
         ) {
             Text(
                 text = transcription.name,

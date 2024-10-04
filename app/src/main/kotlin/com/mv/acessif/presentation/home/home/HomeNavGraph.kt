@@ -25,8 +25,11 @@ fun NavGraphBuilder.homeNavGraph(
     rootNavController: NavHostController,
 ) {
     composable<HomeNavGraph> {
+        val navController = rememberNavController()
+
         HomeNavGraph(
             modifier = modifier,
+            navController = navController,
             rootNavController = rootNavController,
         )
     }
@@ -35,47 +38,41 @@ fun NavGraphBuilder.homeNavGraph(
 @Composable
 fun HomeNavGraph(
     modifier: Modifier,
+    navController: NavHostController,
     rootNavController: NavHostController,
 ) {
-    val navController = rememberNavController()
-
-    Scaffold(
-        modifier = modifier,
-    ) { contentPadding ->
-        NavHost(
-            modifier = Modifier.padding(contentPadding),
-            startDestination = HomeScreen,
+    NavHost(
+        startDestination = HomeScreen,
+        navController = navController,
+    ) {
+        homeScreen(
+            modifier = modifier,
             navController = navController,
-        ) {
-            homeScreen(
-                modifier = Modifier,
-                navController = navController,
-                rootNavController = rootNavController,
-            )
+            rootNavController = rootNavController,
+        )
 
-            transcriptionsScreen(
-                modifier = Modifier,
-                navController = navController,
-                rootNavController = rootNavController,
-            )
+        transcriptionsScreen(
+            modifier = modifier,
+            navController = navController,
+            rootNavController = rootNavController,
+        )
 
-            newTranscriptionScreen(
-                modifier = Modifier,
-                navController = navController,
-                rootNavController = rootNavController,
-            )
+        newTranscriptionScreen(
+            modifier = modifier,
+            navController = navController,
+            rootNavController = rootNavController,
+        )
 
-            transcriptionDetailScreen(
-                modifier = Modifier,
-                navController = navController,
-                rootNavController = rootNavController,
-            )
+        transcriptionDetailScreen(
+            modifier = modifier,
+            navController = navController,
+            rootNavController = rootNavController,
+        )
 
-            summaryScreen(
-                modifier = Modifier,
-                navController = navController,
-                rootNavController = rootNavController,
-            )
-        }
+        summaryScreen(
+            modifier = modifier,
+            navController = navController,
+            rootNavController = rootNavController,
+        )
     }
 }

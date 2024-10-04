@@ -36,7 +36,7 @@ class MainViewModel(
 
     private fun checkRefreshToken() {
         isLoading.value = true
-        viewModelScope.launch(dispatcher) {
+        viewModelScope.launch {
             when (refreshTokenUseCase.execute()) {
                 is Result.Success -> {
                     isLoggedIn.value = true

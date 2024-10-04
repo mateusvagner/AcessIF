@@ -83,7 +83,7 @@ class LoginScreenViewModel(
                     password = loginScreenState.passwordTextFieldState.password,
                 )
 
-            viewModelScope.launch(dispatcher) {
+            viewModelScope.launch {
                 loginScreenState =
                     loginScreenState.copy(
                         isLoading = true,

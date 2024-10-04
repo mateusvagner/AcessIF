@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import javax.inject.Inject
 
@@ -38,31 +39,32 @@ class HomeViewModel(
         dispatcher = Dispatchers.IO,
     )
 
+    sealed interface HomeEvent {
+        data object OnLogout : HomeEvent
+        data class OnTranscriptionDone(val id: Int) : HomeEvent
+    }
+
     var state = mutableStateOf(HomeScreenState())
         private set
 
-    private val _onLogoutSuccess = Channel<Unit>()
-    val onLogoutSuccess =
-        _onLogoutSuccess.receiveAsFlow().shareIn(viewModelScope, SharingStarted.Lazily)
-
-    private val _onTranscriptionSuccess = Channel<Int>()
-    val onTranscriptionSuccess =
-        _onTranscriptionSuccess.receiveAsFlow().shareIn(viewModelScope, SharingStarted.Lazily)
+    private val _onEventSuccess = Channel<HomeEvent>()
+    val onEventSuccess =
+        _onEventSuccess.receiveAsFlow().shareIn(viewModelScope, SharingStarted.Lazily)
 
     init {
         getLastTranscriptions()
     }
 
     private fun getLastTranscriptions() {
-        viewModelScope.launch(dispatcher) {
+        viewModelScope.launch {
             state.value =
                 state.value.copy(
                     transcriptionsSectionState =
-                        TranscriptionsSectionState(
-                            isLoading = true,
-                            error = null,
-                            transcriptions = emptyList(),
-                        ),
+                    state.value.transcriptionsSectionState.copy(
+                        isLoading = true,
+                        error = null,
+                        transcriptions = emptyList()
+                    ),
                 )
 
             when (val transcriptionsResult = transcriptionRepository.getLastTranscriptions()) {
@@ -70,23 +72,24 @@ class HomeViewModel(
                     state.value =
                         state.value.copy(
                             transcriptionsSectionState =
-                                TranscriptionsSectionState(
-                                    isLoading = false,
-                                    error = null,
-                                    transcriptions = transcriptionsResult.data,
-                                ),
+                            state.value.transcriptionsSectionState.copy(
+                                isLoading = false,
+                                error = null,
+                                transcriptions = transcriptionsResult.data,
+                            ),
                         )
+
                 }
 
                 is Result.Error -> {
                     state.value =
                         state.value.copy(
                             transcriptionsSectionState =
-                                TranscriptionsSectionState(
-                                    isLoading = false,
-                                    error = transcriptionsResult.error.asUiText(),
-                                    transcriptions = emptyList(),
-                                ),
+                            state.value.transcriptionsSectionState.copy(
+                                isLoading = false,
+                                error = transcriptionsResult.error.asUiText(),
+                                transcriptions = emptyList(),
+                            ),
                         )
                 }
             }
@@ -114,15 +117,20 @@ class HomeViewModel(
                 errorTranscription = null,
             )
 
-        viewModelScope.launch(dispatcher) {
-            when (val transcriptionResult = transcriptionRepository.transcribe(file)) {
+        viewModelScope.launch {
+            when (val transcriptionResult = transcriptionRepository.transcribeId(file)) {
                 is Result.Success -> {
                     state.value =
                         state.value.copy(
                             isLoadingTranscription = false,
                             errorTranscription = null,
                         )
-                    _onTranscriptionSuccess.send(transcriptionResult.data.id)
+
+                    withContext(Dispatchers.Main) {
+                        _onEventSuccess.send(
+                            HomeEvent.OnTranscriptionDone(transcriptionResult.data)
+                        )
+                    }
                 }
 
                 is Result.Error -> {
@@ -148,7 +156,7 @@ class HomeViewModel(
         sharedPreferencesRepository.clearTokens()
 
         viewModelScope.launch {
-            _onLogoutSuccess.send(Unit)
+            _onEventSuccess.send(HomeEvent.OnLogout)
         }
     }
 }

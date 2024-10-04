@@ -13,6 +13,7 @@ import com.mv.acessif.presentation.asUiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -40,7 +41,6 @@ class TranscriptionDetailViewModel(
 
     init {
         getTranscriptionDetail()
-        player.prepare()
     }
 
     override fun onCleared() {
@@ -49,7 +49,7 @@ class TranscriptionDetailViewModel(
     }
 
     private fun getTranscriptionDetail() {
-        viewModelScope.launch(dispatcher) {
+        viewModelScope.launch {
             state.value =
                 state.value.copy(
                     isLoading = true,
@@ -67,7 +67,12 @@ class TranscriptionDetailViewModel(
                             isLoading = false,
                             transcription = transcriptionDetailResult.data,
                         )
-                    setupMediaItem()
+                    val audioUrl =
+                        transcriptionRepository.getAudioUrl(
+                            transcriptionDetailResult.data.audioId.orEmpty()
+                        )
+
+                    setupPlayer(audioUrl)
                 }
 
                 is Result.Error -> {
@@ -81,12 +86,34 @@ class TranscriptionDetailViewModel(
         }
     }
 
-    private fun setupMediaItem() {
-        val mediaItem = state.value.transcription?.audioId?.let { MediaItem.fromUri(it) }
-        if (mediaItem != null) {
+    private fun setupPlayer(audioUrl: String) {
+        if (audioUrl.isEmpty()) {
+            return
+        }
+
+        val mediaItem = MediaItem.fromUri(audioUrl)
+
+        viewModelScope.launch(Dispatchers.Main) {
             player.setMediaItem(mediaItem)
+            player.prepare()
+        }
+
+        startTrackingCurrentPosition()
+    }
+
+    private fun startTrackingCurrentPosition() {
+        viewModelScope.launch { // Por que player falha aqui?
+            while (true) {
+                state.value =
+                    state.value.copy(
+                        currentPosition = player.currentPosition.toFloat() / 1000,
+                    )
+
+                delay(500)
+            }
         }
     }
+
 
     fun onTryAgainClicked() {
         getTranscriptionDetail()

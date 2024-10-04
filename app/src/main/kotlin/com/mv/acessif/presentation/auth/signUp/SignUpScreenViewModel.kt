@@ -97,7 +97,7 @@ class SignUpScreenViewModel(
                     password = signupScreenState.passwordTextFieldState.password,
                 )
 
-            viewModelScope.launch(dispatcher) {
+            viewModelScope.launch {
                 signupScreenState =
                     signupScreenState.copy(
                         isLoading = true,

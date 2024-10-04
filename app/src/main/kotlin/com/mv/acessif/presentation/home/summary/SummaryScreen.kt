@@ -161,15 +161,13 @@ private fun SummaryContent(
             name = stringResource(R.string.summary),
         ) {
             Text(
-                modifier = Modifier.verticalScroll(rememberScrollState()),
+                modifier = Modifier.verticalScroll(rememberScrollState()).padding(horizontal = L),
                 text = summary.text,
                 color = MaterialTheme.colorScheme.onBackground,
                 fontSize = fontSize.sp,
                 lineHeight = (fontSize * 1.5).sp,
             )
         }
-
-        Spacer(modifier = Modifier.height(S))
 
         SupportBottomBar(
             modifier = Modifier.fillMaxWidth(),

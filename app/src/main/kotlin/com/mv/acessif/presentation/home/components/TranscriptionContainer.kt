@@ -39,11 +39,12 @@ fun TranscriptionContainer(
         modifier =
             modifier
                 .fillMaxSize()
-                .background(color = MaterialTheme.colorScheme.background)
-                .padding(horizontal = L),
+                .background(color = MaterialTheme.colorScheme.background),
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = L),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
@@ -68,6 +69,7 @@ fun TranscriptionContainer(
 
         createdAt?.let {
             Text(
+                modifier = Modifier.padding(start = L),
                 text = stringResource(R.string.transcribed_at, it),
                 style = BodyMedium,
                 color = MaterialTheme.colorScheme.onBackground,
