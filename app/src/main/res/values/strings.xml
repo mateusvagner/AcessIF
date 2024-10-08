@@ -39,6 +39,7 @@
     <string name="password">Password</string>
 
     <string name="welcome_screen">Welcome Screen</string>
+    <string name="welcome">Welcome!</string>
     <string name="home_screen">Home Screen</string>
     <string name="new_transcription_screen">New Transcription Screen</string>
     <string name="my_transcriptions_screen">My Transcriptions Screen</string>
@@ -80,6 +81,7 @@
     <string name="your_last_transcription_is_being_loaded">We are loading your last transcriptions.</string>
     <string name="your_transcriptions_are_being_loaded">Please wait while we load your transcriptions.</string>
     <string name="your_summary_is_being_loaded">Your transcription summary is being loaded</string>
+    <string name="your_transcription_is_being_deleting">Please wait while we process your deletion request.</string>
 
     <string name="semantics_decrease_font_size">Decrease font size</string>
     <string name="semantics_increase_font_size">Increase font size</string>
@@ -110,5 +112,14 @@
     <string name="send_recording">Send recording</string>
 
     <string name="edit_transcription_name">Edit Transcription Name</string>
+    <string name="new_transcription_name">New Transcription Name</string>
+    <string name="save_transcription_name">Save Transcription New Name</string>
+    <string name="delete_transcription">Delete Transcription</string>
+
+    <string name="dont_have_account">Don\'t have account yet?</string>
+    <string name="sign_up_here">Sign up here</string>
+
+    <string name="signin_and_do_more">Signin and do more!</string>
+    <string name="signin_and_do_more_instruction">Signin to access your transcription history and create smart summaries!</string>
 
 </resources>
