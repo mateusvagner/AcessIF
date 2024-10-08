@@ -21,7 +21,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -41,6 +40,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.ui.PlayerControlView
 import androidx.navigation.NavGraphBuilder
@@ -68,11 +68,8 @@ import com.mv.acessif.ui.theme.AcessIFTheme
 import com.mv.acessif.ui.theme.BaseCornerRadius
 import com.mv.acessif.ui.theme.L
 import com.mv.acessif.ui.theme.M
-import com.mv.acessif.ui.theme.S
-import com.mv.acessif.ui.theme.SmallCornerRadius
 import com.mv.acessif.ui.theme.White
 import com.mv.acessif.ui.theme.XL
-import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
 import java.util.Date
 
@@ -90,6 +87,7 @@ fun NavGraphBuilder.transcriptionDetailScreen(
 ) {
     composable<TranscriptionDetailScreen> { entry ->
         val viewModel: TranscriptionDetailViewModel = hiltViewModel()
+        val state by viewModel.state.collectAsStateWithLifecycle()
 
         val context = navController.context
 
@@ -142,7 +140,7 @@ fun NavGraphBuilder.transcriptionDetailScreen(
                             .clip(RoundedCornerShape(BaseCornerRadius)),
                 )
             },
-            state = viewModel.state.value,
+            state = state,
             onIntent = { intent ->
                 when (intent) {
                     TranscriptionDetailIntent.OnNavigateBack -> {
@@ -162,14 +160,14 @@ fun NavGraphBuilder.transcriptionDetailScreen(
                     }
 
                     TranscriptionDetailIntent.OnShareTranscription -> {
-                        val transcriptionPlainText = viewModel.state.value.transcription?.text
+                        val transcriptionPlainText = state.transcription?.text
                         if (transcriptionPlainText != null) {
                             context.shareTextIntent(transcriptionPlainText)
                         }
                     }
 
                     is TranscriptionDetailIntent.OnSummarizeTranscription -> {
-                        val transcriptionId = viewModel.state.value.transcription?.id
+                        val transcriptionId = state.transcription?.id
                         if (transcriptionId != null) {
                             navController.navigate(
                                 SummaryScreen(
@@ -181,6 +179,10 @@ fun NavGraphBuilder.transcriptionDetailScreen(
 
                     TranscriptionDetailIntent.OnTryAgain -> {
                         viewModel.onTryAgainClicked()
+                    }
+
+                    is TranscriptionDetailIntent.OnTranscriptionNameEdited -> {
+                        viewModel.onNewTranscriptionName(intent.newName)
                     }
                 }
             },

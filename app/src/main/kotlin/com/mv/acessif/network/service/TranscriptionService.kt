@@ -24,4 +24,6 @@ interface TranscriptionService {
     ): TranscriptionDto
 
     fun getAudioUrl(audioId: String): String
+
+    suspend fun deleteTranscription(id: Int): Unit
 }

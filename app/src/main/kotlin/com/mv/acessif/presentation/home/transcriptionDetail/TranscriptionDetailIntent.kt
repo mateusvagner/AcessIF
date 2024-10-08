@@ -10,4 +10,6 @@ sealed interface TranscriptionDetailIntent {
     data object OnTryAgain : TranscriptionDetailIntent
 
     data class OnSummarizeTranscription(val transcriptionId: Int) : TranscriptionDetailIntent
+
+    data class OnTranscriptionNameEdited(val newName: String) : TranscriptionDetailIntent
 }

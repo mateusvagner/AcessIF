@@ -1,6 +1,5 @@
 package com.mv.acessif.presentation.home.transcriptions
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mv.acessif.domain.repository.TranscriptionRepository
@@ -10,7 +9,10 @@ import com.mv.acessif.presentation.util.groupByFormattedDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,38 +28,76 @@ class TranscriptionsViewModel(
         dispatcher = Dispatchers.IO,
     )
 
-    var state = mutableStateOf(TranscriptionsScreenState())
-        private set
+    private val _state = MutableStateFlow(TranscriptionsScreenState())
+    val state = _state.asStateFlow()
 
     init {
         getTranscriptions()
     }
 
     fun getTranscriptions() {
-        viewModelScope.launch(dispatcher) {
-            state.value =
-                state.value.copy(
+        viewModelScope.launch {
+            _state.value =
+                _state.value.copy(
                     isLoading = true,
                     error = null,
                     transcriptions = emptyMap(),
+                    isDeletingTranscription = false,
                 )
 
-            when (val transcriptionsResult = transcriptionRepository.getTranscriptions()) {
+            val transcriptionsResult =
+                withContext(dispatcher) {
+                    transcriptionRepository.getTranscriptions()
+                }
+
+            when (transcriptionsResult) {
                 is Result.Success -> {
-                    state.value =
-                        state.value.copy(
+                    _state.value =
+                        _state.value.copy(
                             isLoading = false,
                             error = null,
                             transcriptions = transcriptionsResult.data.groupByFormattedDate(),
+                            isDeletingTranscription = false,
                         )
                 }
 
                 is Result.Error -> {
-                    state.value =
-                        state.value.copy(
+                    _state.value =
+                        _state.value.copy(
                             isLoading = false,
                             error = transcriptionsResult.error.asUiText(),
                             transcriptions = emptyMap(),
+                            isDeletingTranscription = false,
+                        )
+                }
+            }
+        }
+    }
+
+    fun deleteTranscription(id: Int) {
+        viewModelScope.launch {
+            _state.value =
+                _state.value.copy(
+                    isDeletingTranscription = true,
+                )
+
+            val result =
+                withContext(dispatcher) {
+                    transcriptionRepository.deleteTranscription(id)
+                }
+
+            when (result) {
+                is Result.Success -> {
+                    getTranscriptions()
+                }
+
+                is Result.Error -> {
+                    _state.value =
+                        _state.value.copy(
+                            isLoading = false,
+                            error = result.error.asUiText(),
+                            transcriptions = emptyMap(),
+                            isDeletingTranscription = false,
                         )
                 }
             }

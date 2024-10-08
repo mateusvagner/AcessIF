@@ -1,5 +1,6 @@
 package com.mv.acessif.presentation.home.home.components
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -46,23 +47,39 @@ fun TranscriptionCard(
         onClick = { onTranscriptionClick(transcription) },
     ) {
         Column(
-            modifier = Modifier.padding(M).width(180.dp).height(164.dp),
+            modifier =
+                Modifier
+                    .padding(M)
+                    .width(180.dp)
+                    .height(164.dp),
         ) {
+            val textColor =
+                if (isSystemInDarkTheme()) {
+                    MaterialTheme.colorScheme.onSurface
+                } else {
+                    MaterialTheme.colorScheme.primary
+                }
+
             Text(
                 text = transcription.name,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = textColor,
                 style = TitleLarge.copy(fontWeight = FontWeight.Bold),
             )
 
             val transcribedAt =
-                transcription.createdAt?.let { stringResource(R.string.transcribed_at, it.formatTo("dd/MM/yyyy")) }
+                transcription.createdAt?.let {
+                    stringResource(
+                        R.string.transcribed_at,
+                        it.formatTo("dd/MM/yyyy"),
+                    )
+                }
 
             if (transcribedAt != null) {
                 Spacer(modifier = Modifier.height(XS))
 
                 Text(
                     text = transcribedAt,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.80F),
                     style = TitleSmall,
                 )
             }

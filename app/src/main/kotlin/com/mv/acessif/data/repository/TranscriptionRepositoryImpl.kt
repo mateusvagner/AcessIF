@@ -116,4 +116,15 @@ class TranscriptionRepositoryImpl
         override fun getAudioUrl(audioId: String): String {
             return transcriptionService.getAudioUrl(audioId)
         }
+
+        override suspend fun deleteTranscription(id: Int): Result<Unit, DataError> {
+            return try {
+                transcriptionService.deleteTranscription(id)
+                Result.Success(Unit)
+            } catch (e: Exception) {
+                Result.Error(
+                    ErrorMapper.mapNetworkExceptionToNetworkDataError(e),
+                )
+            }
+        }
     }
