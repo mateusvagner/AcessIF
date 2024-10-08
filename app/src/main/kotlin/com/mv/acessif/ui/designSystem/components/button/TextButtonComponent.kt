@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
@@ -50,6 +51,7 @@ fun TextButtonComponent(
         onClick = onClick,
     ) {
         ButtonContent(
+            modifier = Modifier.padding(end = S),
             label = label,
             mainColor = color,
             leadingImage = leadingImage,

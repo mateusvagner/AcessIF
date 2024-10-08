@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -18,14 +17,14 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.mv.acessif.R
+import com.mv.acessif.ui.designSystem.components.button.BackButton
 import com.mv.acessif.ui.theme.AcessIFTheme
 import com.mv.acessif.ui.theme.DarkGrey
 import com.mv.acessif.ui.theme.L
 import com.mv.acessif.ui.theme.M
 import com.mv.acessif.ui.theme.S
 import com.mv.acessif.ui.theme.TitleLarge
-import com.mv.acessif.ui.theme.TitleMedium
-import com.mv.acessif.ui.theme.White
+import com.mv.acessif.ui.theme.XL
 
 @Composable
 fun DefaultScreenHeader(
@@ -40,35 +39,23 @@ fun DefaultScreenHeader(
         modifier =
             modifier
                 .background(color = MaterialTheme.colorScheme.primary)
-                .padding(vertical = M)
-                .padding(end = S),
+                .padding(top = XL, bottom = M)
+                .padding(horizontal = S),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         if (onBackPressed != null) {
-            Button(
+            BackButton(
+                label = origin,
+                color = MaterialTheme.colorScheme.onPrimary,
+                modifier = modifier,
                 onClick = { onBackPressed.invoke() },
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(S),
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_arrow_back),
-                        contentDescription = null,
-                    )
-
-                    Text(
-                        text = origin.orEmpty(),
-                        style = TitleMedium.copy(color = White),
-                    )
-                }
-            }
+            )
         } else if (screenTitle != null) {
             Text(
                 modifier = Modifier.padding(horizontal = L),
                 text = screenTitle,
-                style = TitleLarge.copy(color = White),
+                style = TitleLarge.copy(color = MaterialTheme.colorScheme.onPrimary),
             )
         }
 
@@ -104,7 +91,7 @@ private fun DefaultScreenHeaderPreview() {
                     Image(
                         painter = painterResource(id = R.drawable.ic_menu),
                         contentDescription = null,
-                        colorFilter = ColorFilter.tint(color = White),
+                        colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onPrimary),
                     )
                 },
                 onSupportIconPressed = { },
@@ -116,7 +103,7 @@ private fun DefaultScreenHeaderPreview() {
                     Image(
                         painter = painterResource(id = R.drawable.ic_menu),
                         contentDescription = null,
-                        colorFilter = ColorFilter.tint(color = White),
+                        colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onPrimary),
                     )
                 },
                 onBackPressed = { },

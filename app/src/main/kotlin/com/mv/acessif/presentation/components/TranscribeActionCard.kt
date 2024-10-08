@@ -1,4 +1,4 @@
-package com.mv.acessif.presentation.home.home.components
+package com.mv.acessif.presentation.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -9,9 +9,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,9 +27,9 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.mv.acessif.R
 import com.mv.acessif.ui.theme.AcessIFTheme
+import com.mv.acessif.ui.theme.BaseButtonHeight
 import com.mv.acessif.ui.theme.BodyLarge
 import com.mv.acessif.ui.theme.BodyMedium
 import com.mv.acessif.ui.theme.CardBrushGradient
@@ -39,6 +39,7 @@ import com.mv.acessif.ui.theme.LightPrimary
 import com.mv.acessif.ui.theme.M
 import com.mv.acessif.ui.theme.S
 import com.mv.acessif.ui.theme.White
+import com.mv.acessif.ui.theme.XL
 
 @Composable
 fun TranscribeActionCard(
@@ -86,7 +87,7 @@ fun TranscribeActionCard(
                     style = BodyMedium,
                 )
 
-                Spacer(modifier = Modifier.height(L))
+                Spacer(modifier = Modifier.height(XL))
 
                 val buttonSemantics = stringResource(R.string.send_recording)
 
@@ -95,10 +96,11 @@ fun TranscribeActionCard(
                         Modifier.fillMaxWidth().semantics {
                             contentDescription = buttonSemantics
                             role = Role.Button
-                        },
+                        }
+                            .sizeIn(minHeight = BaseButtonHeight),
                     color = White,
                     onClick = onCardClick,
-                    shape = RoundedCornerShape(24.dp),
+                    shape = RoundedCornerShape(percent = 50),
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth().padding(horizontal = L, vertical = S),

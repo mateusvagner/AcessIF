@@ -41,6 +41,7 @@ class HomeViewModel(
 
     sealed interface HomeEvent {
         data object OnLogout : HomeEvent
+
         data class OnTranscriptionDone(val id: Int) : HomeEvent
     }
 
@@ -60,36 +61,40 @@ class HomeViewModel(
             state.value =
                 state.value.copy(
                     transcriptionsSectionState =
-                    state.value.transcriptionsSectionState.copy(
-                        isLoading = true,
-                        error = null,
-                        transcriptions = emptyList()
-                    ),
+                        state.value.transcriptionsSectionState.copy(
+                            isLoading = true,
+                            error = null,
+                            transcriptions = emptyList(),
+                        ),
                 )
 
-            when (val transcriptionsResult = transcriptionRepository.getLastTranscriptions()) {
+            val transcriptionsResult =
+                withContext(dispatcher) {
+                    transcriptionRepository.getLastTranscriptions()
+                }
+
+            when (transcriptionsResult) {
                 is Result.Success -> {
                     state.value =
                         state.value.copy(
                             transcriptionsSectionState =
-                            state.value.transcriptionsSectionState.copy(
-                                isLoading = false,
-                                error = null,
-                                transcriptions = transcriptionsResult.data,
-                            ),
+                                state.value.transcriptionsSectionState.copy(
+                                    isLoading = false,
+                                    error = null,
+                                    transcriptions = transcriptionsResult.data,
+                                ),
                         )
-
                 }
 
                 is Result.Error -> {
                     state.value =
                         state.value.copy(
                             transcriptionsSectionState =
-                            state.value.transcriptionsSectionState.copy(
-                                isLoading = false,
-                                error = transcriptionsResult.error.asUiText(),
-                                transcriptions = emptyList(),
-                            ),
+                                state.value.transcriptionsSectionState.copy(
+                                    isLoading = false,
+                                    error = transcriptionsResult.error.asUiText(),
+                                    transcriptions = emptyList(),
+                                ),
                         )
                 }
             }
@@ -118,7 +123,12 @@ class HomeViewModel(
             )
 
         viewModelScope.launch {
-            when (val transcriptionResult = transcriptionRepository.transcribeId(file)) {
+            val transcriptionResult =
+                withContext(dispatcher) {
+                    transcriptionRepository.transcribeId(file)
+                }
+
+            when (transcriptionResult) {
                 is Result.Success -> {
                     state.value =
                         state.value.copy(
@@ -126,11 +136,9 @@ class HomeViewModel(
                             errorTranscription = null,
                         )
 
-                    withContext(Dispatchers.Main) {
-                        _onEventSuccess.send(
-                            HomeEvent.OnTranscriptionDone(transcriptionResult.data)
-                        )
-                    }
+                    _onEventSuccess.send(
+                        HomeEvent.OnTranscriptionDone(transcriptionResult.data),
+                    )
                 }
 
                 is Result.Error -> {

@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -14,11 +16,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.mv.acessif.R
 import com.mv.acessif.ui.designSystem.components.button.SecondaryActionButton
 import com.mv.acessif.ui.theme.AcessIFTheme
+import com.mv.acessif.ui.theme.BaseButtonHeight
 import com.mv.acessif.ui.theme.BodyLarge
 import com.mv.acessif.ui.theme.IconBigSize
 import com.mv.acessif.ui.theme.LightGrey
@@ -32,7 +36,7 @@ fun ErrorComponent(
     onTryAgain: (() -> Unit)? = null,
 ) {
     Column(
-        modifier = modifier,
+        modifier = modifier.background(color = MaterialTheme.colorScheme.background),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -52,11 +56,17 @@ fun ErrorComponent(
         )
 
         if (onTryAgain != null) {
-            SecondaryActionButton(
-                modifier = Modifier.padding(M),
-                label = stringResource(id = R.string.try_again),
-                onClick = onTryAgain,
-            )
+            OutlinedButton(
+                modifier = Modifier.padding(M).sizeIn(minHeight = BaseButtonHeight),
+                onClick = onTryAgain
+            ) {
+                Text(
+                    modifier = Modifier.padding(horizontal = M),
+                    text = stringResource(id = R.string.try_again),
+                    style = BodyLarge.copy(fontWeight = FontWeight.Bold),
+                    color = MaterialTheme.colorScheme.onBackground,
+                )
+            }
         }
     }
 }

@@ -9,8 +9,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
-import com.mv.acessif.ui.theme.LabelLarge
 import com.mv.acessif.ui.theme.S
+import com.mv.acessif.ui.theme.TitleMedium
 
 @Composable
 fun ButtonContent(
@@ -34,7 +34,7 @@ fun ButtonContent(
         if (label != null) {
             Text(
                 text = label,
-                style = LabelLarge.copy(color = mainColor),
+                style = TitleMedium.copy(color = mainColor),
             )
         }
 

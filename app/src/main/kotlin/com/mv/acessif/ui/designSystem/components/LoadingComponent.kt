@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.ripple.RippleAlpha
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,10 +38,11 @@ import com.mv.acessif.ui.theme.S
 @Composable
 fun LoadingComponent(
     modifier: Modifier = Modifier,
+    backgroundAlpha: Float = 1F,
     label: String? = null,
 ) {
     Column(
-        modifier = modifier,
+        modifier = modifier.background(color = MaterialTheme.colorScheme.background.copy(alpha = backgroundAlpha)),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {

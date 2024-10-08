@@ -1,25 +1,19 @@
 package com.mv.acessif.presentation.root.welcome
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Text
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
@@ -28,19 +22,13 @@ import androidx.navigation.compose.composable
 import com.mv.acessif.R
 import com.mv.acessif.presentation.auth.login.LoginScreen
 import com.mv.acessif.presentation.auth.signUp.SignUpScreen
+import com.mv.acessif.presentation.components.SigninSignupActionCard
+import com.mv.acessif.presentation.components.TranscribeActionCard
 import com.mv.acessif.presentation.root.RootStartDestination
 import com.mv.acessif.presentation.root.demoTranscription.DemoTranscriptionScreen
-import com.mv.acessif.ui.designSystem.components.button.MainActionButton
-import com.mv.acessif.ui.designSystem.components.button.SecondaryActionButton
-import com.mv.acessif.ui.designSystem.components.button.TertiaryActionButton
+import com.mv.acessif.ui.designSystem.components.DefaultScreenHeader
 import com.mv.acessif.ui.theme.AcessIFTheme
-import com.mv.acessif.ui.theme.IconBigSize
 import com.mv.acessif.ui.theme.L
-import com.mv.acessif.ui.theme.LightNeutralBackground
-import com.mv.acessif.ui.theme.LightPrimary
-import com.mv.acessif.ui.theme.S
-import com.mv.acessif.ui.theme.TitleLarge
-import com.mv.acessif.ui.theme.XL
 import com.mv.acessif.ui.theme.XXXL
 import kotlinx.serialization.Serializable
 
@@ -61,9 +49,11 @@ fun NavGraphBuilder.welcomeScreen(
                     WelcomeScreenIntent.OnTranscriptPressed -> {
                         rootNavController.navigate(DemoTranscriptionScreen)
                     }
+
                     WelcomeScreenIntent.OnLoginPressed -> {
                         rootNavController.navigate(LoginScreen)
                     }
+
                     WelcomeScreenIntent.OnSignupPressed -> {
                         rootNavController.navigate(SignUpScreen)
                     }
@@ -82,83 +72,37 @@ fun WelcomeScreen(
         modifier =
             modifier
                 .fillMaxSize()
-                .background(color = LightNeutralBackground)
-                .padding(vertical = XL),
+                .background(color = MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Row(
+        DefaultScreenHeader(
             modifier =
                 Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = L),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
-        ) {
-            Text(
-                text = stringResource(id = R.string.welcome_to),
-                style = TitleLarge,
-            )
+                    .background(color = MaterialTheme.colorScheme.primary),
+            screenTitle = stringResource(R.string.welcome),
+        )
 
-            Spacer(modifier = Modifier.width(S))
-
-            Text(
-                text = stringResource(id = R.string.app_name),
-                style = TitleLarge.copy(fontWeight = FontWeight.Black),
-                color = LightPrimary,
-            )
-        }
+        Spacer(modifier = Modifier.height(L))
 
         Column(
-            modifier = Modifier.fillMaxSize().weight(1f),
-            verticalArrangement = Arrangement.Center,
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(XXXL),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Image(
-                modifier = Modifier.size(IconBigSize),
-                painter = painterResource(id = R.drawable.ic_speech_to_text),
-                contentDescription = null,
-                colorFilter = ColorFilter.tint(color = LightPrimary),
+            SigninSignupActionCard(
+                modifier = Modifier.padding(horizontal = L),
+                onSigninPressed = { onIntent(WelcomeScreenIntent.OnLoginPressed) },
+                onSignupPressed = { onIntent(WelcomeScreenIntent.OnSignupPressed) },
             )
 
-            Spacer(modifier = Modifier.height(S))
-
-            MainActionButton(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = XL),
-                label = stringResource(id = R.string.start_a_transcription),
-            ) {
-                onIntent(WelcomeScreenIntent.OnTranscriptPressed)
-            }
-        }
-
-        Column(
-            modifier = Modifier.fillMaxSize().weight(1f),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            TertiaryActionButton(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = XXXL),
-                label = stringResource(id = R.string.sign_in),
-            ) {
-                onIntent(WelcomeScreenIntent.OnLoginPressed)
-            }
-
-            Spacer(modifier = Modifier.height(L))
-
-            SecondaryActionButton(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = XXXL),
-                label = stringResource(id = R.string.sign_up),
-            ) {
-                onIntent(WelcomeScreenIntent.OnSignupPressed)
-            }
+            TranscribeActionCard(
+                modifier = Modifier.padding(horizontal = L),
+                onCardClick = { onIntent(WelcomeScreenIntent.OnTranscriptPressed) },
+            )
         }
     }
 }

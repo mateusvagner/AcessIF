@@ -1,5 +1,6 @@
 package com.mv.acessif.presentation.auth.login
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,15 +9,24 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -26,16 +36,18 @@ import com.mv.acessif.domain.returnModel.DataError
 import com.mv.acessif.presentation.asUiText
 import com.mv.acessif.presentation.home.home.HomeNavGraph
 import com.mv.acessif.presentation.root.welcome.WelcomeScreen
+import com.mv.acessif.ui.designSystem.components.DefaultScreenHeader
 import com.mv.acessif.ui.designSystem.components.ErrorComponent
 import com.mv.acessif.ui.designSystem.components.LoadingComponent
-import com.mv.acessif.ui.designSystem.components.ScreenHeader
-import com.mv.acessif.ui.designSystem.components.button.MainActionButton
 import com.mv.acessif.ui.designSystem.components.textField.EmailTextField
 import com.mv.acessif.ui.designSystem.components.textField.PasswordTextField
 import com.mv.acessif.ui.theme.AcessIFTheme
+import com.mv.acessif.ui.theme.BaseButtonHeight
+import com.mv.acessif.ui.theme.BodyLarge
+import com.mv.acessif.ui.theme.HeadlineLarge
 import com.mv.acessif.ui.theme.L
-import com.mv.acessif.ui.theme.LightNeutralBackground
 import com.mv.acessif.ui.theme.XL
+import com.mv.acessif.ui.theme.XXL
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -102,15 +114,12 @@ fun LoginScreen(
         modifier =
             modifier
                 .fillMaxSize()
-                .background(color = LightNeutralBackground)
+                .background(color = MaterialTheme.colorScheme.background)
                 .padding(bottom = XL),
     ) {
-        ScreenHeader(
-            screenTitle = stringResource(id = R.string.sign_in),
-            onBackPressed = {
-                onIntent(LoginScreenIntent.OnNavigateBack)
-            },
+        DefaultScreenHeader(
             origin = stringResource(id = R.string.welcome_screen),
+            onBackPressed = { onIntent(LoginScreenIntent.OnNavigateBack) },
         )
 
         if (screenState.isLoading) {
@@ -137,6 +146,22 @@ fun LoginScreen(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
+                Image(
+                    painter = painterResource(R.drawable.img_moon),
+                    colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.primary),
+                    contentDescription = null,
+                )
+
+                Spacer(modifier = Modifier.height(L))
+
+                Text(
+                    text = stringResource(R.string.welcome),
+                    color = MaterialTheme.colorScheme.onBackground,
+                    style = HeadlineLarge,
+                )
+
+                Spacer(modifier = Modifier.height(64.dp))
+
                 EmailTextField(
                     label = stringResource(id = R.string.email),
                     email = screenState.emailTextFieldState.email,
@@ -177,15 +202,25 @@ fun LoginScreen(
                     },
                 )
 
-                Spacer(modifier = Modifier.height(XL))
+                Spacer(modifier = Modifier.height(XXL))
 
-                MainActionButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    label = stringResource(id = R.string.sign_in),
-                    onClick = {
-                        onIntent(LoginScreenIntent.OnSigninPressed)
-                    },
-                )
+                Button(
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .sizeIn(minHeight = BaseButtonHeight),
+                    colors =
+                        ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primary,
+                        ),
+                    onClick = { onIntent(LoginScreenIntent.OnSigninPressed) },
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.sign_in),
+                        style = BodyLarge.copy(fontWeight = FontWeight.Bold),
+                        color = MaterialTheme.colorScheme.onPrimary,
+                    )
+                }
             }
         }
     }

@@ -42,7 +42,6 @@ import com.mv.acessif.ui.designSystem.components.button.util.MAX_FONT_SIZE
 import com.mv.acessif.ui.designSystem.components.button.util.MIN_FONT_SIZE
 import com.mv.acessif.ui.theme.AcessIFTheme
 import com.mv.acessif.ui.theme.L
-import com.mv.acessif.ui.theme.S
 import com.mv.acessif.ui.theme.White
 import com.mv.acessif.ui.theme.XL
 import kotlinx.serialization.Serializable
