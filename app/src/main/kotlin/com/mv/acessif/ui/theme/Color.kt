@@ -12,10 +12,10 @@ val DarkGrey = Color(0xFF333333)
 val DarkBackground = Color(0xFF1C1C1C)
 val DarkOnBackground = Color(0xFFE7E7E7)
 
-val DarkPrimary = Color(0xFFA0C9FF)
-val DarkOnPrimary = Black
+val DarkPrimary = Color(0xFF035AEE)
+val DarkOnPrimary = White
 
-val DarkSecondary = Color(0xFFA0C9FF)
+val DarkSecondary = Color(0xFFA6CDFF)
 val DarkOnSecondary = Color(0xFF1C1C1C)
 
 val DarkTertiary = Color(0xFFEFB8C8)
@@ -38,4 +38,5 @@ val LightSurface = White
 val LightOnSurface = Color(0xFF2A2A2A)
 
 val CardBrushGradient = Brush.verticalGradient(listOf(Color(0xFF0011CE), Color(0xFF046DF6)))
+val DarkCardBrushGradient = Brush.verticalGradient(listOf(Color(0xFF68AEF5), Color(0xFF325C85)))
 val CardDarkBrushGradient = Brush.verticalGradient(listOf(Color(0xFF262626), Color(0xFF0E0E0E)))

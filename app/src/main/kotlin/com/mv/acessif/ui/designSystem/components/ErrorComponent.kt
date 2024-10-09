@@ -20,7 +20,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.mv.acessif.R
-import com.mv.acessif.ui.designSystem.components.button.SecondaryActionButton
 import com.mv.acessif.ui.theme.AcessIFTheme
 import com.mv.acessif.ui.theme.BaseButtonHeight
 import com.mv.acessif.ui.theme.BodyLarge
@@ -58,7 +57,7 @@ fun ErrorComponent(
         if (onTryAgain != null) {
             OutlinedButton(
                 modifier = Modifier.padding(M).sizeIn(minHeight = BaseButtonHeight),
-                onClick = onTryAgain
+                onClick = onTryAgain,
             ) {
                 Text(
                     modifier = Modifier.padding(horizontal = M),

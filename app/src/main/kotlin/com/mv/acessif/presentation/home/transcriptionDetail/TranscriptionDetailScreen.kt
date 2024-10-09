@@ -281,7 +281,7 @@ private fun TranscriptionContent(
             modifier = Modifier.weight(1f),
             name = transcription.name,
             onEditTranscriptionName = {
-                // TODO Edit transcription name
+                onIntent(TranscriptionDetailIntent.OnTranscriptionNameEdited(it))
             },
             createdAt = transcription.createdAt?.formatTo("dd/MM/yyyy"),
         ) {

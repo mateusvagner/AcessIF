@@ -15,6 +15,8 @@ import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.client.request.url
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
 import io.ktor.util.cio.readChannel
 import java.io.File
 import javax.inject.Inject
@@ -67,6 +69,7 @@ class KtorTranscriptionService
         ): TranscriptionDto {
             return client.put {
                 url("${HttpRoutes.TRANSCRIPTIONS}/$id/name")
+                contentType(ContentType.Application.Json)
                 setBody(name)
             }.body()
         }

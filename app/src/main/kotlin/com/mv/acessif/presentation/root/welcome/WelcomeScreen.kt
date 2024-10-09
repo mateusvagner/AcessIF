@@ -22,7 +22,7 @@ import androidx.navigation.compose.composable
 import com.mv.acessif.R
 import com.mv.acessif.presentation.auth.login.LoginScreen
 import com.mv.acessif.presentation.auth.signUp.SignUpScreen
-import com.mv.acessif.presentation.components.SigninSignupActionCard
+import com.mv.acessif.presentation.components.SignInSignUpActionCard
 import com.mv.acessif.presentation.components.TranscribeActionCard
 import com.mv.acessif.presentation.root.RootStartDestination
 import com.mv.acessif.presentation.root.demoTranscription.DemoTranscriptionScreen
@@ -93,15 +93,15 @@ fun WelcomeScreen(
             verticalArrangement = Arrangement.spacedBy(XXXL),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            SigninSignupActionCard(
-                modifier = Modifier.padding(horizontal = L),
-                onSigninPressed = { onIntent(WelcomeScreenIntent.OnLoginPressed) },
-                onSignupPressed = { onIntent(WelcomeScreenIntent.OnSignupPressed) },
-            )
-
             TranscribeActionCard(
                 modifier = Modifier.padding(horizontal = L),
                 onCardClick = { onIntent(WelcomeScreenIntent.OnTranscriptPressed) },
+            )
+
+            SignInSignUpActionCard(
+                modifier = Modifier.padding(horizontal = L),
+                onSignInPressed = { onIntent(WelcomeScreenIntent.OnLoginPressed) },
+                onSignupPressed = { onIntent(WelcomeScreenIntent.OnSignupPressed) },
             )
         }
     }

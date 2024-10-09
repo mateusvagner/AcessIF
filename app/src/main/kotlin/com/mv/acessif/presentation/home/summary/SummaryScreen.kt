@@ -160,7 +160,7 @@ private fun SummaryContent(
             name = stringResource(R.string.summary),
         ) {
             Text(
-                modifier = Modifier.verticalScroll(rememberScrollState()).padding(horizontal = L),
+                modifier = Modifier.verticalScroll(rememberScrollState()).padding(horizontal = L).padding(bottom = L),
                 text = summary.text,
                 color = MaterialTheme.colorScheme.onBackground,
                 fontSize = fontSize.sp,

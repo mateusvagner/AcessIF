@@ -3,17 +3,16 @@ package com.mv.acessif.presentation.auth.login
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,18 +35,18 @@ import com.mv.acessif.domain.returnModel.DataError
 import com.mv.acessif.presentation.asUiText
 import com.mv.acessif.presentation.home.home.HomeNavGraph
 import com.mv.acessif.presentation.root.welcome.WelcomeScreen
+import com.mv.acessif.ui.designSystem.components.CustomButton
 import com.mv.acessif.ui.designSystem.components.DefaultScreenHeader
 import com.mv.acessif.ui.designSystem.components.ErrorComponent
 import com.mv.acessif.ui.designSystem.components.LoadingComponent
 import com.mv.acessif.ui.designSystem.components.textField.EmailTextField
 import com.mv.acessif.ui.designSystem.components.textField.PasswordTextField
 import com.mv.acessif.ui.theme.AcessIFTheme
-import com.mv.acessif.ui.theme.BaseButtonHeight
 import com.mv.acessif.ui.theme.BodyLarge
 import com.mv.acessif.ui.theme.HeadlineLarge
 import com.mv.acessif.ui.theme.L
-import com.mv.acessif.ui.theme.XL
 import com.mv.acessif.ui.theme.XXL
+import com.mv.acessif.ui.theme.XXXL
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -114,8 +113,66 @@ fun LoginScreen(
         modifier =
             modifier
                 .fillMaxSize()
-                .background(color = MaterialTheme.colorScheme.background)
-                .padding(bottom = XL),
+                .background(color = MaterialTheme.colorScheme.background),
+    ) {
+        Box {
+            Image(
+                modifier =
+                    Modifier
+                        .align(alignment = Alignment.TopStart)
+                        .offset(x = (-45).dp, y = 50.dp),
+                painter = painterResource(R.drawable.img_moon_background),
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1F)),
+            )
+
+            Image(
+                modifier =
+                    Modifier
+                        .align(alignment = Alignment.TopEnd)
+                        .offset(x = 45.dp, y = 50.dp),
+                painter = painterResource(R.drawable.img_moon_background),
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1F)),
+            )
+
+            Image(
+                modifier =
+                    Modifier
+                        .align(alignment = Alignment.BottomEnd)
+                        .offset(x = 45.dp, y = 45.dp),
+                painter = painterResource(R.drawable.img_moon_background),
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1F)),
+            )
+
+            Image(
+                modifier =
+                    Modifier
+                        .align(alignment = Alignment.BottomStart)
+                        .offset(x = (-45).dp, y = 45.dp),
+                painter = painterResource(R.drawable.img_moon_background),
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1F)),
+            )
+
+            MainContent(
+                modifier = Modifier.fillMaxSize(),
+                screenState = screenState,
+                onIntent = onIntent,
+            )
+        }
+    }
+}
+
+@Composable
+fun MainContent(
+    modifier: Modifier = Modifier,
+    screenState: LoginScreenState,
+    onIntent: (LoginScreenIntent) -> Unit,
+) {
+    Column(
+        modifier = modifier,
     ) {
         DefaultScreenHeader(
             origin = stringResource(id = R.string.welcome_screen),
@@ -142,8 +199,9 @@ fun LoginScreen(
                     Modifier
                         .fillMaxSize()
                         .padding(horizontal = L)
+                        .padding(top = XXXL)
                         .verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.Center,
+                verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Image(
@@ -204,15 +262,10 @@ fun LoginScreen(
 
                 Spacer(modifier = Modifier.height(XXL))
 
-                Button(
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .sizeIn(minHeight = BaseButtonHeight),
-                    colors =
-                        ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.primary,
-                        ),
+                CustomButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    isLightColor = false,
+                    color = MaterialTheme.colorScheme.primary,
                     onClick = { onIntent(LoginScreenIntent.OnSigninPressed) },
                 ) {
                     Text(

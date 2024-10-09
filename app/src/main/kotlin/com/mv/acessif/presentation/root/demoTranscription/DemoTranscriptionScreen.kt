@@ -5,12 +5,14 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
@@ -36,6 +38,7 @@ import com.mv.acessif.presentation.UiText
 import com.mv.acessif.presentation.home.components.SupportBottomBar
 import com.mv.acessif.presentation.home.components.TranscriptionContainer
 import com.mv.acessif.presentation.util.shareTextIntent
+import com.mv.acessif.ui.designSystem.components.CustomButton
 import com.mv.acessif.ui.designSystem.components.DefaultScreenHeader
 import com.mv.acessif.ui.designSystem.components.ErrorComponent
 import com.mv.acessif.ui.designSystem.components.LoadingComponent
@@ -45,6 +48,8 @@ import com.mv.acessif.ui.designSystem.components.button.util.MAX_FONT_SIZE
 import com.mv.acessif.ui.designSystem.components.button.util.MIN_FONT_SIZE
 import com.mv.acessif.ui.theme.AcessIFTheme
 import com.mv.acessif.ui.theme.L
+import com.mv.acessif.ui.theme.S
+import com.mv.acessif.ui.theme.TitleMedium
 import com.mv.acessif.ui.theme.White
 import com.mv.acessif.ui.theme.XL
 import kotlinx.serialization.Serializable
@@ -130,27 +135,27 @@ fun DemoTranscriptionScreen(
 
         Spacer(modifier = Modifier.height(L))
 
-        MainActionButton(
-            modifier =
-                Modifier
-                    .padding(horizontal = XL)
-                    .fillMaxWidth(),
-            label =
-                if (state.transcription.isEmpty()) {
+        CustomButton(
+            modifier = Modifier.fillMaxWidth().padding(horizontal = XL),
+            isLightColor = isSystemInDarkTheme(),
+            color = MaterialTheme.colorScheme.primary,
+            onClick = { onIntent(DemoTranscriptionIntent.OnAttachFile) },
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_upload_file),
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onPrimary),
+            )
+
+            Spacer(modifier = Modifier.width(S))
+            Text(
+                text = if (state.transcription.isEmpty()) {
                     stringResource(R.string.attach_audio_file)
                 } else {
                     stringResource(R.string.attach_another_audio_file)
                 },
-            isEnabled = !state.isLoading,
-            leadingImage = {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_upload_file),
-                    contentDescription = null,
-                    colorFilter = ColorFilter.tint(color = White),
-                )
-            },
-        ) {
-            onIntent(DemoTranscriptionIntent.OnAttachFile)
+                style = TitleMedium.copy(color = MaterialTheme.colorScheme.onPrimary),
+            )
         }
 
         Spacer(modifier = Modifier.height(L))
