@@ -29,6 +29,8 @@ import kotlinx.serialization.json.Json
 object HttpClientFactory {
     fun create(sharedPreferencesManager: SharedPreferencesManager): HttpClient {
         return HttpClient(Android) {
+            expectSuccess = true
+
             defaultRequest { url(HttpRoutes.BASE_URL) }
 
             install(Auth) {

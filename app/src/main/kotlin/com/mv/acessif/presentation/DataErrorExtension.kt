@@ -18,6 +18,7 @@ fun DataError.asUiText(): UiText {
                 DataError.Network.SERVER_UNAVAILABLE -> UiText.StringResource(R.string.server_unavailable)
                 DataError.Network.SERIALIZATION_ERROR -> UiText.StringResource(R.string.serialization_error)
                 DataError.Network.UNKNOWN -> UiText.StringResource(R.string.unknown_error)
+                DataError.Network.MOVED_PERMANENTLY -> UiText.StringResource(R.string.server_moved)
             }
         }
         is DataError.Local -> {

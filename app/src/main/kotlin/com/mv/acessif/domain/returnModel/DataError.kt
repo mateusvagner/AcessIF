@@ -11,6 +11,7 @@ sealed interface DataError : Error {
         INTERNAL_SERVER_ERROR, // 500
         SERVER_UNAVAILABLE, // 503
         SERIALIZATION_ERROR,
+        MOVED_PERMANENTLY, // 301
         UNKNOWN,
     }
 
