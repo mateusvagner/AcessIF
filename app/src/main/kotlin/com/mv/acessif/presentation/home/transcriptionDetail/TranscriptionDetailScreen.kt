@@ -140,9 +140,9 @@ fun NavGraphBuilder.transcriptionDetailScreen(
                         }
                     },
                     modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(BaseCornerRadius)),
+                        Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(BaseCornerRadius)),
                 )
             },
             state = state,
@@ -209,9 +209,9 @@ fun TranscriptionDetailScreen(
 ) {
     Column(
         modifier =
-        modifier
-            .fillMaxSize()
-            .background(color = MaterialTheme.colorScheme.background),
+            modifier
+                .fillMaxSize()
+                .background(color = MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         DefaultScreenHeader(
@@ -237,18 +237,18 @@ fun TranscriptionDetailScreen(
         if (state.error != null) {
             ErrorComponent(
                 modifier =
-                Modifier
-                    .padding(horizontal = XL)
-                    .fillMaxSize(),
+                    Modifier
+                        .padding(horizontal = XL)
+                        .fillMaxSize(),
                 message = state.error.asString(),
                 onTryAgain = { onIntent(TranscriptionDetailIntent.OnTryAgain) },
             )
         } else if (state.isLoading) {
             LoadingComponent(
                 modifier =
-                Modifier
-                    .padding(horizontal = XL)
-                    .fillMaxSize(),
+                    Modifier
+                        .padding(horizontal = XL)
+                        .fillMaxSize(),
                 label = stringResource(id = R.string.your_transcription_is_being_loaded),
             )
         } else if (state.transcription != null) {
@@ -277,9 +277,9 @@ private fun TranscriptionContent(
 
         Box(
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(horizontal = L),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = L),
         ) {
             player()
         }
@@ -305,9 +305,10 @@ private fun TranscriptionContent(
                     val isHighlight = playerCurrentPosition in segment.start..segment.end
 
                     Text(
-                        modifier = Modifier.clickable {
-                            onIntent(TranscriptionDetailIntent.OnSeekToTime(segment.start))
-                        },
+                        modifier =
+                            Modifier.clickable {
+                                onIntent(TranscriptionDetailIntent.OnSeekToTime(segment.start))
+                            },
                         text = segment.text,
                         color = MaterialTheme.colorScheme.onBackground,
                         fontSize = fontSize.sp,

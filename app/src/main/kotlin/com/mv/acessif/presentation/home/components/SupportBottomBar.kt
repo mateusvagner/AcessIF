@@ -21,7 +21,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -50,22 +49,21 @@ fun SupportBottomBar(
         RippleConfiguration(
             color = if (isSystemInDarkTheme()) Black else White,
             rippleAlpha =
-            RippleAlpha(
-                0.2f,
-                0.2f,
-                0.2f,
-                0.2f,
-            ),
+                RippleAlpha(
+                    0.2f,
+                    0.2f,
+                    0.2f,
+                    0.2f,
+                ),
         )
     CompositionLocalProvider(LocalRippleConfiguration provides rippleConfiguration) {
-
         Row(
             modifier =
-            modifier
-                .fillMaxWidth()
-                .background(color = MaterialTheme.colorScheme.primary)
-                .padding(vertical = M)
-                .padding(end = S),
+                modifier
+                    .fillMaxWidth()
+                    .background(color = MaterialTheme.colorScheme.primary)
+                    .padding(vertical = M)
+                    .padding(end = S),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
@@ -100,7 +98,7 @@ fun SupportBottomBar(
                     Image(
                         painter = painterResource(id = R.drawable.ic_increase_font),
                         contentDescription = stringResource(R.string.increase_font),
-                        colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onPrimary)
+                        colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onPrimary),
                     )
                 }
 
@@ -110,7 +108,7 @@ fun SupportBottomBar(
                     Image(
                         painter = painterResource(id = R.drawable.ic_decrease_font),
                         contentDescription = stringResource(R.string.decrease_font),
-                        colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onPrimary)
+                        colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onPrimary),
                     )
                 }
             }
@@ -124,8 +122,8 @@ private fun SupportBottomBarPreview() {
     AcessIFTheme {
         Column(
             modifier =
-            Modifier
-                .background(color = LightGrey),
+                Modifier
+                    .background(color = LightGrey),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(S),
         ) {
@@ -154,8 +152,8 @@ private fun SupportBottomBarDarkPreview() {
     AcessIFTheme {
         Column(
             modifier =
-            Modifier
-                .background(color = LightGrey),
+                Modifier
+                    .background(color = LightGrey),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(S),
         ) {

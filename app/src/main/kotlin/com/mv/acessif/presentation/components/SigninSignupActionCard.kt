@@ -58,17 +58,17 @@ fun SignInSignUpActionCard(
 ) {
     Surface(
         modifier =
-        modifier
-            .fillMaxWidth(),
+            modifier
+                .fillMaxWidth(),
         color = MaterialTheme.colorScheme.surface,
         shape = RoundedCornerShape(LargeCornerRadius),
     ) {
         Box {
             Image(
                 modifier =
-                Modifier
-                    .align(alignment = Alignment.TopEnd)
-                    .offset(x = 32.dp, y = (-32).dp),
+                    Modifier
+                        .align(alignment = Alignment.TopEnd)
+                        .offset(x = 32.dp, y = (-32).dp),
                 painter = painterResource(R.drawable.img_moon_background),
                 contentDescription = null,
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1F)),
@@ -76,10 +76,10 @@ fun SignInSignUpActionCard(
 
             Image(
                 modifier =
-                Modifier
-                    .size(96.dp)
-                    .align(alignment = Alignment.BottomStart)
-                    .offset(x = (-32).dp, y = 32.dp),
+                    Modifier
+                        .size(96.dp)
+                        .align(alignment = Alignment.BottomStart)
+                        .offset(x = (-32).dp, y = 32.dp),
                 painter = painterResource(R.drawable.img_moon_background),
                 contentDescription = null,
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1F)),
@@ -87,9 +87,9 @@ fun SignInSignUpActionCard(
 
             Column(
                 modifier =
-                Modifier
-                    .padding(horizontal = L)
-                    .padding(top = L, bottom = S),
+                    Modifier
+                        .padding(horizontal = L)
+                        .padding(top = L, bottom = S),
                 horizontalAlignment = Alignment.Start,
             ) {
                 Text(
@@ -111,12 +111,12 @@ fun SignInSignUpActionCard(
                     RippleConfiguration(
                         color = if (isSystemInDarkTheme()) White else Black,
                         rippleAlpha =
-                        RippleAlpha(
-                            0.2f,
-                            0.2f,
-                            0.2f,
-                            0.2f,
-                        ),
+                            RippleAlpha(
+                                0.2f,
+                                0.2f,
+                                0.2f,
+                                0.2f,
+                            ),
                     )
                 CompositionLocalProvider(LocalRippleConfiguration provides rippleConfiguration) {
                     Column(
@@ -124,9 +124,9 @@ fun SignInSignUpActionCard(
                     ) {
                         OutlinedButton(
                             modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .sizeIn(minHeight = BaseButtonHeight),
+                                Modifier
+                                    .fillMaxWidth()
+                                    .sizeIn(minHeight = BaseButtonHeight),
                             onClick = onSignInPressed,
                         ) {
                             Text(
@@ -143,19 +143,19 @@ fun SignInSignUpActionCard(
                                 modifier =
                                 Modifier,
                                 text =
-                                buildAnnotatedString {
-                                    append(stringResource(R.string.dont_have_account))
-                                    append("  ")
-                                    withStyle(
-                                        style =
-                                        SpanStyle(
-                                            fontWeight = FontWeight.Black,
-                                            textDecoration = TextDecoration.Underline,
-                                        ),
-                                    ) {
-                                        append(stringResource(R.string.sign_up_here))
-                                    }
-                                },
+                                    buildAnnotatedString {
+                                        append(stringResource(R.string.dont_have_account))
+                                        append("  ")
+                                        withStyle(
+                                            style =
+                                                SpanStyle(
+                                                    fontWeight = FontWeight.Black,
+                                                    textDecoration = TextDecoration.Underline,
+                                                ),
+                                        ) {
+                                            append(stringResource(R.string.sign_up_here))
+                                        }
+                                    },
                                 color = MaterialTheme.colorScheme.onSurface,
                                 textAlign = TextAlign.Center,
                             )

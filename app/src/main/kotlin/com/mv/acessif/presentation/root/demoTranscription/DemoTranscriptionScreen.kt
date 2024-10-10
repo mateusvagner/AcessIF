@@ -42,7 +42,6 @@ import com.mv.acessif.ui.designSystem.components.CustomButton
 import com.mv.acessif.ui.designSystem.components.DefaultScreenHeader
 import com.mv.acessif.ui.designSystem.components.ErrorComponent
 import com.mv.acessif.ui.designSystem.components.LoadingComponent
-import com.mv.acessif.ui.designSystem.components.button.MainActionButton
 import com.mv.acessif.ui.designSystem.components.button.util.BASE_FONT_SIZE
 import com.mv.acessif.ui.designSystem.components.button.util.MAX_FONT_SIZE
 import com.mv.acessif.ui.designSystem.components.button.util.MIN_FONT_SIZE
@@ -149,11 +148,12 @@ fun DemoTranscriptionScreen(
 
             Spacer(modifier = Modifier.width(S))
             Text(
-                text = if (state.transcription.isEmpty()) {
-                    stringResource(R.string.attach_audio_file)
-                } else {
-                    stringResource(R.string.attach_another_audio_file)
-                },
+                text =
+                    if (state.transcription.isEmpty()) {
+                        stringResource(R.string.attach_audio_file)
+                    } else {
+                        stringResource(R.string.attach_another_audio_file)
+                    },
                 style = TitleMedium.copy(color = MaterialTheme.colorScheme.onPrimary),
             )
         }

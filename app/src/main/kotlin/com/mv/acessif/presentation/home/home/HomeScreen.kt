@@ -310,7 +310,7 @@ private fun MenuComponent(
                     onDismissRequest()
                 },
             )
-              // TODO Uncomment when about us screen is implemented
+            // TODO Uncomment when about us screen is implemented
 //            DropdownMenuItem(
 //                text = {
 //                    Text(text = stringResource(R.string.about_us))

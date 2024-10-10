@@ -2,7 +2,6 @@ package com.mv.acessif.presentation.home.home
 
 import android.content.Context
 import android.net.Uri
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mv.acessif.domain.repository.SharedPreferencesRepository
