@@ -7,4 +7,5 @@ data class TranscriptionsScreenState(
     val isLoading: Boolean = false,
     val error: UiText? = null,
     val transcriptions: Map<String, List<Transcription>> = emptyMap(),
+    val isDeletingTranscription: Boolean = false,
 )

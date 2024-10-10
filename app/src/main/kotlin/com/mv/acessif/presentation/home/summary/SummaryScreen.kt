@@ -42,7 +42,6 @@ import com.mv.acessif.ui.designSystem.components.button.util.MAX_FONT_SIZE
 import com.mv.acessif.ui.designSystem.components.button.util.MIN_FONT_SIZE
 import com.mv.acessif.ui.theme.AcessIFTheme
 import com.mv.acessif.ui.theme.L
-import com.mv.acessif.ui.theme.S
 import com.mv.acessif.ui.theme.White
 import com.mv.acessif.ui.theme.XL
 import kotlinx.serialization.Serializable
@@ -161,15 +160,13 @@ private fun SummaryContent(
             name = stringResource(R.string.summary),
         ) {
             Text(
-                modifier = Modifier.verticalScroll(rememberScrollState()),
+                modifier = Modifier.verticalScroll(rememberScrollState()).padding(horizontal = L).padding(bottom = L),
                 text = summary.text,
                 color = MaterialTheme.colorScheme.onBackground,
                 fontSize = fontSize.sp,
                 lineHeight = (fontSize * 1.5).sp,
             )
         }
-
-        Spacer(modifier = Modifier.height(S))
 
         SupportBottomBar(
             modifier = Modifier.fillMaxWidth(),

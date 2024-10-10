@@ -37,10 +37,11 @@ import com.mv.acessif.ui.theme.S
 @Composable
 fun LoadingComponent(
     modifier: Modifier = Modifier,
+    backgroundAlpha: Float = 1F,
     label: String? = null,
 ) {
     Column(
-        modifier = modifier,
+        modifier = modifier.background(color = MaterialTheme.colorScheme.background.copy(alpha = backgroundAlpha)),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {

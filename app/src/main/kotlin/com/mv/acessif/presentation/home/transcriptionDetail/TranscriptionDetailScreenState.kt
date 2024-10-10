@@ -7,4 +7,5 @@ data class TranscriptionDetailScreenState(
     val isLoading: Boolean = false,
     val error: UiText? = null,
     val transcription: Transcription? = null,
+    val currentPosition: Float = 0F,
 )

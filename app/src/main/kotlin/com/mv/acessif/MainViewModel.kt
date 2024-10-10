@@ -9,6 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -36,8 +37,13 @@ class MainViewModel(
 
     private fun checkRefreshToken() {
         isLoading.value = true
-        viewModelScope.launch(dispatcher) {
-            when (refreshTokenUseCase.execute()) {
+        viewModelScope.launch {
+            val result =
+                withContext(dispatcher) {
+                    refreshTokenUseCase.execute()
+                }
+
+            when (result) {
                 is Result.Success -> {
                     isLoggedIn.value = true
                 }

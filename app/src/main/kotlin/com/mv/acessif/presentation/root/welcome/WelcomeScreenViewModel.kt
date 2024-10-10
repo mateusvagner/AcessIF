@@ -7,6 +7,4 @@ import javax.inject.Inject
 @HiltViewModel
 class WelcomeScreenViewModel
     @Inject
-    constructor() : ViewModel() {
-        // TODO Check if user is logged in
-    }
+    constructor() : ViewModel()

@@ -2,7 +2,6 @@ package com.mv.acessif.presentation.home.home
 
 import android.content.Context
 import android.net.Uri
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mv.acessif.domain.repository.SharedPreferencesRepository
@@ -15,10 +14,13 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import javax.inject.Inject
 
@@ -38,39 +40,42 @@ class HomeViewModel(
         dispatcher = Dispatchers.IO,
     )
 
-    var state = mutableStateOf(HomeScreenState())
-        private set
+    sealed interface HomeEvent {
+        data object OnLogout : HomeEvent
 
-    private val _onLogoutSuccess = Channel<Unit>()
-    val onLogoutSuccess =
-        _onLogoutSuccess.receiveAsFlow().shareIn(viewModelScope, SharingStarted.Lazily)
-
-    private val _onTranscriptionSuccess = Channel<Int>()
-    val onTranscriptionSuccess =
-        _onTranscriptionSuccess.receiveAsFlow().shareIn(viewModelScope, SharingStarted.Lazily)
-
-    init {
-        getLastTranscriptions()
+        data class OnTranscriptionDone(val id: Int) : HomeEvent
     }
 
-    private fun getLastTranscriptions() {
-        viewModelScope.launch(dispatcher) {
-            state.value =
-                state.value.copy(
+    private val _state = MutableStateFlow(HomeScreenState())
+    val state = _state.asStateFlow()
+
+    private val _onEventSuccess = Channel<HomeEvent>()
+    val onEventSuccess =
+        _onEventSuccess.receiveAsFlow().shareIn(viewModelScope, SharingStarted.Lazily)
+
+    fun getLastTranscriptions() {
+        viewModelScope.launch {
+            _state.value =
+                _state.value.copy(
                     transcriptionsSectionState =
-                        TranscriptionsSectionState(
+                        state.value.transcriptionsSectionState.copy(
                             isLoading = true,
                             error = null,
                             transcriptions = emptyList(),
                         ),
                 )
 
-            when (val transcriptionsResult = transcriptionRepository.getLastTranscriptions()) {
+            val transcriptionsResult =
+                withContext(dispatcher) {
+                    transcriptionRepository.getLastTranscriptions()
+                }
+
+            when (transcriptionsResult) {
                 is Result.Success -> {
-                    state.value =
-                        state.value.copy(
+                    _state.value =
+                        _state.value.copy(
                             transcriptionsSectionState =
-                                TranscriptionsSectionState(
+                                state.value.transcriptionsSectionState.copy(
                                     isLoading = false,
                                     error = null,
                                     transcriptions = transcriptionsResult.data,
@@ -79,10 +84,10 @@ class HomeViewModel(
                 }
 
                 is Result.Error -> {
-                    state.value =
-                        state.value.copy(
+                    _state.value =
+                        _state.value.copy(
                             transcriptionsSectionState =
-                                TranscriptionsSectionState(
+                                state.value.transcriptionsSectionState.copy(
                                     isLoading = false,
                                     error = transcriptionsResult.error.asUiText(),
                                     transcriptions = emptyList(),
@@ -108,26 +113,34 @@ class HomeViewModel(
     }
 
     private fun transcribeFile(file: File) {
-        state.value =
-            state.value.copy(
+        _state.value =
+            _state.value.copy(
                 isLoadingTranscription = true,
                 errorTranscription = null,
             )
 
-        viewModelScope.launch(dispatcher) {
-            when (val transcriptionResult = transcriptionRepository.transcribe(file)) {
+        viewModelScope.launch {
+            val transcriptionResult =
+                withContext(dispatcher) {
+                    transcriptionRepository.transcribeId(file)
+                }
+
+            when (transcriptionResult) {
                 is Result.Success -> {
-                    state.value =
-                        state.value.copy(
+                    _state.value =
+                        _state.value.copy(
                             isLoadingTranscription = false,
                             errorTranscription = null,
                         )
-                    _onTranscriptionSuccess.send(transcriptionResult.data.id)
+
+                    _onEventSuccess.send(
+                        HomeEvent.OnTranscriptionDone(transcriptionResult.data),
+                    )
                 }
 
                 is Result.Error -> {
-                    state.value =
-                        state.value.copy(
+                    _state.value =
+                        _state.value.copy(
                             isLoadingTranscription = false,
                             errorTranscription = transcriptionResult.asErrorUiText(),
                         )
@@ -137,8 +150,8 @@ class HomeViewModel(
     }
 
     fun handleFileUriError() {
-        state.value =
-            state.value.copy(
+        _state.value =
+            _state.value.copy(
                 isLoadingTranscription = false,
                 errorTranscription = DataError.Local.FILE_NOT_FOUND.asUiText(),
             )
@@ -148,7 +161,7 @@ class HomeViewModel(
         sharedPreferencesRepository.clearTokens()
 
         viewModelScope.launch {
-            _onLogoutSuccess.send(Unit)
+            _onEventSuccess.send(HomeEvent.OnLogout)
         }
     }
 }

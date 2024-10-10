@@ -38,7 +38,7 @@ class SummaryViewModel(
     }
 
     fun getSummary() {
-        viewModelScope.launch(dispatcher) {
+        viewModelScope.launch {
             state.value =
                 state.value.copy(
                     isLoading = true,

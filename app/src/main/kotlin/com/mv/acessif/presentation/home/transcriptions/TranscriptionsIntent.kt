@@ -8,4 +8,6 @@ sealed interface TranscriptionsIntent {
     data object OnNewTranscription : TranscriptionsIntent
 
     data class OnOpenTranscriptionDetail(val transcriptionId: Int) : TranscriptionsIntent
+
+    data class OnDeleteTranscription(val transcriptionId: Int) : TranscriptionsIntent
 }

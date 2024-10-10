@@ -33,15 +33,15 @@ import com.mv.acessif.presentation.UiText
 import com.mv.acessif.presentation.home.summary.SummaryScreen
 import com.mv.acessif.presentation.home.transcriptionDetail.TranscriptionDetailScreen
 import com.mv.acessif.presentation.util.shareTextIntent
+import com.mv.acessif.ui.designSystem.components.DefaultScreenHeader
 import com.mv.acessif.ui.designSystem.components.ErrorComponent
 import com.mv.acessif.ui.designSystem.components.LoadingComponent
-import com.mv.acessif.ui.designSystem.components.ScreenHeader
 import com.mv.acessif.ui.designSystem.components.button.MainActionButton
 import com.mv.acessif.ui.designSystem.components.button.SecondaryActionButton
 import com.mv.acessif.ui.designSystem.components.button.TertiaryActionButton
 import com.mv.acessif.ui.theme.AcessIFTheme
 import com.mv.acessif.ui.theme.L
-import com.mv.acessif.ui.theme.LightNeutralBackground
+import com.mv.acessif.ui.theme.LightBackground
 import com.mv.acessif.ui.theme.TitleMedium
 import com.mv.acessif.ui.theme.White
 import com.mv.acessif.ui.theme.XL
@@ -49,11 +49,13 @@ import com.mv.acessif.ui.theme.XXL
 import com.mv.acessif.ui.theme.XXXL
 import kotlinx.serialization.Serializable
 
+@Deprecated("Not used anymore")
 @Serializable
 data class NewTranscriptionScreen(
     val originScreen: String,
 )
 
+@Deprecated("Not used anymore")
 fun NavGraphBuilder.newTranscriptionScreen(
     modifier: Modifier,
     navController: NavHostController,
@@ -139,13 +141,12 @@ fun NewTranscriptionScreen(
         modifier =
             modifier
                 .fillMaxSize()
-                .background(color = LightNeutralBackground)
+                .background(color = LightBackground)
                 .padding(bottom = XL),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        ScreenHeader(
+        DefaultScreenHeader(
             origin = originScreen,
-            screenTitle = stringResource(id = R.string.new_transcription),
             onBackPressed = { onIntent(NewTranscriptionIntent.OnNavigateBack) },
         )
 

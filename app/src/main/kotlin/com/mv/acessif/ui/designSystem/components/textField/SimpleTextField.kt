@@ -5,10 +5,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,6 +23,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
+import com.mv.acessif.ui.theme.BaseCornerRadius
 import com.mv.acessif.ui.theme.LightGrey
 import com.mv.acessif.ui.theme.S
 import com.mv.acessif.ui.theme.XS
@@ -41,6 +44,7 @@ fun SimpleTextField(
     ) {
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(BaseCornerRadius),
             value = value,
             onValueChange = onValueChange,
             label = { Text(label) },
@@ -54,6 +58,10 @@ fun SimpleTextField(
             keyboardActions =
                 KeyboardActions(
                     onNext = { focusManager.moveFocus(FocusDirection.Down) },
+                ),
+            colors =
+                OutlinedTextFieldDefaults.colors(
+                    unfocusedBorderColor = MaterialTheme.colorScheme.onBackground,
                 ),
         )
 

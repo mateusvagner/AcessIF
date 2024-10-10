@@ -1,7 +1,5 @@
 package com.mv.acessif.presentation.root
 
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -18,35 +16,33 @@ fun RootNavGraph(
     startDestination: RootStartDestination,
     rootNavController: NavHostController,
 ) {
-    Scaffold { contentPadding ->
-        NavHost(
-            startDestination = startDestination,
-            navController = rootNavController,
-        ) {
-            welcomeScreen(
-                modifier = modifier.padding(contentPadding),
-                rootNavController = rootNavController,
-            )
+    NavHost(
+        startDestination = startDestination,
+        navController = rootNavController,
+    ) {
+        welcomeScreen(
+            modifier = modifier,
+            rootNavController = rootNavController,
+        )
 
-            demoTranscriptionScreen(
-                modifier = modifier.padding(contentPadding),
-                rootNavController = rootNavController,
-            )
+        demoTranscriptionScreen(
+            modifier = modifier,
+            rootNavController = rootNavController,
+        )
 
-            loginScreen(
-                modifier = modifier.padding(contentPadding),
-                rootNavController = rootNavController,
-            )
+        loginScreen(
+            modifier = modifier,
+            rootNavController = rootNavController,
+        )
 
-            signUpScreen(
-                modifier = modifier.padding(contentPadding),
-                rootNavController = rootNavController,
-            )
+        signUpScreen(
+            modifier = modifier,
+            rootNavController = rootNavController,
+        )
 
-            homeNavGraph(
-                modifier = modifier,
-                rootNavController = rootNavController,
-            )
-        }
+        homeNavGraph(
+            modifier = modifier,
+            rootNavController = rootNavController,
+        )
     }
 }

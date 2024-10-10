@@ -1,7 +1,9 @@
 package com.mv.acessif.presentation.home.transcriptionDetail
 
+import androidx.annotation.OptIn
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,7 +24,6 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -40,7 +41,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.media3.ui.PlayerView
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.ui.PlayerControlView
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -66,10 +69,8 @@ import com.mv.acessif.ui.theme.AcessIFTheme
 import com.mv.acessif.ui.theme.BaseCornerRadius
 import com.mv.acessif.ui.theme.L
 import com.mv.acessif.ui.theme.M
-import com.mv.acessif.ui.theme.S
 import com.mv.acessif.ui.theme.White
 import com.mv.acessif.ui.theme.XL
-import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
 import java.util.Date
 
@@ -79,6 +80,7 @@ data class TranscriptionDetailScreen(
     val originScreen: String,
 )
 
+@OptIn(UnstableApi::class)
 fun NavGraphBuilder.transcriptionDetailScreen(
     modifier: Modifier,
     navController: NavHostController,
@@ -86,6 +88,7 @@ fun NavGraphBuilder.transcriptionDetailScreen(
 ) {
     composable<TranscriptionDetailScreen> { entry ->
         val viewModel: TranscriptionDetailViewModel = hiltViewModel()
+        val state by viewModel.state.collectAsStateWithLifecycle()
 
         val context = navController.context
 
@@ -108,35 +111,29 @@ fun NavGraphBuilder.transcriptionDetailScreen(
             }
         }
 
-        var currentPosition by remember { mutableLongStateOf(0L) }
-
-        LaunchedEffect(key1 = viewModel.player) {
-            while (true) {
-                currentPosition = viewModel.player.currentPosition
-                delay(300)
-            }
-        }
-
         TranscriptionDetailScreen(
             modifier = modifier,
             originScreen = entry.toRoute<TranscriptionDetailScreen>().originScreen,
             player = {
                 AndroidView(
                     factory = { context ->
-                        PlayerView(context).also {
+                        PlayerControlView(context).also {
                             it.player = viewModel.player
+                            it.showTimeoutMs = 0
                         }
                     },
                     update = { playerView ->
                         when (lifecycle) {
                             Lifecycle.Event.ON_PAUSE -> {
-                                playerView.onPause()
                                 playerView.player?.pause()
                             }
 
                             Lifecycle.Event.ON_RESUME -> {
-                                playerView.onResume()
                                 playerView.player?.play()
+                            }
+
+                            Lifecycle.Event.ON_STOP -> {
+                                playerView.player?.stop()
                             }
 
                             else -> Unit
@@ -148,8 +145,7 @@ fun NavGraphBuilder.transcriptionDetailScreen(
                             .clip(RoundedCornerShape(BaseCornerRadius)),
                 )
             },
-            playerCurrentPosition = currentPosition,
-            state = viewModel.state.value,
+            state = state,
             onIntent = { intent ->
                 when (intent) {
                     TranscriptionDetailIntent.OnNavigateBack -> {
@@ -169,14 +165,14 @@ fun NavGraphBuilder.transcriptionDetailScreen(
                     }
 
                     TranscriptionDetailIntent.OnShareTranscription -> {
-                        val transcriptionPlainText = viewModel.state.value.transcription?.text
+                        val transcriptionPlainText = state.transcription?.text
                         if (transcriptionPlainText != null) {
                             context.shareTextIntent(transcriptionPlainText)
                         }
                     }
 
                     is TranscriptionDetailIntent.OnSummarizeTranscription -> {
-                        val transcriptionId = viewModel.state.value.transcription?.id
+                        val transcriptionId = state.transcription?.id
                         if (transcriptionId != null) {
                             navController.navigate(
                                 SummaryScreen(
@@ -189,6 +185,14 @@ fun NavGraphBuilder.transcriptionDetailScreen(
                     TranscriptionDetailIntent.OnTryAgain -> {
                         viewModel.onTryAgainClicked()
                     }
+
+                    is TranscriptionDetailIntent.OnTranscriptionNameEdited -> {
+                        viewModel.onNewTranscriptionName(intent.newName)
+                    }
+
+                    is TranscriptionDetailIntent.OnSeekToTime -> {
+                        viewModel.seekToTime(intent.start)
+                    }
                 }
             },
         )
@@ -200,7 +204,6 @@ fun TranscriptionDetailScreen(
     modifier: Modifier = Modifier,
     originScreen: String,
     player: @Composable () -> Unit,
-    playerCurrentPosition: Long,
     state: TranscriptionDetailScreenState,
     onIntent: (TranscriptionDetailIntent) -> Unit,
 ) {
@@ -252,7 +255,7 @@ fun TranscriptionDetailScreen(
             TranscriptionContent(
                 transcription = state.transcription,
                 player = player,
-                playerCurrentPosition = playerCurrentPosition,
+                playerCurrentPosition = state.currentPosition,
                 onIntent = onIntent,
             )
         }
@@ -264,7 +267,7 @@ private fun TranscriptionContent(
     modifier: Modifier = Modifier,
     transcription: Transcription,
     player: @Composable () -> Unit,
-    playerCurrentPosition: Long,
+    playerCurrentPosition: Float,
     onIntent: (TranscriptionDetailIntent) -> Unit,
 ) {
     Column(
@@ -287,7 +290,7 @@ private fun TranscriptionContent(
             modifier = Modifier.weight(1f),
             name = transcription.name,
             onEditTranscriptionName = {
-                // TODO Edit transcription name
+                onIntent(TranscriptionDetailIntent.OnTranscriptionNameEdited(it))
             },
             createdAt = transcription.createdAt?.formatTo("dd/MM/yyyy"),
         ) {
@@ -295,13 +298,17 @@ private fun TranscriptionContent(
 
             LazyColumn(
                 state = listState,
-                contentPadding = PaddingValues(bottom = L),
+                contentPadding = PaddingValues(bottom = L, start = L, end = L),
                 verticalArrangement = Arrangement.spacedBy(M),
             ) {
                 itemsIndexed(transcription.segments) { index, segment ->
-                    val isHighlight = playerCurrentPosition.toFloat() in segment.start..segment.end
+                    val isHighlight = playerCurrentPosition in segment.start..segment.end
 
                     Text(
+                        modifier =
+                            Modifier.clickable {
+                                onIntent(TranscriptionDetailIntent.OnSeekToTime(segment.start))
+                            },
                         text = segment.text,
                         color = MaterialTheme.colorScheme.onBackground,
                         fontSize = fontSize.sp,
@@ -317,8 +324,6 @@ private fun TranscriptionContent(
                 }
             }
         }
-
-        Spacer(modifier = Modifier.height(S))
 
         SupportBottomBar(
             summaryLabel = stringResource(id = if (transcription.summary == null) R.string.summarize else R.string.open_summary),
@@ -348,7 +353,6 @@ private fun TranscriptionDetailScreenPreview() {
             modifier = Modifier,
             originScreen = "Home Screen",
             player = {},
-            playerCurrentPosition = 1L,
             state = fakeTranscriptionState(),
             onIntent = {},
         )
@@ -363,7 +367,6 @@ private fun TranscriptionDetailScreenStartPreview() {
             modifier = Modifier,
             originScreen = "Home Screen",
             player = {},
-            playerCurrentPosition = 1L,
             state = TranscriptionDetailScreenState(),
             onIntent = {},
         )
@@ -378,7 +381,6 @@ private fun TranscriptionDetailScreenLoadingPreview() {
             modifier = Modifier,
             originScreen = "Home Screen",
             player = {},
-            playerCurrentPosition = 1L,
             state =
                 TranscriptionDetailScreenState(
                     isLoading = true,
@@ -397,7 +399,6 @@ private fun TranscriptionDetailScreenErrorPreview() {
             modifier = Modifier,
             originScreen = "Home Screen",
             player = {},
-            playerCurrentPosition = 1L,
             state =
                 TranscriptionDetailScreenState(
                     isLoading = false,
