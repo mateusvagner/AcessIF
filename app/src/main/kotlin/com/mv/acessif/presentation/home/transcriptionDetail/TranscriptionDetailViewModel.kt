@@ -147,4 +147,8 @@ class TranscriptionDetailViewModel(
             }
         }
     }
+
+    fun seekToTime(start: Float) {
+        player.seekTo((start * 1000).toLong())
+    }
 }

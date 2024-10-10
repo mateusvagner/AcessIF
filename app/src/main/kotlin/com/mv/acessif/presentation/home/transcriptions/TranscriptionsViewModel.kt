@@ -31,10 +31,6 @@ class TranscriptionsViewModel(
     private val _state = MutableStateFlow(TranscriptionsScreenState())
     val state = _state.asStateFlow()
 
-    init {
-        getTranscriptions()
-    }
-
     fun getTranscriptions() {
         viewModelScope.launch {
             _state.value =

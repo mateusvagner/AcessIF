@@ -3,6 +3,7 @@ package com.mv.acessif.presentation.home.transcriptionDetail
 import androidx.annotation.OptIn
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -131,13 +132,17 @@ fun NavGraphBuilder.transcriptionDetailScreen(
                                 playerView.player?.play()
                             }
 
+                            Lifecycle.Event.ON_STOP -> {
+                                playerView.player?.stop()
+                            }
+
                             else -> Unit
                         }
                     },
                     modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(BaseCornerRadius)),
+                    Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(BaseCornerRadius)),
                 )
             },
             state = state,
@@ -184,6 +189,10 @@ fun NavGraphBuilder.transcriptionDetailScreen(
                     is TranscriptionDetailIntent.OnTranscriptionNameEdited -> {
                         viewModel.onNewTranscriptionName(intent.newName)
                     }
+
+                    is TranscriptionDetailIntent.OnSeekToTime -> {
+                        viewModel.seekToTime(intent.start)
+                    }
                 }
             },
         )
@@ -200,9 +209,9 @@ fun TranscriptionDetailScreen(
 ) {
     Column(
         modifier =
-            modifier
-                .fillMaxSize()
-                .background(color = MaterialTheme.colorScheme.background),
+        modifier
+            .fillMaxSize()
+            .background(color = MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         DefaultScreenHeader(
@@ -228,18 +237,18 @@ fun TranscriptionDetailScreen(
         if (state.error != null) {
             ErrorComponent(
                 modifier =
-                    Modifier
-                        .padding(horizontal = XL)
-                        .fillMaxSize(),
+                Modifier
+                    .padding(horizontal = XL)
+                    .fillMaxSize(),
                 message = state.error.asString(),
                 onTryAgain = { onIntent(TranscriptionDetailIntent.OnTryAgain) },
             )
         } else if (state.isLoading) {
             LoadingComponent(
                 modifier =
-                    Modifier
-                        .padding(horizontal = XL)
-                        .fillMaxSize(),
+                Modifier
+                    .padding(horizontal = XL)
+                    .fillMaxSize(),
                 label = stringResource(id = R.string.your_transcription_is_being_loaded),
             )
         } else if (state.transcription != null) {
@@ -268,9 +277,9 @@ private fun TranscriptionContent(
 
         Box(
             modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = L),
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = L),
         ) {
             player()
         }
@@ -296,6 +305,9 @@ private fun TranscriptionContent(
                     val isHighlight = playerCurrentPosition in segment.start..segment.end
 
                     Text(
+                        modifier = Modifier.clickable {
+                            onIntent(TranscriptionDetailIntent.OnSeekToTime(segment.start))
+                        },
                         text = segment.text,
                         color = MaterialTheme.colorScheme.onBackground,
                         fontSize = fontSize.sp,

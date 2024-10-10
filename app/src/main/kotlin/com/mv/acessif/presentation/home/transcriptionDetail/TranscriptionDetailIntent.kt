@@ -12,4 +12,6 @@ sealed interface TranscriptionDetailIntent {
     data class OnSummarizeTranscription(val transcriptionId: Int) : TranscriptionDetailIntent
 
     data class OnTranscriptionNameEdited(val newName: String) : TranscriptionDetailIntent
+
+    data class OnSeekToTime(val start: Float) : TranscriptionDetailIntent
 }

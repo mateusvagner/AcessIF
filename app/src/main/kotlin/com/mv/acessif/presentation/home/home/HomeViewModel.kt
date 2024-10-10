@@ -15,7 +15,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
@@ -45,21 +47,17 @@ class HomeViewModel(
         data class OnTranscriptionDone(val id: Int) : HomeEvent
     }
 
-    var state = mutableStateOf(HomeScreenState())
-        private set
+    private val _state = MutableStateFlow(HomeScreenState())
+    val state = _state.asStateFlow()
 
     private val _onEventSuccess = Channel<HomeEvent>()
     val onEventSuccess =
         _onEventSuccess.receiveAsFlow().shareIn(viewModelScope, SharingStarted.Lazily)
 
-    init {
-        getLastTranscriptions()
-    }
-
-    private fun getLastTranscriptions() {
+    fun getLastTranscriptions() {
         viewModelScope.launch {
-            state.value =
-                state.value.copy(
+            _state.value =
+                _state.value.copy(
                     transcriptionsSectionState =
                         state.value.transcriptionsSectionState.copy(
                             isLoading = true,
@@ -75,8 +73,8 @@ class HomeViewModel(
 
             when (transcriptionsResult) {
                 is Result.Success -> {
-                    state.value =
-                        state.value.copy(
+                    _state.value =
+                        _state.value.copy(
                             transcriptionsSectionState =
                                 state.value.transcriptionsSectionState.copy(
                                     isLoading = false,
@@ -87,8 +85,8 @@ class HomeViewModel(
                 }
 
                 is Result.Error -> {
-                    state.value =
-                        state.value.copy(
+                    _state.value =
+                        _state.value.copy(
                             transcriptionsSectionState =
                                 state.value.transcriptionsSectionState.copy(
                                     isLoading = false,
@@ -116,8 +114,8 @@ class HomeViewModel(
     }
 
     private fun transcribeFile(file: File) {
-        state.value =
-            state.value.copy(
+        _state.value =
+            _state.value.copy(
                 isLoadingTranscription = true,
                 errorTranscription = null,
             )
@@ -130,8 +128,8 @@ class HomeViewModel(
 
             when (transcriptionResult) {
                 is Result.Success -> {
-                    state.value =
-                        state.value.copy(
+                    _state.value =
+                        _state.value.copy(
                             isLoadingTranscription = false,
                             errorTranscription = null,
                         )
@@ -142,8 +140,8 @@ class HomeViewModel(
                 }
 
                 is Result.Error -> {
-                    state.value =
-                        state.value.copy(
+                    _state.value =
+                        _state.value.copy(
                             isLoadingTranscription = false,
                             errorTranscription = transcriptionResult.asErrorUiText(),
                         )
@@ -153,8 +151,8 @@ class HomeViewModel(
     }
 
     fun handleFileUriError() {
-        state.value =
-            state.value.copy(
+        _state.value =
+            _state.value.copy(
                 isLoadingTranscription = false,
                 errorTranscription = DataError.Local.FILE_NOT_FOUND.asUiText(),
             )
