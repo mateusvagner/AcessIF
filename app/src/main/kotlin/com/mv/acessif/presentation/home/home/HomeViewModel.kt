@@ -17,8 +17,10 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -47,22 +49,28 @@ class HomeViewModel(
     }
 
     private val _state = MutableStateFlow(HomeScreenState())
-    val state = _state.asStateFlow()
+    val state = _state
+        .onStart { getLastTranscriptions() }
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(3000L),
+            HomeScreenState(),
+        )
 
     private val _onEventSuccess = Channel<HomeEvent>()
     val onEventSuccess =
         _onEventSuccess.receiveAsFlow().shareIn(viewModelScope, SharingStarted.Lazily)
 
-    fun getLastTranscriptions() {
+    private fun getLastTranscriptions() {
         viewModelScope.launch {
             _state.value =
                 _state.value.copy(
                     transcriptionsSectionState =
-                        state.value.transcriptionsSectionState.copy(
-                            isLoading = true,
-                            error = null,
-                            transcriptions = emptyList(),
-                        ),
+                    state.value.transcriptionsSectionState.copy(
+                        isLoading = true,
+                        error = null,
+                        transcriptions = emptyList(),
+                    ),
                 )
 
             val transcriptionsResult =
@@ -75,11 +83,11 @@ class HomeViewModel(
                     _state.value =
                         _state.value.copy(
                             transcriptionsSectionState =
-                                state.value.transcriptionsSectionState.copy(
-                                    isLoading = false,
-                                    error = null,
-                                    transcriptions = transcriptionsResult.data,
-                                ),
+                            state.value.transcriptionsSectionState.copy(
+                                isLoading = false,
+                                error = null,
+                                transcriptions = transcriptionsResult.data,
+                            ),
                         )
                 }
 
@@ -87,11 +95,11 @@ class HomeViewModel(
                     _state.value =
                         _state.value.copy(
                             transcriptionsSectionState =
-                                state.value.transcriptionsSectionState.copy(
-                                    isLoading = false,
-                                    error = transcriptionsResult.error.asUiText(),
-                                    transcriptions = emptyList(),
-                                ),
+                            state.value.transcriptionsSectionState.copy(
+                                isLoading = false,
+                                error = transcriptionsResult.error.asUiText(),
+                                transcriptions = emptyList(),
+                            ),
                         )
                 }
             }

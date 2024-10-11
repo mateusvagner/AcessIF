@@ -92,27 +92,6 @@ fun NavGraphBuilder.homeScreen(
 
         val context = navController.context
 
-        val lifecycleOwner = LocalLifecycleOwner.current
-
-        DisposableEffect(lifecycleOwner) {
-            val observer =
-                LifecycleEventObserver { _, event ->
-                    when (event) {
-                        Lifecycle.Event.ON_RESUME -> {
-                            viewModel.getLastTranscriptions()
-                        }
-
-                        else -> Unit
-                    }
-                }
-
-            lifecycleOwner.lifecycle.addObserver(observer)
-
-            onDispose {
-                lifecycleOwner.lifecycle.removeObserver(observer)
-            }
-        }
-
         LaunchedEffect(key1 = Unit) {
             viewModel.onEventSuccess.collect { event ->
                 when (event) {
