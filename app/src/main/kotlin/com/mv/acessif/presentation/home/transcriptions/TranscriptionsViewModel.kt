@@ -5,14 +5,12 @@ import androidx.lifecycle.viewModelScope
 import com.mv.acessif.domain.repository.TranscriptionRepository
 import com.mv.acessif.domain.returnModel.Result
 import com.mv.acessif.presentation.asUiText
-import com.mv.acessif.presentation.home.home.HomeScreenState
 import com.mv.acessif.presentation.util.groupByFormattedDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -33,13 +31,14 @@ class TranscriptionsViewModel(
     )
 
     private val _state = MutableStateFlow(TranscriptionsScreenState())
-    val state = _state
-        .onStart { getTranscriptions() }
-        .stateIn(
-            viewModelScope,
-            SharingStarted.WhileSubscribed(3000L),
-            TranscriptionsScreenState(),
-        )
+    val state =
+        _state
+            .onStart { getTranscriptions() }
+            .stateIn(
+                viewModelScope,
+                SharingStarted.WhileSubscribed(3000L),
+                TranscriptionsScreenState(),
+            )
 
     fun getTranscriptions() {
         viewModelScope.launch {
