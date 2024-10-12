@@ -88,7 +88,7 @@ fun NavGraphBuilder.transcriptionsScreen(
                         navController.navigate(
                             TranscriptionDetailScreen(
                                 transcriptionId = it.transcriptionId,
-                                originScreen = context.getString(R.string.my_transcriptions),
+                                originScreen = context.getString(R.string.my_transcriptions_screen),
                             ),
                         )
                     }
