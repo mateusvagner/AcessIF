@@ -21,7 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.mv.acessif.R
@@ -55,12 +55,11 @@ fun TranscribeActionCard(
         }
     Surface(
         modifier =
-            modifier
-                .fillMaxWidth()
-                .background(brush = brush, shape = RoundedCornerShape(LargeCornerRadius)),
+        modifier
+            .fillMaxWidth()
+            .background(brush = brush, shape = RoundedCornerShape(LargeCornerRadius)),
         color = Color.Transparent,
         shape = RoundedCornerShape(LargeCornerRadius),
-        onClick = onCardClick,
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -75,26 +74,30 @@ fun TranscribeActionCard(
 
             Column(
                 modifier =
-                    Modifier
-                        .padding(horizontal = L)
-                        .padding(bottom = L),
+                Modifier
+                    .padding(horizontal = L)
+                    .padding(bottom = L),
                 horizontalAlignment = Alignment.Start,
             ) {
                 val textColor = if (isSystemInDarkTheme()) Black else White
 
-                Text(
-                    text = stringResource(R.string.create_transcription),
-                    color = textColor,
-                    style = BodyLarge.copy(fontWeight = FontWeight.Black),
-                )
+                Column(
+                    modifier = Modifier.semantics(mergeDescendants = true) {},
+                ) {
+                    Text(
+                        text = stringResource(R.string.create_transcription),
+                        color = textColor,
+                        style = BodyLarge.copy(fontWeight = FontWeight.Black),
+                    )
 
-                Spacer(modifier = Modifier.height(S))
+                    Spacer(modifier = Modifier.height(S))
 
-                Text(
-                    text = stringResource(R.string.create_transcription_instruction),
-                    color = textColor,
-                    style = BodyMedium,
-                )
+                    Text(
+                        text = stringResource(R.string.create_transcription_instruction),
+                        color = textColor,
+                        style = BodyMedium,
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(XL))
 
@@ -108,9 +111,9 @@ fun TranscribeActionCard(
 
                     Row(
                         modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = L, vertical = S),
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = L, vertical = S),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center,
                     ) {

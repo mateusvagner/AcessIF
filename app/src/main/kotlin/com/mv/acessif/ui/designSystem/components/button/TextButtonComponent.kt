@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
@@ -51,7 +52,7 @@ fun TextButtonComponent(
         onClick = onClick,
     ) {
         ButtonContent(
-            modifier = Modifier.padding(end = S),
+            modifier = Modifier.padding(end = S).clearAndSetSemantics { },
             label = label,
             mainColor = color,
             leadingImage = leadingImage,

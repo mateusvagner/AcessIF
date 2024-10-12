@@ -1,5 +1,8 @@
 package com.mv.acessif.ui.designSystem.components
 
+import android.media.AudioManager
+import android.os.VibrationEffect
+import android.os.Vibrator
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -20,6 +23,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.mv.acessif.R
@@ -44,6 +48,9 @@ fun DefaultScreenHeader(
     onBackPressed: (() -> Unit)? = null,
     onSupportIconPressed: (() -> Unit)? = null,
 ) {
+    val vibrator = LocalContext.current.getSystemService(Vibrator::class.java)
+    val audioManager = LocalContext.current.getSystemService(AudioManager::class.java)
+
     val rippleConfiguration =
         RippleConfiguration(
             color = if (isSystemInDarkTheme()) Black else White,
@@ -70,7 +77,11 @@ fun DefaultScreenHeader(
                     label = origin,
                     color = MaterialTheme.colorScheme.onPrimary,
                     modifier = modifier,
-                    onClick = { onBackPressed.invoke() },
+                    onClick = {
+                        vibrator.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK))
+                        audioManager.playSoundEffect(AudioManager.FX_KEY_CLICK)
+                        onBackPressed.invoke()
+                    },
                 )
             } else if (screenTitle != null) {
                 Text(
@@ -84,7 +95,11 @@ fun DefaultScreenHeader(
 
             if (onSupportIconPressed != null && supportIcon != null) {
                 IconButton(
-                    onClick = { onSupportIconPressed.invoke() },
+                    onClick = {
+                        vibrator.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK))
+                        audioManager.playSoundEffect(AudioManager.FX_KEY_CLICK)
+                        onSupportIconPressed.invoke()
+                    },
                 ) {
                     supportIcon.invoke()
                 }

@@ -22,6 +22,8 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -50,6 +52,9 @@ fun PasswordTextField(
         modifier = modifier,
         verticalArrangement = Arrangement.Center,
     ) {
+        val stateVisible = stringResource(id = R.string.show_password_state)
+        val stateNotVisible = stringResource(id = R.string.hide_password_state)
+
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(BaseCornerRadius),
@@ -66,6 +71,9 @@ fun PasswordTextField(
             trailingIcon = {
                 IconButton(onClick = { onVisibilityChanged(!isVisible) }) {
                     Image(
+                        modifier = Modifier.semantics {
+                            stateDescription = if (isVisible) stateVisible else stateNotVisible
+                        },
                         painter =
                             if (isVisible) {
                                 painterResource(

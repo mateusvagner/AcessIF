@@ -1,5 +1,8 @@
 package com.mv.acessif.presentation.components
 
+import android.media.AudioManager
+import android.os.VibrationEffect
+import android.os.Vibrator
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
@@ -18,7 +21,6 @@ import androidx.compose.material3.LocalRippleConfiguration
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.RippleConfiguration
-import androidx.compose.material3.RippleDefaults.RippleAlpha
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -27,8 +29,10 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -56,6 +60,9 @@ fun SignInSignUpActionCard(
     onSignInPressed: () -> Unit,
     onSignupPressed: () -> Unit,
 ) {
+    val vibrator = LocalContext.current.getSystemService(Vibrator::class.java)
+    val audioManager = LocalContext.current.getSystemService(AudioManager::class.java)
+
     Surface(
         modifier =
             modifier
@@ -92,19 +99,23 @@ fun SignInSignUpActionCard(
                         .padding(top = L, bottom = S),
                 horizontalAlignment = Alignment.Start,
             ) {
-                Text(
-                    text = stringResource(R.string.signin_and_do_more),
-                    color = MaterialTheme.colorScheme.onSurface,
-                    style = BodyLarge.copy(fontWeight = FontWeight.Black),
-                )
+                Column(
+                    modifier = Modifier.semantics(mergeDescendants = true) {},
+                ) {
+                    Text(
+                        text = stringResource(R.string.signin_and_do_more),
+                        color = MaterialTheme.colorScheme.onSurface,
+                        style = BodyLarge.copy(fontWeight = FontWeight.Black),
+                    )
 
-                Spacer(modifier = Modifier.height(L))
+                    Spacer(modifier = Modifier.height(L))
 
-                Text(
-                    text = stringResource(R.string.signin_and_do_more_instruction),
-                    color = MaterialTheme.colorScheme.onSurface,
-                    style = BodyMedium,
-                )
+                    Text(
+                        text = stringResource(R.string.signin_and_do_more_instruction),
+                        color = MaterialTheme.colorScheme.onSurface,
+                        style = BodyMedium,
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(XXL))
                 val rippleConfiguration =
@@ -127,7 +138,11 @@ fun SignInSignUpActionCard(
                                 Modifier
                                     .fillMaxWidth()
                                     .sizeIn(minHeight = BaseButtonHeight),
-                            onClick = onSignInPressed,
+                            onClick = {
+                                vibrator.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK))
+                                audioManager.playSoundEffect(AudioManager.FX_KEY_CLICK)
+                                onSignInPressed()
+                            },
                         ) {
                             Text(
                                 text = stringResource(id = R.string.sign_in),
@@ -137,7 +152,11 @@ fun SignInSignUpActionCard(
                         }
 
                         TextButton(
-                            onClick = onSignupPressed,
+                            onClick = {
+                                vibrator.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK))
+                                audioManager.playSoundEffect(AudioManager.FX_KEY_CLICK)
+                                onSignupPressed()
+                            },
                         ) {
                             Text(
                                 modifier =

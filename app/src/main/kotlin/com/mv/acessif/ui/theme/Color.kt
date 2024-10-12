@@ -12,7 +12,7 @@ val DarkGrey = Color(0xFF333333)
 val DarkBackground = Color(0xFF1C1C1C)
 val DarkOnBackground = Color(0xFFE7E7E7)
 
-val DarkPrimary = Color(0xFF035AEE)
+val DarkPrimary = Color(0xFF2B4EE3)
 val DarkOnPrimary = White
 
 val DarkSecondary = Color(0xFFA6CDFF)

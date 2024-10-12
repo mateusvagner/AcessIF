@@ -1,5 +1,8 @@
 package com.mv.acessif.ui.designSystem.components
 
+import android.media.AudioManager
+import android.os.VibrationEffect
+import android.os.Vibrator
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material.ripple.RippleAlpha
@@ -13,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.mv.acessif.ui.theme.AcessIFTheme
 import com.mv.acessif.ui.theme.BaseButtonHeight
@@ -28,6 +32,9 @@ fun CustomButton(
     onClick: () -> Unit,
     content: @Composable RowScope.() -> Unit,
 ) {
+    val vibrator = LocalContext.current.getSystemService(Vibrator::class.java)
+    val audioManager = LocalContext.current.getSystemService(AudioManager::class.java)
+
     val rippleConfiguration =
         RippleConfiguration(
             color = if (isLightColor) Black else White,
@@ -42,7 +49,11 @@ fun CustomButton(
     CompositionLocalProvider(LocalRippleConfiguration provides rippleConfiguration) {
         Button(
             modifier = modifier.sizeIn(minHeight = BaseButtonHeight),
-            onClick = onClick,
+            onClick = {
+                vibrator.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK))
+                audioManager.playSoundEffect(AudioManager.FX_KEY_CLICK)
+                onClick()
+            },
             colors =
                 ButtonDefaults.buttonColors(
                     containerColor = color,

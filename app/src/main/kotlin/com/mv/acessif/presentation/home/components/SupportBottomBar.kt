@@ -1,5 +1,8 @@
 package com.mv.acessif.presentation.home.components
 
+import android.media.AudioManager
+import android.os.VibrationEffect
+import android.os.Vibrator
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -22,6 +25,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -45,6 +49,9 @@ fun SupportBottomBar(
     maxFontSize: Int,
     onSizeChanged: (Int) -> Unit,
 ) {
+    val vibrator = LocalContext.current.getSystemService(Vibrator::class.java)
+    val audioManager = LocalContext.current.getSystemService(AudioManager::class.java)
+
     val rippleConfiguration =
         RippleConfiguration(
             color = if (isSystemInDarkTheme()) Black else White,
@@ -69,7 +76,11 @@ fun SupportBottomBar(
         ) {
             if (summaryLabel != null) {
                 Button(
-                    onClick = { onSummaryPressed?.invoke() },
+                    onClick = {
+                        vibrator.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK))
+                        audioManager.playSoundEffect(AudioManager.FX_KEY_CLICK)
+                        onSummaryPressed?.invoke()
+                    },
                 ) {
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(S),
@@ -93,7 +104,11 @@ fun SupportBottomBar(
                 horizontalArrangement = Arrangement.spacedBy(M),
             ) {
                 IconButton(
-                    onClick = { onSizeChanged((fontSize + 1).coerceIn(minFontSize, maxFontSize)) },
+                    onClick = {
+                        vibrator.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK))
+                        audioManager.playSoundEffect(AudioManager.FX_KEY_CLICK)
+                        onSizeChanged((fontSize + 1).coerceIn(minFontSize, maxFontSize))
+                    },
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_increase_font),
@@ -103,7 +118,11 @@ fun SupportBottomBar(
                 }
 
                 IconButton(
-                    onClick = { onSizeChanged((fontSize - 1).coerceIn(minFontSize, maxFontSize)) },
+                    onClick = {
+                        vibrator.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK))
+                        audioManager.playSoundEffect(AudioManager.FX_KEY_CLICK)
+                        onSizeChanged((fontSize - 1).coerceIn(minFontSize, maxFontSize))
+                    },
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_decrease_font),
