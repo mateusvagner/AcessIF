@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AcessIF</string>
+    <string name="welcome_user">Bem-vindo(a) %s!</string>
+
+    <string name="no_internet">Sem conexão com a internet. Verifique suas configurações de rede.</string>
+    <string name="timeout">A solicitação demorou muito. Tente novamente mais tarde.</string>
+    <string name="bad_request">Houve um problema com sua solicitação. Verifique e tente novamente.</string>
+    <string name="unauthorized">Email ou senha inválidos. Verifique suas credenciais e tente novamente.</string>
+    <string name="not_found">O recurso solicitado não foi encontrado.</string>
+    <string name="token_expired">Sua sessão expirou. Faça login novamente.</string>
+    <string name="internal_server_error">Ocorreu um erro inesperado. Tente novamente mais tarde.</string>
+    <string name="server_unavailable">O servidor está indisponível no momento. Tente novamente mais tarde.</string>
+    <string name="unknown_error">Ocorreu um erro inesperado. Tente novamente ou entre em contato com o suporte.</string>
+    <string name="server_moved">A localização do servidor mudou. Atualize o endereço do servidor.</string>
+    <string name="permission_denied">Você não tem permissão para acessar este recurso.</string>
+    <string name="serialization_error">Resposta inesperada do servidor. Tente novamente mais tarde.</string>
+    <string name="file_not_found">O arquivo solicitado não foi encontrado.</string>
+    <string name="null_pointer_error">Ocorreu um erro no sistema. Tente novamente ou entre em contato com o suporte.</string>
+    <string name="empty_result_error">Nenhum resultado encontrado. Tente uma consulta diferente.</string>
+
+    <string name="back_to">Voltar para %s</string>
+    <string name="previous_screen">Tela anterior</string>
+    <string name="close">Fechar</string>
+    <string name="menu">Menu</string>
+    <string name="see_all">Ver tudo</string>
+    <string name="see_all_my_transcription">Ver todas as minhas transcrições</string>
+    <string name="increase_font">Aumentar fonte</string>
+    <string name="decrease_font">Diminuir fonte</string>
+
+    <string name="show_password">Mostrar senha</string>
+    <string name="hide_password">Ocultar senha</string>
+    <string name="show_password_state">Senha Visível</string>
+    <string name="hide_password_state">Senha Oculta</string>
+
+    <string name="sign_in">Entrar</string>
+    <string name="sign_up">Cadastrar</string>
+    <string name="logout">Sair</string>
+    <string name="about_us">Sobre nós</string>
+
+    <string name="name">Nome</string>
+    <string name="email">Email</string>
+    <string name="password">Senha</string>
+
+    <string name="welcome_screen">Tela de Boas-vindas</string>
+    <string name="welcome">Bem-vindo(a)!</string>
+    <string name="home_screen">Tela Inicial</string>
+    <string name="new_transcription_screen">Tela de Nova Transcrição</string>
+    <string name="my_transcriptions_screen">Tela Minhas Transcrições</string>
+    <string name="my_transcriptions">Minhas Transcrições</string>
+    <string name="summary">Resumo</string>
+
+    <string name="name_is_too_short">Nome muito curto</string>
+    <string name="name_is_required">Nome é obrigatório</string>
+
+    <string name="email_is_required">Email é obrigatório</string>
+    <string name="email_is_invalid">Email inválido</string>
+
+    <string name="password_is_required">Senha é obrigatória</string>
+
+    <string name="creating_account">Criando conta</string>
+    <string name="signing_in">Entrando</string>
+
+    <string name="an_error">Um erro</string>
+    <string name="try_again">Tente novamente</string>
+
+    <string name="welcome_to">Bem-vindo(a) ao</string>
+
+    <string name="speech_to_text">Fala para texto</string>
+    <string name="start_a_transcription">Iniciar uma transcrição</string>
+    <string name="start_a_new_transcription">Iniciar nova transcrição</string>
+    <string name="check_my_transcriptions">Ver minhas transcrições</string>
+
+    <string name="transcription">Transcrição</string>
+    <string name="transcription_detail">Detalhes da Transcrição</string>
+    <string name="make_transcription">Fazer Transcrição</string>
+    <string name="make_first_transcription">Faça sua primeira transcrição</string>
+    <string name="make_other_transcription">Fazer outra transcrição</string>
+
+    <string name="send_audio_file">Enviar Arquivo de Áudio</string>
+    <string name="attach_audio_file">Anexar Arquivo de Áudio</string>
+    <string name="attach_another_audio_file">Anexar Outro Arquivo de Áudio</string>
+    <string name="your_audio_is_been_processed">Seu áudio está sendo processado</string>
+    <string name="your_transcription_is_being_loaded">Aguarde enquanto carregamos sua transcrição.</string>
+    <string name="your_last_transcription_is_being_loaded">Estamos carregando suas últimas transcrições.</string>
+    <string name="your_transcriptions_are_being_loaded">Aguarde enquanto carregamos suas transcrições.</string>
+    <string name="your_summary_is_being_loaded">Seu resumo de transcrição está sendo carregado</string>
+    <string name="your_transcription_is_being_deleting">Aguarde enquanto processamos seu pedido de exclusão.</string>
+
+    <string name="semantics_decrease_font_size">Diminuir tamanho da fonte</string>
+    <string name="semantics_increase_font_size">Aumentar tamanho da fonte</string>
+
+    <string name="share_transcription">Compartilhar transcrição</string>
+    <string name="share_summary">Compartilhar resumo</string>
+    <string name="share">Compartilhar</string>
+    <string name="transcribe_again">Transcrever novamente</string>
+
+    <string name="file_picker_error">Erro ao selecionar arquivo</string>
+
+    <string name="new_transcription">Nova Transcrição</string>
+    <string name="summarize">Resumir</string>
+    <string name="open_summary">Abrir Resumo</string>
+    <string name="transcription_summary">Resumo da Transcrição</string>
+    <string name="your_transcription_is_ready">Sua transcrição está pronta!</string>
+    <string name="open_transcription">Abrir transcrição</string>
+
+    <string name="you_dont_have_transcriptions">Você ainda não tem transcrições.</string>
+
+    <string name="open_transcription_from">Abrir transcrição do dia %s</string>
+    <string name="unknown_date">Data desconhecida</string>
+    <string name="unknown_audio_id">ID de áudio desconhecido</string>
+
+    <string name="transcribed_at">Transcrito em %s</string>
+    <string name="create_transcription">Criar Transcrição</string>
+    <string name="create_transcription_instruction">Envie um arquivo de áudio e comece a transcrever imediatamente</string>
+    <string name="send_recording">Enviar gravação</string>
+
+    <string name="edit_transcription_name">Editar Nome da Transcrição</string>
+    <string name="new_transcription_name">Novo Nome da Transcrição</string>
+    <string name="save_transcription_name">Salvar Novo Nome da Transcrição</string>
+    <string name="delete_transcription">Excluir Transcrição</string>
+
+    <string name="dont_have_account">Ainda não tem conta?</string>
+    <string name="sign_up_here">Cadastre-se aqui</string>
+
+    <string name="signin_and_do_more">Entre e faça mais!</string>
+    <string name="signin_and_do_more_instruction">Entre para acessar o histórico de suas transcrições e criar resumos inteligentes!</string>
+</resources>

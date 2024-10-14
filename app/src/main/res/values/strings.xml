@@ -2,20 +2,21 @@
     <string name="app_name">AcessIF</string>
     <string name="welcome_user">Welcome %s!</string>
 
-    <string name="no_internet">Your are not connected to the internet</string>
-    <string name="timeout">Request timeout</string>
-    <string name="bad_request">Bad request</string>
-    <string name="unauthorized">The user is unauthorized</string>
-    <string name="not_found">Not found</string>
-    <string name="token_expired">The token has expired</string>
-    <string name="internal_server_error">Internal server error</string>
-    <string name="server_unavailable">The server is unavailable</string>
-    <string name="unknown_error">Unknown error</string>
-    <string name="permission_denied">Permission denied</string>
-    <string name="serialization_error">Serialization Error</string>
-    <string name="file_not_found">File not found</string>
-    <string name="null_pointer_error">Null pointer error</string>
-    <string name="empty_result_error">Empty result</string>
+    <string name="no_internet">No internet connection. Please check your network settings.</string>
+    <string name="timeout">The request took too long. Please try again later.</string>
+    <string name="bad_request">There was an issue with your request. Please review and try again.</string>
+    <string name="unauthorized">Invalid email or password. Please check your credentials and try again.</string>
+    <string name="not_found">The requested resource could not be found.</string>
+    <string name="token_expired">Your session has expired. Please log in again.</string>
+    <string name="internal_server_error">An unexpected error occurred. Please try again later.</string>
+    <string name="server_unavailable">The server is currently unavailable. Please try again later.</string>
+    <string name="unknown_error">An unexpected error occurred. Please try again or contact support.</string>
+    <string name="server_moved">The server location has changed. Please update the server address.</string>
+    <string name="permission_denied">You do not have permission to access this resource.</string>
+    <string name="serialization_error">Unexpected response from the server. Please try again later.</string>
+    <string name="file_not_found">The requested file could not be found.</string>
+    <string name="null_pointer_error">A system error occurred. Please try again or contact support.</string>
+    <string name="empty_result_error">No results were found. Please try a different query.</string>
 
     <string name="back_to">Back to %s</string>
     <string name="previous_screen">Previous screen</string>
@@ -28,6 +29,8 @@
 
     <string name="show_password">Show password</string>
     <string name="hide_password">Hide password</string>
+    <string name="show_password_state">Password Visible</string>
+    <string name="hide_password_state">Password Hidden</string>
 
     <string name="sign_in">Sign in</string>
     <string name="sign_up">Sign up</string>
@@ -39,6 +42,7 @@
     <string name="password">Password</string>
 
     <string name="welcome_screen">Welcome Screen</string>
+    <string name="welcome">Welcome!</string>
     <string name="home_screen">Home Screen</string>
     <string name="new_transcription_screen">New Transcription Screen</string>
     <string name="my_transcriptions_screen">My Transcriptions Screen</string>
@@ -80,6 +84,7 @@
     <string name="your_last_transcription_is_being_loaded">We are loading your last transcriptions.</string>
     <string name="your_transcriptions_are_being_loaded">Please wait while we load your transcriptions.</string>
     <string name="your_summary_is_being_loaded">Your transcription summary is being loaded</string>
+    <string name="your_transcription_is_being_deleting">Please wait while we process your deletion request.</string>
 
     <string name="semantics_decrease_font_size">Decrease font size</string>
     <string name="semantics_increase_font_size">Increase font size</string>
@@ -110,5 +115,14 @@
     <string name="send_recording">Send recording</string>
 
     <string name="edit_transcription_name">Edit Transcription Name</string>
+    <string name="new_transcription_name">New Transcription Name</string>
+    <string name="save_transcription_name">Save Transcription New Name</string>
+    <string name="delete_transcription">Delete Transcription</string>
+
+    <string name="dont_have_account">Don\'t have account yet?</string>
+    <string name="sign_up_here">Sign up here</string>
+
+    <string name="signin_and_do_more">Signin and do more!</string>
+    <string name="signin_and_do_more_instruction">Signin to access your transcription history and create smart summaries!</string>
 
 </resources>

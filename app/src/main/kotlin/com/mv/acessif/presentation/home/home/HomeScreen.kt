@@ -25,6 +25,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -43,6 +44,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -51,8 +53,8 @@ import com.mv.acessif.domain.Language
 import com.mv.acessif.domain.Segment
 import com.mv.acessif.domain.Transcription
 import com.mv.acessif.presentation.UiText
+import com.mv.acessif.presentation.components.TranscribeActionCard
 import com.mv.acessif.presentation.home.home.components.SeeAllButton
-import com.mv.acessif.presentation.home.home.components.TranscribeActionCard
 import com.mv.acessif.presentation.home.home.components.TranscriptionCard
 import com.mv.acessif.presentation.home.transcriptionDetail.TranscriptionDetailScreen
 import com.mv.acessif.presentation.home.transcriptions.TranscriptionsScreen
@@ -82,30 +84,34 @@ fun NavGraphBuilder.homeScreen(
 ) {
     composable<HomeScreen> {
         val viewModel: HomeViewModel = hiltViewModel()
+        val state by viewModel.state.collectAsStateWithLifecycle()
 
         val context = navController.context
 
         LaunchedEffect(key1 = Unit) {
-            viewModel.onLogoutSuccess.collect {
-                rootNavController.navigate(WelcomeScreen) {
-                    val currentRoute = rootNavController.currentBackStackEntry?.destination?.route
-                    currentRoute?.let { screenRoute ->
-                        popUpTo(screenRoute) {
-                            inclusive = true
+            viewModel.onEventSuccess.collect { event ->
+                when (event) {
+                    is HomeViewModel.HomeEvent.OnTranscriptionDone -> {
+                        navController.navigate(
+                            TranscriptionDetailScreen(
+                                transcriptionId = event.id,
+                                originScreen = context.getString(R.string.home_screen),
+                            ),
+                        )
+                    }
+
+                    HomeViewModel.HomeEvent.OnLogout -> {
+                        rootNavController.navigate(WelcomeScreen) {
+                            val currentRoute =
+                                rootNavController.currentBackStackEntry?.destination?.route
+                            currentRoute?.let { screenRoute ->
+                                popUpTo(screenRoute) {
+                                    inclusive = true
+                                }
+                            }
                         }
                     }
                 }
-            }
-        }
-
-        LaunchedEffect(key1 = Unit) {
-            viewModel.onTranscriptionSuccess.collect { transcriptionId ->
-                navController.navigate(
-                    TranscriptionDetailScreen(
-                        transcriptionId = transcriptionId,
-                        originScreen = context.getString(R.string.home_screen),
-                    ),
-                )
             }
         }
 
@@ -126,7 +132,7 @@ fun NavGraphBuilder.homeScreen(
         HomeScreen(
             modifier = modifier,
             userName = "", // TODO
-            state = viewModel.state.value,
+            state = state,
             onIntent = { intent ->
                 when (intent) {
                     HomeIntent.OnNewTranscription -> {
@@ -220,14 +226,24 @@ fun HomeScreen(
                     modifier =
                         Modifier
                             .fillMaxSize()
-                            .background(color = MaterialTheme.colorScheme.background.copy(alpha = 0.95F))
                             .clickable(
                                 indication = null,
                                 interactionSource = remember { MutableInteractionSource() },
                                 onClick = { },
                             ),
+                    backgroundAlpha = 0.95F,
                     label = stringResource(R.string.your_transcription_is_being_loaded),
                 )
+            } else if (state.errorTranscription != null) {
+                Surface {
+                    ErrorComponent(
+                        modifier =
+                            Modifier
+                                .fillMaxSize()
+                                .background(color = MaterialTheme.colorScheme.background.copy(alpha = 0.95F)),
+                        message = state.errorTranscription.asString(),
+                    )
+                }
             }
         }
     }
@@ -269,23 +285,23 @@ private fun MenuComponent(
                     onDismissRequest()
                 },
             )
-
-            DropdownMenuItem(
-                text = {
-                    Text(text = stringResource(R.string.about_us))
-                },
-                trailingIcon = {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_contacts),
-                        colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onSurface),
-                        contentDescription = stringResource(R.string.about_us),
-                    )
-                },
-                onClick = {
-                    onIntent(HomeIntent.OnAboutUs)
-                    onDismissRequest()
-                },
-            )
+            // TODO Uncomment when about us screen is implemented
+//            DropdownMenuItem(
+//                text = {
+//                    Text(text = stringResource(R.string.about_us))
+//                },
+//                trailingIcon = {
+//                    Image(
+//                        painter = painterResource(id = R.drawable.ic_contacts),
+//                        colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onSurface),
+//                        contentDescription = stringResource(R.string.about_us),
+//                    )
+//                },
+//                onClick = {
+//                    onIntent(HomeIntent.OnAboutUs)
+//                    onDismissRequest()
+//                },
+//            )
         }
     }
 }
@@ -311,7 +327,7 @@ private fun TranscriptionsSection(
                     .padding(vertical = XL),
             message = state.error.asString(),
         )
-    } else {
+    } else if (state.transcriptions.isEmpty().not()) {
         Column {
             Row(
                 modifier =

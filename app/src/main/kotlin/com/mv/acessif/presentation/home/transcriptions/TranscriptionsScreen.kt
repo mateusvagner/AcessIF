@@ -2,7 +2,10 @@ package com.mv.acessif.presentation.home.transcriptions
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,12 +17,16 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -30,12 +37,13 @@ import com.mv.acessif.domain.Transcription
 import com.mv.acessif.presentation.UiText
 import com.mv.acessif.presentation.home.newTranscription.NewTranscriptionScreen
 import com.mv.acessif.presentation.home.transcriptionDetail.TranscriptionDetailScreen
+import com.mv.acessif.ui.designSystem.components.DefaultScreenHeader
 import com.mv.acessif.ui.designSystem.components.ErrorComponent
 import com.mv.acessif.ui.designSystem.components.LoadingComponent
-import com.mv.acessif.ui.designSystem.components.ScreenHeader
 import com.mv.acessif.ui.designSystem.components.button.MainActionButton
 import com.mv.acessif.ui.theme.AcessIFTheme
 import com.mv.acessif.ui.theme.Black
+import com.mv.acessif.ui.theme.BodyLarge
 import com.mv.acessif.ui.theme.BodyMedium
 import com.mv.acessif.ui.theme.L
 import com.mv.acessif.ui.theme.M
@@ -55,12 +63,13 @@ fun NavGraphBuilder.transcriptionsScreen(
 ) {
     composable<TranscriptionsScreen> {
         val viewModel: TranscriptionsViewModel = hiltViewModel()
+        val state by viewModel.state.collectAsStateWithLifecycle()
 
         val context = navController.context
 
         TranscriptionsScreen(
             modifier = modifier,
-            state = viewModel.state.value,
+            state = state,
             onIntent = {
                 when (it) {
                     TranscriptionsIntent.OnNavigateBack -> {
@@ -79,9 +88,13 @@ fun NavGraphBuilder.transcriptionsScreen(
                         navController.navigate(
                             TranscriptionDetailScreen(
                                 transcriptionId = it.transcriptionId,
-                                originScreen = context.getString(R.string.my_transcriptions),
+                                originScreen = context.getString(R.string.my_transcriptions_screen),
                             ),
                         )
+                    }
+
+                    is TranscriptionsIntent.OnDeleteTranscription -> {
+                        viewModel.deleteTranscription(it.transcriptionId)
                     }
                 }
             },
@@ -99,13 +112,14 @@ fun TranscriptionsScreen(
         modifier =
             modifier
                 .fillMaxSize()
-                .background(color = MaterialTheme.colorScheme.background)
-                .padding(bottom = XL),
+                .background(color = MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        ScreenHeader(
+        DefaultScreenHeader(
+            modifier =
+                Modifier
+                    .background(color = MaterialTheme.colorScheme.primary),
             origin = stringResource(id = R.string.home_screen),
-            screenTitle = stringResource(id = R.string.my_transcriptions),
             onBackPressed = { onIntent(TranscriptionsIntent.OnNavigateBack) },
         )
 
@@ -137,11 +151,28 @@ fun TranscriptionsScreen(
                 onIntent = onIntent,
             )
         } else {
-            TranscriptionsContent(
-                modifier = Modifier,
-                transcriptions = state.transcriptions,
-                onIntent = onIntent,
-            )
+            Box {
+                TranscriptionsContent(
+                    modifier = Modifier,
+                    transcriptions = state.transcriptions,
+                    onIntent = onIntent,
+                )
+
+                if (state.isDeletingTranscription) {
+                    LoadingComponent(
+                        modifier =
+                            Modifier
+                                .fillMaxSize()
+                                .background(color = MaterialTheme.colorScheme.background.copy(alpha = 0.95F))
+                                .clickable(
+                                    indication = null,
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    onClick = { },
+                                ),
+                        label = stringResource(R.string.your_transcription_is_being_deleting),
+                    )
+                }
+            }
         }
     }
 }
@@ -157,10 +188,13 @@ fun TranscriptionsEmptyContent(
         verticalArrangement = Arrangement.Center,
     ) {
         Text(
-            modifier = Modifier.padding(M),
+            modifier =
+                Modifier
+                    .padding(M)
+                    .background(color = MaterialTheme.colorScheme.background),
             text = stringResource(R.string.you_dont_have_transcriptions),
             style = BodyMedium,
-            color = Black,
+            color = MaterialTheme.colorScheme.onBackground,
         )
 
         MainActionButton(
@@ -190,7 +224,7 @@ fun TranscriptionsContent(
                 Text(
                     modifier = Modifier.padding(M),
                     text = date,
-                    style = BodyMedium,
+                    style = BodyLarge.copy(fontWeight = FontWeight.Bold),
                     color = Black,
                 )
             }
@@ -202,6 +236,13 @@ fun TranscriptionsContent(
                     onClick = {
                         onIntent(
                             TranscriptionsIntent.OnOpenTranscriptionDetail(
+                                transcription.id,
+                            ),
+                        )
+                    },
+                    onDeleteClick = {
+                        onIntent(
+                            TranscriptionsIntent.OnDeleteTranscription(
                                 transcription.id,
                             ),
                         )
@@ -223,6 +264,24 @@ private fun TranscriptionScreenPreview() {
                     isLoading = false,
                     error = null,
                     transcriptions = fakeTranscriptions(),
+                ),
+            onIntent = {},
+        )
+    }
+}
+
+@Composable
+@Preview
+private fun TranscriptionScreenDeletingPreview() {
+    AcessIFTheme {
+        TranscriptionsScreen(
+            modifier = Modifier,
+            state =
+                TranscriptionsScreenState(
+                    isLoading = false,
+                    error = null,
+                    transcriptions = fakeTranscriptions(),
+                    isDeletingTranscription = true,
                 ),
             onIntent = {},
         )

@@ -2,9 +2,11 @@ package com.mv.acessif.data.mapper
 
 import com.mv.acessif.domain.returnModel.DataError
 import io.ktor.client.plugins.ClientRequestException
+import io.ktor.client.plugins.RedirectResponseException
 import io.ktor.client.plugins.ResponseException
 import io.ktor.client.plugins.ServerResponseException
 import io.ktor.http.HttpStatusCode
+import io.ktor.serialization.JsonConvertException
 import kotlinx.serialization.SerializationException
 import java.net.ConnectException
 import java.net.SocketTimeoutException
@@ -13,6 +15,7 @@ import java.net.UnknownHostException
 object ErrorMapper {
     fun mapNetworkExceptionToNetworkDataError(exception: Exception): DataError.Network {
         return when (exception) {
+            // For 4xx responses.
             is ClientRequestException -> {
                 when (exception.response.status) {
                     HttpStatusCode.BadRequest -> DataError.Network.BAD_REQUEST
@@ -23,6 +26,7 @@ object ErrorMapper {
                 }
             }
 
+            // For 5xx responses
             is ServerResponseException -> {
                 when (exception.response.status) {
                     HttpStatusCode.InternalServerError -> DataError.Network.INTERNAL_SERVER_ERROR
@@ -30,6 +34,16 @@ object ErrorMapper {
                     else -> DataError.Network.UNKNOWN
                 }
             }
+
+            // For 3xx responses
+            is RedirectResponseException -> {
+                when (exception.response.status) {
+                    HttpStatusCode.MovedPermanently -> DataError.Network.MOVED_PERMANENTLY
+                    else -> DataError.Network.UNKNOWN
+                }
+            }
+
+            is JsonConvertException -> DataError.Network.SERIALIZATION_ERROR
 
             is ResponseException -> {
                 when (exception.response.status) {
@@ -88,8 +102,6 @@ object ErrorMapper {
             is NullPointerException -> DataError.Local.NULL_POINTER
 
             else -> DataError.Network.UNKNOWN
-
-            // TODO local errors
         }
     }
 

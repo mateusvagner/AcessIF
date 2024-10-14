@@ -3,14 +3,17 @@ package com.mv.acessif.ui.designSystem.components.button.common
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
-import com.mv.acessif.ui.theme.LabelLarge
+import com.mv.acessif.ui.theme.AcessIFTheme
 import com.mv.acessif.ui.theme.S
+import com.mv.acessif.ui.theme.TitleMedium
 
 @Composable
 fun ButtonContent(
@@ -34,12 +37,23 @@ fun ButtonContent(
         if (label != null) {
             Text(
                 text = label,
-                style = LabelLarge.copy(color = mainColor),
+                style = TitleMedium.copy(color = mainColor),
             )
         }
 
         if (trailingImage != null) {
             trailingImage()
         }
+    }
+}
+
+@Preview
+@Composable
+private fun ButtonContentPreview() {
+    AcessIFTheme {
+        ButtonContent(
+            mainColor = MaterialTheme.colorScheme.primary,
+            label = "Button",
+        )
     }
 }

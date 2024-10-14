@@ -13,6 +13,7 @@ object HttpRoutes {
     const val LAST_TRANSCRIPTIONS = "last-transcriptions"
     const val TRANSCRIBE = "transcribe"
     const val TRANSCRIBE_DEMO = "transcribe/demo"
+    const val TRANSCRIBE_ID = "transcribe/id"
 
     // Audio File
     const val AUDIO_FILES = "audio-files"
