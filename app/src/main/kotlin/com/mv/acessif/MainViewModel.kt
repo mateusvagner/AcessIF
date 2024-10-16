@@ -13,32 +13,33 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
-    private val refreshTokenUseCase: RefreshTokenUseCase,
-    private val navigator: Navigator,
-) : ViewModel(), Navigator by navigator {
+class MainViewModel
+    @Inject
+    constructor(
+        private val refreshTokenUseCase: RefreshTokenUseCase,
+        private val navigator: Navigator,
+    ) : ViewModel(), Navigator by navigator {
+        private val _isLoading = MutableStateFlow(true)
+        val isLoading = _isLoading.asStateFlow()
 
-    private val _isLoading = MutableStateFlow(true)
-    val isLoading = _isLoading.asStateFlow()
+        init {
+            checkRefreshToken()
+        }
 
-    init {
-        checkRefreshToken()
-    }
+        private fun checkRefreshToken() {
+            _isLoading.value = true
+            viewModelScope.launch {
+                val result = refreshTokenUseCase.execute()
 
-    private fun checkRefreshToken() {
-        _isLoading.value = true
-        viewModelScope.launch {
-            val result = refreshTokenUseCase.execute()
-
-            if (result is Result.Success) {
-                navigateTo(RootGraph.HomeGraph) {
-                    popUpTo<RootGraph.WelcomeRoute> {
-                        inclusive = true
+                if (result is Result.Success) {
+                    navigateTo(RootGraph.HomeGraph) {
+                        popUpTo<RootGraph.WelcomeRoute> {
+                            inclusive = true
+                        }
                     }
                 }
-            }
 
-            _isLoading.value = false
+                _isLoading.value = false
+            }
         }
     }
-}

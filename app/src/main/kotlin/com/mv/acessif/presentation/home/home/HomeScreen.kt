@@ -28,7 +28,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -56,8 +55,6 @@ import com.mv.acessif.presentation.UiText
 import com.mv.acessif.presentation.components.TranscribeActionCard
 import com.mv.acessif.presentation.home.home.components.SeeAllButton
 import com.mv.acessif.presentation.home.home.components.TranscriptionCard
-import com.mv.acessif.presentation.home.transcriptions.TranscriptionsScreen
-import com.mv.acessif.presentation.root.RootGraph
 import com.mv.acessif.ui.designSystem.components.DefaultScreenHeader
 import com.mv.acessif.ui.designSystem.components.ErrorComponent
 import com.mv.acessif.ui.designSystem.components.LoadingComponent

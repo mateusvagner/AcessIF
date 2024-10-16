@@ -19,9 +19,10 @@ import com.mv.acessif.presentation.util.collectWithLifecycle
 fun NavHostController.observeNavigationEvents(navigator: Navigator) {
     navigator.navigationActions.collectWithLifecycle { action ->
         when (action) {
-            is NavigationAction.Navigate -> navigate(action.destination) {
-                action.navOptions(this)
-            }
+            is NavigationAction.Navigate ->
+                navigate(action.destination) {
+                    action.navOptions(this)
+                }
 
             is NavigationAction.NavigateUp -> navigateUp()
         }

@@ -40,7 +40,6 @@ class AcessIFNavigator(
         _navigationActions.trySend(NavigationAction.Navigate(destination, navOptions))
     }
 
-
     override fun tryNavigateUp() {
         _navigationActions.trySend(NavigationAction.NavigateUp)
     }

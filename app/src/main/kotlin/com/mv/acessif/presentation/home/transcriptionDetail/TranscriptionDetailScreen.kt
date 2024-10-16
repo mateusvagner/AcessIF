@@ -57,7 +57,6 @@ import com.mv.acessif.presentation.UiText
 import com.mv.acessif.presentation.home.components.SupportBottomBar
 import com.mv.acessif.presentation.home.components.TranscriptionContainer
 import com.mv.acessif.presentation.home.home.HomeGraph
-import com.mv.acessif.presentation.home.summary.SummaryScreen
 import com.mv.acessif.presentation.util.formatTo
 import com.mv.acessif.presentation.util.shareTextIntent
 import com.mv.acessif.ui.designSystem.components.DefaultScreenHeader
