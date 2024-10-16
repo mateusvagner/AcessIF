@@ -23,10 +23,6 @@ interface Navigator {
         navOptions: NavOptionsBuilder.() -> Unit,
     )
 
-    suspend fun navigateToTopLevel(destination: Destination)
-
-    fun tryNavigateToTopLevel(destination: Destination)
-
     suspend fun navigateUp()
 
     fun tryNavigateUp()

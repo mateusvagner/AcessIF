@@ -8,7 +8,5 @@ sealed interface NavigationAction {
         val navOptions: NavOptionsBuilder.() -> Unit = {},
     ) : NavigationAction
 
-    data class NavigateToTopLevel(val destination: Destination) : NavigationAction
-
     data object NavigateUp : NavigationAction
 }
