@@ -55,9 +55,9 @@ fun TranscribeActionCard(
         }
     Surface(
         modifier =
-        modifier
-            .fillMaxWidth()
-            .background(brush = brush, shape = RoundedCornerShape(LargeCornerRadius)),
+            modifier
+                .fillMaxWidth()
+                .background(brush = brush, shape = RoundedCornerShape(LargeCornerRadius)),
         color = Color.Transparent,
         shape = RoundedCornerShape(LargeCornerRadius),
     ) {
@@ -74,9 +74,9 @@ fun TranscribeActionCard(
 
             Column(
                 modifier =
-                Modifier
-                    .padding(horizontal = L)
-                    .padding(bottom = L),
+                    Modifier
+                        .padding(horizontal = L)
+                        .padding(bottom = L),
                 horizontalAlignment = Alignment.Start,
             ) {
                 val textColor = if (isSystemInDarkTheme()) Black else White
@@ -111,9 +111,9 @@ fun TranscribeActionCard(
 
                     Row(
                         modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = L, vertical = S),
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = L, vertical = S),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center,
                     ) {

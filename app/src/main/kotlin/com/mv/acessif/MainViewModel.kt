@@ -1,59 +1,44 @@
 package com.mv.acessif
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mv.acessif.domain.returnModel.Result
 import com.mv.acessif.domain.useCase.RefreshTokenUseCase
+import com.mv.acessif.presentation.navigation.Navigator
+import com.mv.acessif.presentation.root.RootGraph
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel(
+class MainViewModel @Inject constructor(
     private val refreshTokenUseCase: RefreshTokenUseCase,
-    private val dispatcher: CoroutineDispatcher,
-) : ViewModel() {
-    @Inject
-    constructor(
-        refreshTokenUseCase: RefreshTokenUseCase,
-    ) : this(
-        refreshTokenUseCase = refreshTokenUseCase,
-        dispatcher = Dispatchers.IO,
-    )
+    private val navigator: Navigator,
+) : ViewModel(), Navigator by navigator {
 
-    var isLoading = mutableStateOf(true)
-        private set
-
-    var isLoggedIn = mutableStateOf(false)
-        private set
+    private val _isLoading = MutableStateFlow(true)
+    val isLoading = _isLoading.asStateFlow()
 
     init {
         checkRefreshToken()
     }
 
     private fun checkRefreshToken() {
-        isLoading.value = true
+        _isLoading.value = true
         viewModelScope.launch {
-            val result =
-                withContext(dispatcher) {
-                    refreshTokenUseCase.execute()
-                }
+            val result = refreshTokenUseCase.execute()
 
-            when (result) {
-                is Result.Success -> {
-                    isLoggedIn.value = true
-                }
-
-                is Result.Error -> {
-                    isLoggedIn.value = false
+            if (result is Result.Success) {
+                navigateTo(RootGraph.HomeGraph) {
+                    popUpTo<RootGraph.WelcomeRoute> {
+                        inclusive = true
+                    }
                 }
             }
 
-            isLoading.value = false
+            _isLoading.value = false
         }
     }
 }

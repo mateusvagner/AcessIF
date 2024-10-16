@@ -1,7 +1,7 @@
 package com.mv.acessif.network
 
 object HttpRoutes {
-    const val BASE_URL = "http://192.168.68.115:5000/"
+    const val BASE_URL = "http://10.0.2.2:8000/"
 
     // Auth
     const val SIGN_UP = "signup"

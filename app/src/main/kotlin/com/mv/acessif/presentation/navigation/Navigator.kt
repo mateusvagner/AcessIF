@@ -11,19 +11,19 @@ interface Navigator {
 
     suspend fun navigateTo(destination: Destination)
 
-    fun tryNavigateTo(destination: Destination)
-
     suspend fun navigateTo(
         destination: Destination,
         navOptions: NavOptionsBuilder.() -> Unit,
     )
 
+    suspend fun navigateUp()
+
+    fun tryNavigateTo(destination: Destination)
+
     fun tryNavigateTo(
         destination: Destination,
         navOptions: NavOptionsBuilder.() -> Unit,
     )
-
-    suspend fun navigateUp()
 
     fun tryNavigateUp()
 }

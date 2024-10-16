@@ -1,6 +1,7 @@
 package com.mv.acessif.presentation.home.transcriptionDetail
 
 import androidx.annotation.OptIn
+import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -55,7 +56,7 @@ import com.mv.acessif.domain.Transcription
 import com.mv.acessif.presentation.UiText
 import com.mv.acessif.presentation.home.components.SupportBottomBar
 import com.mv.acessif.presentation.home.components.TranscriptionContainer
-import com.mv.acessif.presentation.home.newTranscription.NewTranscriptionScreen
+import com.mv.acessif.presentation.home.home.HomeGraph
 import com.mv.acessif.presentation.home.summary.SummaryScreen
 import com.mv.acessif.presentation.util.formatTo
 import com.mv.acessif.presentation.util.shareTextIntent
@@ -71,22 +72,14 @@ import com.mv.acessif.ui.theme.L
 import com.mv.acessif.ui.theme.M
 import com.mv.acessif.ui.theme.White
 import com.mv.acessif.ui.theme.XL
-import kotlinx.serialization.Serializable
 import java.util.Date
 
-@Serializable
-data class TranscriptionDetailScreen(
-    val transcriptionId: Int,
-    val originScreen: String,
-)
-
 @OptIn(UnstableApi::class)
-fun NavGraphBuilder.transcriptionDetailScreen(
+fun NavGraphBuilder.transcriptionDetailRoute(
     modifier: Modifier,
     navController: NavHostController,
-    rootNavController: NavHostController,
 ) {
-    composable<TranscriptionDetailScreen> { entry ->
+    composable<HomeGraph.TranscriptionDetailRoute> { entry ->
         val viewModel: TranscriptionDetailViewModel = hiltViewModel()
         val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -113,7 +106,7 @@ fun NavGraphBuilder.transcriptionDetailScreen(
 
         TranscriptionDetailScreen(
             modifier = modifier,
-            originScreen = entry.toRoute<TranscriptionDetailScreen>().originScreen,
+            originScreen = entry.toRoute<HomeGraph.TranscriptionDetailRoute>().originScreen,
             player = {
                 AndroidView(
                     factory = { context ->
@@ -152,18 +145,6 @@ fun NavGraphBuilder.transcriptionDetailScreen(
                         navController.navigateUp()
                     }
 
-                    TranscriptionDetailIntent.OnNewTranscription -> {
-                        navController.navigate(
-                            NewTranscriptionScreen(
-                                originScreen = entry.toRoute<TranscriptionDetailScreen>().originScreen,
-                            ),
-                        ) {
-                            popUpTo(TranscriptionDetailScreen) {
-                                inclusive = true
-                            }
-                        }
-                    }
-
                     TranscriptionDetailIntent.OnShareTranscription -> {
                         val transcriptionPlainText = state.transcription?.text
                         if (transcriptionPlainText != null) {
@@ -175,7 +156,7 @@ fun NavGraphBuilder.transcriptionDetailScreen(
                         val transcriptionId = state.transcription?.id
                         if (transcriptionId != null) {
                             navController.navigate(
-                                SummaryScreen(
+                                HomeGraph.SummaryRoute(
                                     transcriptionId = transcriptionId,
                                 ),
                             )
@@ -202,7 +183,7 @@ fun NavGraphBuilder.transcriptionDetailScreen(
 @Composable
 fun TranscriptionDetailScreen(
     modifier: Modifier = Modifier,
-    originScreen: String,
+    @StringRes originScreen: Int,
     player: @Composable () -> Unit,
     state: TranscriptionDetailScreenState,
     onIntent: (TranscriptionDetailIntent) -> Unit,
@@ -218,7 +199,7 @@ fun TranscriptionDetailScreen(
             modifier =
                 Modifier
                     .background(color = MaterialTheme.colorScheme.primary),
-            origin = originScreen,
+            origin = stringResource(originScreen),
             supportIcon = {
                 if (state.transcription?.segments.isNullOrEmpty().not()) {
                     Image(
@@ -351,7 +332,7 @@ private fun TranscriptionDetailScreenPreview() {
     AcessIFTheme {
         TranscriptionDetailScreen(
             modifier = Modifier,
-            originScreen = "Home Screen",
+            originScreen = R.string.home_screen,
             player = {},
             state = fakeTranscriptionState(),
             onIntent = {},
@@ -365,7 +346,7 @@ private fun TranscriptionDetailScreenStartPreview() {
     AcessIFTheme {
         TranscriptionDetailScreen(
             modifier = Modifier,
-            originScreen = "Home Screen",
+            originScreen = R.string.home_screen,
             player = {},
             state = TranscriptionDetailScreenState(),
             onIntent = {},
@@ -379,7 +360,7 @@ private fun TranscriptionDetailScreenLoadingPreview() {
     AcessIFTheme {
         TranscriptionDetailScreen(
             modifier = Modifier,
-            originScreen = "Home Screen",
+            originScreen = R.string.home_screen,
             player = {},
             state =
                 TranscriptionDetailScreenState(
@@ -397,7 +378,7 @@ private fun TranscriptionDetailScreenErrorPreview() {
     AcessIFTheme {
         TranscriptionDetailScreen(
             modifier = Modifier,
-            originScreen = "Home Screen",
+            originScreen = R.string.home_screen,
             player = {},
             state =
                 TranscriptionDetailScreenState(

@@ -36,7 +36,7 @@ class TranscriptionsViewModel(
             .onStart { getTranscriptions() }
             .stateIn(
                 viewModelScope,
-                SharingStarted.WhileSubscribed(3000L),
+                SharingStarted.WhileSubscribed(5000L),
                 TranscriptionsScreenState(),
             )
 

@@ -56,9 +56,8 @@ import com.mv.acessif.presentation.UiText
 import com.mv.acessif.presentation.components.TranscribeActionCard
 import com.mv.acessif.presentation.home.home.components.SeeAllButton
 import com.mv.acessif.presentation.home.home.components.TranscriptionCard
-import com.mv.acessif.presentation.home.transcriptionDetail.TranscriptionDetailScreen
 import com.mv.acessif.presentation.home.transcriptions.TranscriptionsScreen
-import com.mv.acessif.presentation.root.welcome.WelcomeScreen
+import com.mv.acessif.presentation.root.RootGraph
 import com.mv.acessif.ui.designSystem.components.DefaultScreenHeader
 import com.mv.acessif.ui.designSystem.components.ErrorComponent
 import com.mv.acessif.ui.designSystem.components.LoadingComponent
@@ -70,50 +69,18 @@ import com.mv.acessif.ui.theme.SmallCornerRadius
 import com.mv.acessif.ui.theme.TitleMedium
 import com.mv.acessif.ui.theme.White
 import com.mv.acessif.ui.theme.XL
-import kotlinx.serialization.Serializable
 import java.time.Instant
 import java.util.Date
 
-@Serializable
-object HomeScreen
-
-fun NavGraphBuilder.homeScreen(
+fun NavGraphBuilder.homeRoute(
     modifier: Modifier,
     navController: NavHostController,
-    rootNavController: NavHostController,
 ) {
-    composable<HomeScreen> {
+    composable<HomeGraph.HomeRoute> {
         val viewModel: HomeViewModel = hiltViewModel()
         val state by viewModel.state.collectAsStateWithLifecycle()
 
         val context = navController.context
-
-        LaunchedEffect(key1 = Unit) {
-            viewModel.onEventSuccess.collect { event ->
-                when (event) {
-                    is HomeViewModel.HomeEvent.OnTranscriptionDone -> {
-                        navController.navigate(
-                            TranscriptionDetailScreen(
-                                transcriptionId = event.id,
-                                originScreen = context.getString(R.string.home_screen),
-                            ),
-                        )
-                    }
-
-                    HomeViewModel.HomeEvent.OnLogout -> {
-                        rootNavController.navigate(WelcomeScreen) {
-                            val currentRoute =
-                                rootNavController.currentBackStackEntry?.destination?.route
-                            currentRoute?.let { screenRoute ->
-                                popUpTo(screenRoute) {
-                                    inclusive = true
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
 
         val filePickerLauncher =
             rememberLauncherForActivityResult(
@@ -138,29 +105,7 @@ fun NavGraphBuilder.homeScreen(
                     HomeIntent.OnNewTranscription -> {
                         filePickerLauncher.launch(arrayOf("audio/*"))
                     }
-
-                    HomeIntent.OnMyTranscriptions -> {
-                        navController.navigate(
-                            TranscriptionsScreen,
-                        )
-                    }
-
-                    is HomeIntent.OnTranscriptionPressed -> {
-                        navController.navigate(
-                            TranscriptionDetailScreen(
-                                transcriptionId = intent.transcription.id,
-                                originScreen = context.getString(R.string.home_screen),
-                            ),
-                        )
-                    }
-
-                    HomeIntent.OnLogout -> {
-                        viewModel.logoutUser()
-                    }
-
-                    HomeIntent.OnAboutUs -> {
-                        TODO()
-                    }
+                    else -> viewModel.handleIntent(intent)
                 }
             },
         )

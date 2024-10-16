@@ -18,15 +18,19 @@ class AcessIFNavigator(
         _navigationActions.send(NavigationAction.Navigate(destination))
     }
 
-    override fun tryNavigateTo(destination: Destination) {
-        _navigationActions.trySend(NavigationAction.Navigate(destination))
-    }
-
     override suspend fun navigateTo(
         destination: Destination,
         navOptions: NavOptionsBuilder.() -> Unit,
     ) {
         _navigationActions.send(NavigationAction.Navigate(destination, navOptions))
+    }
+
+    override suspend fun navigateUp() {
+        _navigationActions.send(NavigationAction.NavigateUp)
+    }
+
+    override fun tryNavigateTo(destination: Destination) {
+        _navigationActions.trySend(NavigationAction.Navigate(destination))
     }
 
     override fun tryNavigateTo(
@@ -36,9 +40,6 @@ class AcessIFNavigator(
         _navigationActions.trySend(NavigationAction.Navigate(destination, navOptions))
     }
 
-    override suspend fun navigateUp() {
-        _navigationActions.send(NavigationAction.NavigateUp)
-    }
 
     override fun tryNavigateUp() {
         _navigationActions.trySend(NavigationAction.NavigateUp)

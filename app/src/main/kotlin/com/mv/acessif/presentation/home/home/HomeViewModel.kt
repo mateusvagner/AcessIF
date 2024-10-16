@@ -4,12 +4,15 @@ import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mv.acessif.R
 import com.mv.acessif.domain.repository.SharedPreferencesRepository
 import com.mv.acessif.domain.repository.TranscriptionRepository
 import com.mv.acessif.domain.returnModel.DataError
 import com.mv.acessif.domain.returnModel.Result
 import com.mv.acessif.presentation.asErrorUiText
 import com.mv.acessif.presentation.asUiText
+import com.mv.acessif.presentation.navigation.Navigator
+import com.mv.acessif.presentation.root.RootGraph
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -26,26 +29,11 @@ import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel(
+class HomeViewModel @Inject constructor(
     private val sharedPreferencesRepository: SharedPreferencesRepository,
     private val transcriptionRepository: TranscriptionRepository,
-    private val dispatcher: CoroutineDispatcher,
-) : ViewModel() {
-    @Inject
-    constructor(
-        sharedPreferencesRepository: SharedPreferencesRepository,
-        transcriptionRepository: TranscriptionRepository,
-    ) : this(
-        sharedPreferencesRepository = sharedPreferencesRepository,
-        transcriptionRepository = transcriptionRepository,
-        dispatcher = Dispatchers.IO,
-    )
-
-    sealed interface HomeEvent {
-        data object OnLogout : HomeEvent
-
-        data class OnTranscriptionDone(val id: Int) : HomeEvent
-    }
+    private val navigator: Navigator,
+) : ViewModel(), Navigator by navigator {
 
     private val _state = MutableStateFlow(HomeScreenState())
     val state =
@@ -53,41 +41,32 @@ class HomeViewModel(
             .onStart { getLastTranscriptions() }
             .stateIn(
                 viewModelScope,
-                SharingStarted.WhileSubscribed(3000L),
+                SharingStarted.WhileSubscribed(5000L),
                 HomeScreenState(),
             )
-
-    private val _onEventSuccess = Channel<HomeEvent>()
-    val onEventSuccess =
-        _onEventSuccess.receiveAsFlow().shareIn(viewModelScope, SharingStarted.Lazily)
 
     private fun getLastTranscriptions() {
         viewModelScope.launch {
             _state.value =
                 _state.value.copy(
                     transcriptionsSectionState =
-                        state.value.transcriptionsSectionState.copy(
-                            isLoading = true,
-                            error = null,
-                            transcriptions = emptyList(),
-                        ),
+                    state.value.transcriptionsSectionState.copy(
+                        isLoading = true,
+                        error = null,
+                        transcriptions = emptyList(),
+                    ),
                 )
 
-            val transcriptionsResult =
-                withContext(dispatcher) {
-                    transcriptionRepository.getLastTranscriptions()
-                }
-
-            when (transcriptionsResult) {
+            when (val transcriptionsResult = transcriptionRepository.getLastTranscriptions()) {
                 is Result.Success -> {
                     _state.value =
                         _state.value.copy(
                             transcriptionsSectionState =
-                                state.value.transcriptionsSectionState.copy(
-                                    isLoading = false,
-                                    error = null,
-                                    transcriptions = transcriptionsResult.data,
-                                ),
+                            state.value.transcriptionsSectionState.copy(
+                                isLoading = false,
+                                error = null,
+                                transcriptions = transcriptionsResult.data,
+                            ),
                         )
                 }
 
@@ -95,11 +74,11 @@ class HomeViewModel(
                     _state.value =
                         _state.value.copy(
                             transcriptionsSectionState =
-                                state.value.transcriptionsSectionState.copy(
-                                    isLoading = false,
-                                    error = transcriptionsResult.error.asUiText(),
-                                    transcriptions = emptyList(),
-                                ),
+                            state.value.transcriptionsSectionState.copy(
+                                isLoading = false,
+                                error = transcriptionsResult.error.asUiText(),
+                                transcriptions = emptyList(),
+                            ),
                         )
                 }
             }
@@ -128,12 +107,7 @@ class HomeViewModel(
             )
 
         viewModelScope.launch {
-            val transcriptionResult =
-                withContext(dispatcher) {
-                    transcriptionRepository.transcribeId(file)
-                }
-
-            when (transcriptionResult) {
+            when (val transcriptionResult = transcriptionRepository.transcribeId(file)) {
                 is Result.Success -> {
                     _state.value =
                         _state.value.copy(
@@ -141,8 +115,11 @@ class HomeViewModel(
                             errorTranscription = null,
                         )
 
-                    _onEventSuccess.send(
-                        HomeEvent.OnTranscriptionDone(transcriptionResult.data),
+                    navigator.navigateTo(
+                        HomeGraph.TranscriptionDetailRoute(
+                            transcriptionId = transcriptionResult.data,
+                            originScreen = R.string.home_screen
+                        )
                     )
                 }
 
@@ -169,7 +146,52 @@ class HomeViewModel(
         sharedPreferencesRepository.clearTokens()
 
         viewModelScope.launch {
-            _onEventSuccess.send(HomeEvent.OnLogout)
+            navigator.navigateTo(RootGraph.WelcomeRoute) {
+                popUpTo<RootGraph.HomeGraph> {
+                    inclusive = true
+                }
+            }
+        }
+    }
+
+    fun handleIntent(intent: HomeIntent) {
+        when (intent) {
+            HomeIntent.OnAboutUs -> {
+                // TODO
+            }
+
+            HomeIntent.OnLogout -> {
+                sharedPreferencesRepository.clearTokens()
+
+                viewModelScope.launch {
+                    navigator.navigateTo(RootGraph.WelcomeRoute) {
+                        popUpTo<RootGraph.HomeGraph> {
+                            inclusive = true
+                        }
+                    }
+                }
+            }
+
+            HomeIntent.OnMyTranscriptions -> {
+                viewModelScope.launch {
+                    navigator.navigateTo(HomeGraph.TranscriptionsRoute)
+                }
+            }
+
+            HomeIntent.OnNewTranscription -> {
+                // TODO
+            }
+
+            is HomeIntent.OnTranscriptionPressed -> {
+                viewModelScope.launch {
+                    navigator.navigateTo(
+                        HomeGraph.TranscriptionDetailRoute(
+                            transcriptionId = intent.transcription.id,
+                            originScreen = R.string.home_screen,
+                        ),
+                    )
+                }
+            }
         }
     }
 }

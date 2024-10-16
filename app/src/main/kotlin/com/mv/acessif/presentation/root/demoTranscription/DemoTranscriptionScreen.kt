@@ -37,6 +37,7 @@ import com.mv.acessif.R
 import com.mv.acessif.presentation.UiText
 import com.mv.acessif.presentation.home.components.SupportBottomBar
 import com.mv.acessif.presentation.home.components.TranscriptionContainer
+import com.mv.acessif.presentation.root.RootGraph
 import com.mv.acessif.presentation.util.shareTextIntent
 import com.mv.acessif.ui.designSystem.components.CustomButton
 import com.mv.acessif.ui.designSystem.components.DefaultScreenHeader
@@ -51,19 +52,15 @@ import com.mv.acessif.ui.theme.S
 import com.mv.acessif.ui.theme.TitleMedium
 import com.mv.acessif.ui.theme.White
 import com.mv.acessif.ui.theme.XL
-import kotlinx.serialization.Serializable
 
-@Serializable
-object DemoTranscriptionScreen
-
-fun NavGraphBuilder.demoTranscriptionScreen(
+fun NavGraphBuilder.demoTranscriptionRoute(
     modifier: Modifier,
-    rootNavController: NavHostController,
+    navController: NavHostController,
 ) {
-    composable<DemoTranscriptionScreen> {
+    composable<RootGraph.DemoTranscriptionRoute> {
         val viewModel: DemoTranscriptionViewModel = hiltViewModel()
 
-        val context = rootNavController.context
+        val context = navController.context
 
         val filePickerLauncher =
             rememberLauncherForActivityResult(
@@ -89,7 +86,7 @@ fun NavGraphBuilder.demoTranscriptionScreen(
                     }
 
                     DemoTranscriptionIntent.OnNavigateBack -> {
-                        rootNavController.navigateUp()
+                        navController.navigateUp()
                     }
 
                     DemoTranscriptionIntent.OnShareTranscription -> {

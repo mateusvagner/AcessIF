@@ -6,17 +6,24 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
-import com.mv.acessif.presentation.home.home.HomeNavGraph
+import com.mv.acessif.presentation.navigation.Navigator
+import com.mv.acessif.presentation.navigation.model.Destination
+import com.mv.acessif.presentation.navigation.observeNavigationEvents
+import com.mv.acessif.presentation.root.RootGraph
 import com.mv.acessif.presentation.root.RootNavGraph
-import com.mv.acessif.presentation.root.RootStartDestination
-import com.mv.acessif.presentation.root.welcome.WelcomeScreen
 import com.mv.acessif.ui.theme.AcessIFTheme
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    val viewModel: MainViewModel by viewModels()
+
+    @Inject
+    lateinit var navigator: Navigator
+
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,22 +36,14 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-            if (viewModel.isLoading.value.not()) {
-                val startDestination: RootStartDestination =
-                    if (viewModel.isLoggedIn.value) {
-                        HomeNavGraph
-                    } else {
-                        WelcomeScreen
-                    }
+            val navController = rememberNavController()
+            navController.observeNavigationEvents(navigator)
 
-                val rootNavHostController = rememberNavController()
-
-                AcessIFTheme {
-                    RootNavGraph(
-                        startDestination = startDestination,
-                        rootNavController = rootNavHostController,
-                    )
-                }
+            AcessIFTheme {
+                RootNavGraph(
+                    startDestination = navigator.startDestination,
+                    navController = navController,
+                )
             }
         }
     }

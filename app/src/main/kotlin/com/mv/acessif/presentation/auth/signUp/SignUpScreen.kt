@@ -33,8 +33,7 @@ import androidx.navigation.compose.composable
 import com.mv.acessif.R
 import com.mv.acessif.domain.returnModel.DataError
 import com.mv.acessif.presentation.asUiText
-import com.mv.acessif.presentation.home.home.HomeNavGraph
-import com.mv.acessif.presentation.root.welcome.WelcomeScreen
+import com.mv.acessif.presentation.root.RootGraph
 import com.mv.acessif.ui.designSystem.components.CustomButton
 import com.mv.acessif.ui.designSystem.components.DefaultScreenHeader
 import com.mv.acessif.ui.designSystem.components.ErrorComponent
@@ -48,22 +47,18 @@ import com.mv.acessif.ui.theme.HeadlineLarge
 import com.mv.acessif.ui.theme.L
 import com.mv.acessif.ui.theme.XXL
 import com.mv.acessif.ui.theme.XXXL
-import kotlinx.serialization.Serializable
 
-@Serializable
-object SignUpScreen
-
-fun NavGraphBuilder.signUpScreen(
+fun NavGraphBuilder.signUpRoute(
     modifier: Modifier,
-    rootNavController: NavHostController,
+    navController: NavHostController,
 ) {
-    composable<SignUpScreen> {
+    composable<RootGraph.SignUpRoute> {
         val viewModel: SignUpScreenViewModel = hiltViewModel()
 
         LaunchedEffect(key1 = Unit) {
             viewModel.onSignupSuccess.collect {
-                rootNavController.navigate(HomeNavGraph) {
-                    popUpTo<WelcomeScreen> {
+                navController.navigate(RootGraph.HomeGraph) {
+                    popUpTo<RootGraph.WelcomeRoute> {
                         inclusive = true
                     }
                 }
@@ -96,7 +91,7 @@ fun NavGraphBuilder.signUpScreen(
                     }
 
                     SignUpScreenIntent.OnNavigateBack -> {
-                        rootNavController.navigateUp()
+                        navController.navigateUp()
                     }
 
                     SignUpScreenIntent.OnTryAgain -> {
