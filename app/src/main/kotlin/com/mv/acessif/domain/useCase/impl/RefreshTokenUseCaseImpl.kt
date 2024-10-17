@@ -6,6 +6,8 @@ import com.mv.acessif.domain.repository.SharedPreferencesRepository
 import com.mv.acessif.domain.returnModel.DataError
 import com.mv.acessif.domain.returnModel.Result
 import com.mv.acessif.domain.useCase.RefreshTokenUseCase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class RefreshTokenUseCaseImpl
@@ -15,17 +17,19 @@ class RefreshTokenUseCaseImpl
         private val sharedPreferencesRepository: SharedPreferencesRepository,
     ) : RefreshTokenUseCase {
         override suspend fun execute(): Result<Unit, DataError> {
-            return when (val refreshTokenResult = sharedPreferencesRepository.getRefreshToken()) {
-                is Result.Success -> {
-                    if (refreshTokenResult.data.isEmpty()) {
-                        Result.Error(DataError.Local.EMPTY_RESULT)
-                    } else {
-                        handleRefreshToken(refreshTokenResult.data)
+            return withContext(Dispatchers.IO) {
+                when (val refreshTokenResult = sharedPreferencesRepository.getRefreshToken()) {
+                    is Result.Success -> {
+                        if (refreshTokenResult.data.isEmpty()) {
+                            Result.Error(DataError.Local.EMPTY_RESULT)
+                        } else {
+                            handleRefreshToken(refreshTokenResult.data)
+                        }
                     }
-                }
 
-                is Result.Error -> {
-                    Result.Error(refreshTokenResult.error)
+                    is Result.Error -> {
+                        Result.Error(refreshTokenResult.error)
+                    }
                 }
             }
         }

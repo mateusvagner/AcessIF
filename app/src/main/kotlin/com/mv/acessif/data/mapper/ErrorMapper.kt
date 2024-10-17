@@ -64,6 +64,14 @@ object ErrorMapper {
         }
     }
 
+    fun mapLocalExceptionToLocalDataError(exception: Exception): DataError.Local {
+        return when (exception) {
+            is NullPointerException -> DataError.Local.NULL_POINTER
+
+            else -> DataError.Local.UNKNOWN
+        }
+    }
+
     fun mapExceptionToDataError(exception: Exception): DataError {
         return when (exception) {
             is ClientRequestException -> {
@@ -102,14 +110,6 @@ object ErrorMapper {
             is NullPointerException -> DataError.Local.NULL_POINTER
 
             else -> DataError.Network.UNKNOWN
-        }
-    }
-
-    fun mapLocalExceptionToLocalDataError(exception: Exception): DataError.Local {
-        return when (exception) {
-            is NullPointerException -> DataError.Local.NULL_POINTER
-
-            else -> DataError.Local.UNKNOWN
         }
     }
 }

@@ -1,59 +1,49 @@
 package com.mv.acessif
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mv.acessif.domain.returnModel.Result
 import com.mv.acessif.domain.useCase.RefreshTokenUseCase
+import com.mv.acessif.presentation.home.home.HomeGraph
+import com.mv.acessif.presentation.navigation.Navigator
+import com.mv.acessif.presentation.root.RootGraph
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel(
-    private val refreshTokenUseCase: RefreshTokenUseCase,
-    private val dispatcher: CoroutineDispatcher,
-) : ViewModel() {
+class MainViewModel
     @Inject
     constructor(
-        refreshTokenUseCase: RefreshTokenUseCase,
-    ) : this(
-        refreshTokenUseCase = refreshTokenUseCase,
-        dispatcher = Dispatchers.IO,
-    )
+        private val refreshTokenUseCase: RefreshTokenUseCase,
+        private val navigator: Navigator,
+    ) : ViewModel(), Navigator by navigator {
+        private val _isLoading = MutableStateFlow(true)
+        val isLoading = _isLoading.asStateFlow()
 
-    var isLoading = mutableStateOf(true)
-        private set
+        init {
+            checkRefreshToken()
+        }
 
-    var isLoggedIn = mutableStateOf(false)
-        private set
+        private fun checkRefreshToken() {
+            _isLoading.value = true
+            viewModelScope.launch {
+                val result = refreshTokenUseCase.execute()
 
-    init {
-        checkRefreshToken()
-    }
-
-    private fun checkRefreshToken() {
-        isLoading.value = true
-        viewModelScope.launch {
-            val result =
-                withContext(dispatcher) {
-                    refreshTokenUseCase.execute()
+                if (result is Result.Success) {
+                    navigateTo(HomeGraph.HomeRoute) { // TODO change to RootGraph.HomeGraph ??
+                        popUpTo<RootGraph.WelcomeRoute> {
+                            inclusive = true
+                        }
+                    }
                 }
 
-            when (result) {
-                is Result.Success -> {
-                    isLoggedIn.value = true
-                }
+                delay(300)
 
-                is Result.Error -> {
-                    isLoggedIn.value = false
-                }
+                _isLoading.value = false
             }
-
-            isLoading.value = false
         }
     }
-}

@@ -43,9 +43,7 @@ import androidx.navigation.compose.composable
 import com.mv.acessif.R
 import com.mv.acessif.domain.returnModel.DataError
 import com.mv.acessif.presentation.asUiText
-import com.mv.acessif.presentation.auth.signUp.SignUpScreen
-import com.mv.acessif.presentation.home.home.HomeNavGraph
-import com.mv.acessif.presentation.root.welcome.WelcomeScreen
+import com.mv.acessif.presentation.root.RootGraph
 import com.mv.acessif.ui.designSystem.components.CustomButton
 import com.mv.acessif.ui.designSystem.components.DefaultScreenHeader
 import com.mv.acessif.ui.designSystem.components.ErrorComponent
@@ -61,22 +59,18 @@ import com.mv.acessif.ui.theme.M
 import com.mv.acessif.ui.theme.XL
 import com.mv.acessif.ui.theme.XXL
 import com.mv.acessif.ui.theme.XXXL
-import kotlinx.serialization.Serializable
 
-@Serializable
-object LoginScreen
-
-fun NavGraphBuilder.loginScreen(
+fun NavGraphBuilder.loginRoute(
     modifier: Modifier,
-    rootNavController: NavHostController,
+    navController: NavHostController,
 ) {
-    composable<LoginScreen> {
+    composable<RootGraph.LoginRoute> {
         val viewModel: LoginScreenViewModel = hiltViewModel()
 
         LaunchedEffect(key1 = Unit) {
             viewModel.onSigninSuccess.collect {
-                rootNavController.navigate(HomeNavGraph) {
-                    popUpTo<WelcomeScreen> {
+                navController.navigate(RootGraph.HomeGraph) {
+                    popUpTo<RootGraph.WelcomeRoute> {
                         inclusive = true
                     }
                 }
@@ -105,15 +99,15 @@ fun NavGraphBuilder.loginScreen(
                     }
 
                     LoginScreenIntent.OnSignUpPressed -> {
-                        rootNavController.navigate(SignUpScreen) {
-                            popUpTo<LoginScreen> {
+                        navController.navigate(RootGraph.SignUpRoute) {
+                            popUpTo<RootGraph.LoginRoute> {
                                 inclusive = true
                             }
                         }
                     }
 
                     LoginScreenIntent.OnNavigateBack -> {
-                        rootNavController.navigateUp()
+                        navController.navigateUp()
                     }
 
                     LoginScreenIntent.OnTryAgain -> {

@@ -9,21 +9,18 @@ import androidx.navigation.toRoute
 import com.mv.acessif.domain.repository.TranscriptionRepository
 import com.mv.acessif.domain.returnModel.Result
 import com.mv.acessif.presentation.asUiText
+import com.mv.acessif.presentation.home.home.HomeGraph
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class TranscriptionDetailViewModel(
     private val transcriptionId: Int,
     private val transcriptionRepository: TranscriptionRepository,
-    private val dispatcher: CoroutineDispatcher,
     val player: Player,
 ) : ViewModel() {
     @Inject
@@ -32,9 +29,8 @@ class TranscriptionDetailViewModel(
         savedStateHandle: SavedStateHandle,
         player: Player,
     ) : this(
-        transcriptionId = savedStateHandle.toRoute<TranscriptionDetailScreen>().transcriptionId,
+        transcriptionId = savedStateHandle.toRoute<HomeGraph.TranscriptionDetailRoute>().transcriptionId,
         transcriptionRepository = transcriptionRepository,
-        dispatcher = Dispatchers.IO,
         player = player,
     )
 
@@ -60,9 +56,7 @@ class TranscriptionDetailViewModel(
                 )
 
             val transcriptionDetailResult =
-                withContext(dispatcher) {
-                    transcriptionRepository.getTranscriptionById(transcriptionId)
-                }
+                transcriptionRepository.getTranscriptionById(transcriptionId)
 
             when (transcriptionDetailResult) {
                 is Result.Success -> {
@@ -125,12 +119,10 @@ class TranscriptionDetailViewModel(
             val transcriptionId = _state.value.transcription?.id ?: return@launch
 
             val result =
-                withContext(dispatcher) {
-                    transcriptionRepository.updateTranscriptionName(
-                        id = transcriptionId,
-                        name = newName,
-                    )
-                }
+                transcriptionRepository.updateTranscriptionName(
+                    id = transcriptionId,
+                    name = newName,
+                )
 
             when (result) {
                 is Result.Success -> {

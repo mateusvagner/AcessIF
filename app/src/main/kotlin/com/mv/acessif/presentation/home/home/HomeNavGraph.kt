@@ -1,72 +1,61 @@
 package com.mv.acessif.presentation.home.home
 
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.Composable
+import androidx.annotation.StringRes
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.mv.acessif.presentation.home.summary.summaryScreen
-import com.mv.acessif.presentation.home.transcriptionDetail.transcriptionDetailScreen
-import com.mv.acessif.presentation.home.transcriptions.transcriptionsScreen
-import com.mv.acessif.presentation.root.RootStartDestination
+import androidx.navigation.navigation
+import com.mv.acessif.presentation.home.summary.summaryRoute
+import com.mv.acessif.presentation.home.transcriptionDetail.transcriptionDetailRoute
+import com.mv.acessif.presentation.home.transcriptions.transcriptionsRoute
+import com.mv.acessif.presentation.navigation.model.Destination
+import com.mv.acessif.presentation.root.RootGraph
 import kotlinx.serialization.Serializable
 
-@Serializable
-object HomeNavGraph : RootStartDestination
+sealed interface HomeGraph : Destination {
+    @Serializable
+    data object HomeRoute : HomeGraph
 
-fun NavGraphBuilder.homeNavGraph(
-    modifier: Modifier,
-    rootNavController: NavHostController,
-) {
-    composable<HomeNavGraph> {
-        val navController = rememberNavController()
+    @Serializable
+    data object TranscriptionsRoute : HomeGraph
 
-        HomeNavGraph(
-            modifier = modifier,
-            navController = navController,
-            rootNavController = rootNavController,
-        )
-    }
+    @Serializable
+    data class TranscriptionDetailRoute(
+        val transcriptionId: Int,
+        @StringRes val originScreen: Int,
+    ) : HomeGraph
+
+    @Serializable
+    data class SummaryRoute(
+        val transcriptionId: Int,
+    ) : HomeGraph
 }
 
-@Composable
-fun HomeNavGraph(
+fun NavGraphBuilder.homeGraphRoute(
     modifier: Modifier,
     navController: NavHostController,
-    rootNavController: NavHostController,
 ) {
-    Scaffold { innerPadding ->
-        NavHost(
-            startDestination = HomeScreen,
+    navigation<RootGraph.HomeGraph>(
+        startDestination = HomeGraph.HomeRoute,
+    ) {
+        homeRoute(
+            modifier = modifier,
             navController = navController,
-        ) {
-            homeScreen(
-                modifier = modifier.padding(bottom = innerPadding.calculateBottomPadding()),
-                navController = navController,
-                rootNavController = rootNavController,
-            )
+        )
 
-            transcriptionsScreen(
-                modifier = modifier.padding(bottom = innerPadding.calculateBottomPadding()),
-                navController = navController,
-                rootNavController = rootNavController,
-            )
+        transcriptionsRoute(
+            modifier = modifier,
+            navController = navController,
+        )
 
-            transcriptionDetailScreen(
-                modifier = modifier.padding(bottom = innerPadding.calculateBottomPadding()),
-                navController = navController,
-                rootNavController = rootNavController,
-            )
+        transcriptionDetailRoute(
+            modifier = modifier,
+            navController = navController,
+        )
 
-            summaryScreen(
-                modifier = modifier.padding(bottom = innerPadding.calculateBottomPadding()),
-                navController = navController,
-                rootNavController = rootNavController,
-            )
-        }
+        summaryRoute(
+            modifier = modifier,
+            navController = navController,
+        )
     }
 }

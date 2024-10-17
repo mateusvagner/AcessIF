@@ -8,6 +8,7 @@ import androidx.navigation.toRoute
 import com.mv.acessif.domain.repository.SummaryRepository
 import com.mv.acessif.domain.returnModel.Result
 import com.mv.acessif.presentation.asUiText
+import com.mv.acessif.presentation.home.home.HomeGraph
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -25,7 +26,7 @@ class SummaryViewModel(
         summaryRepository: SummaryRepository,
         savedStateHandle: SavedStateHandle,
     ) : this(
-        transcriptionId = savedStateHandle.toRoute<SummaryScreen>().transcriptionId,
+        transcriptionId = savedStateHandle.toRoute<HomeGraph.SummaryRoute>().transcriptionId,
         summaryRepository = summaryRepository,
         dispatcher = Dispatchers.IO,
     )

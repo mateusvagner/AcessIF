@@ -31,7 +31,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -58,9 +57,6 @@ import com.mv.acessif.presentation.components.TranscribeActionCard
 import com.mv.acessif.presentation.home.home.components.RightSideMenu
 import com.mv.acessif.presentation.home.home.components.SeeAllButton
 import com.mv.acessif.presentation.home.home.components.TranscriptionCard
-import com.mv.acessif.presentation.home.transcriptionDetail.TranscriptionDetailScreen
-import com.mv.acessif.presentation.home.transcriptions.TranscriptionsScreen
-import com.mv.acessif.presentation.root.welcome.WelcomeScreen
 import com.mv.acessif.ui.designSystem.components.DefaultScreenHeader
 import com.mv.acessif.ui.designSystem.components.ErrorComponent
 import com.mv.acessif.ui.designSystem.components.LoadingComponent
@@ -71,50 +67,18 @@ import com.mv.acessif.ui.theme.S
 import com.mv.acessif.ui.theme.TitleMedium
 import com.mv.acessif.ui.theme.White
 import com.mv.acessif.ui.theme.XL
-import kotlinx.serialization.Serializable
 import java.time.Instant
 import java.util.Date
 
-@Serializable
-object HomeScreen
-
-fun NavGraphBuilder.homeScreen(
+fun NavGraphBuilder.homeRoute(
     modifier: Modifier,
     navController: NavHostController,
-    rootNavController: NavHostController,
 ) {
-    composable<HomeScreen> {
+    composable<HomeGraph.HomeRoute> {
         val viewModel: HomeViewModel = hiltViewModel()
         val state by viewModel.state.collectAsStateWithLifecycle()
 
         val context = navController.context
-
-        LaunchedEffect(key1 = Unit) {
-            viewModel.onEventSuccess.collect { event ->
-                when (event) {
-                    is HomeViewModel.HomeEvent.OnTranscriptionDone -> {
-                        navController.navigate(
-                            TranscriptionDetailScreen(
-                                transcriptionId = event.id,
-                                originScreen = context.getString(R.string.home_screen),
-                            ),
-                        )
-                    }
-
-                    HomeViewModel.HomeEvent.OnLogout -> {
-                        rootNavController.navigate(WelcomeScreen) {
-                            val currentRoute =
-                                rootNavController.currentBackStackEntry?.destination?.route
-                            currentRoute?.let { screenRoute ->
-                                popUpTo(screenRoute) {
-                                    inclusive = true
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
 
         val filePickerLauncher =
             rememberLauncherForActivityResult(
@@ -122,7 +86,7 @@ fun NavGraphBuilder.homeScreen(
             ) { uri: Uri? ->
                 if (uri != null) {
                     viewModel.handleFileUri(
-                        uri,
+                        uri = uri,
                         context = context,
                     )
                 } else {
@@ -139,33 +103,7 @@ fun NavGraphBuilder.homeScreen(
                     HomeIntent.OnNewTranscription -> {
                         filePickerLauncher.launch(arrayOf("audio/*"))
                     }
-
-                    HomeIntent.OnMyTranscriptions -> {
-                        navController.navigate(
-                            TranscriptionsScreen,
-                        )
-                    }
-
-                    is HomeIntent.OnTranscriptionPressed -> {
-                        navController.navigate(
-                            TranscriptionDetailScreen(
-                                transcriptionId = intent.transcription.id,
-                                originScreen = context.getString(R.string.home_screen),
-                            ),
-                        )
-                    }
-
-                    HomeIntent.OnLogout -> {
-                        viewModel.logoutUser()
-                    }
-
-                    HomeIntent.OnAboutTheProject -> {
-                        // TODO()
-                    }
-
-                    HomeIntent.OnContactUs -> {
-                        // TODO()
-                    }
+                    else -> viewModel.handleIntent(intent)
                 }
             },
         )
@@ -248,6 +186,7 @@ fun HomeScreen(
                                     .fillMaxSize()
                                     .background(color = MaterialTheme.colorScheme.background.copy(alpha = 0.95F)),
                             message = state.errorTranscription.asString(),
+                            onTryAgain = { onIntent(HomeIntent.OnReloadScreen) },
                         )
                     }
                 }

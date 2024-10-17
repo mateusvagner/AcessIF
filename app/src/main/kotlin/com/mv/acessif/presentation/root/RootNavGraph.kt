@@ -6,46 +6,65 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.mv.acessif.presentation.auth.login.loginScreen
-import com.mv.acessif.presentation.auth.signUp.signUpScreen
-import com.mv.acessif.presentation.home.home.homeNavGraph
-import com.mv.acessif.presentation.root.demoTranscription.demoTranscriptionScreen
-import com.mv.acessif.presentation.root.welcome.welcomeScreen
+import com.mv.acessif.presentation.auth.login.loginRoute
+import com.mv.acessif.presentation.auth.signUp.signUpRoute
+import com.mv.acessif.presentation.home.home.homeGraphRoute
+import com.mv.acessif.presentation.navigation.model.Destination
+import com.mv.acessif.presentation.root.demoTranscription.demoTranscriptionRoute
+import com.mv.acessif.presentation.root.welcome.welcomeRoute
+import kotlinx.serialization.Serializable
+
+sealed interface RootGraph : Destination {
+    @Serializable
+    data object WelcomeRoute : RootGraph
+
+    @Serializable
+    data object DemoTranscriptionRoute : RootGraph
+
+    @Serializable
+    data object LoginRoute : RootGraph
+
+    @Serializable
+    data object SignUpRoute : RootGraph
+
+    @Serializable
+    data object HomeGraph : RootGraph
+}
 
 @Composable
 fun RootNavGraph(
     modifier: Modifier = Modifier,
-    startDestination: RootStartDestination,
-    rootNavController: NavHostController,
+    startDestination: Destination,
+    navController: NavHostController,
 ) {
     Scaffold { innerPadding ->
         NavHost(
             startDestination = startDestination,
-            navController = rootNavController,
+            navController = navController,
         ) {
-            welcomeScreen(
+            welcomeRoute(
                 modifier = modifier.padding(bottom = innerPadding.calculateBottomPadding()),
-                rootNavController = rootNavController,
+                navController = navController,
             )
 
-            demoTranscriptionScreen(
+            demoTranscriptionRoute(
                 modifier = modifier.padding(bottom = innerPadding.calculateBottomPadding()),
-                rootNavController = rootNavController,
+                navController = navController,
             )
 
-            loginScreen(
+            loginRoute(
                 modifier = modifier.padding(bottom = innerPadding.calculateBottomPadding()),
-                rootNavController = rootNavController,
+                navController = navController,
             )
 
-            signUpScreen(
+            signUpRoute(
                 modifier = modifier.padding(bottom = innerPadding.calculateBottomPadding()),
-                rootNavController = rootNavController,
+                navController = navController,
             )
 
-            homeNavGraph(
+            homeGraphRoute(
                 modifier = modifier.padding(bottom = innerPadding.calculateBottomPadding()),
-                rootNavController = rootNavController,
+                navController = navController,
             )
         }
     }

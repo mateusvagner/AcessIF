@@ -20,26 +20,19 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.mv.acessif.R
-import com.mv.acessif.presentation.auth.login.LoginScreen
-import com.mv.acessif.presentation.auth.signUp.SignUpScreen
 import com.mv.acessif.presentation.components.SignInSignUpActionCard
 import com.mv.acessif.presentation.components.TranscribeActionCard
-import com.mv.acessif.presentation.root.RootStartDestination
-import com.mv.acessif.presentation.root.demoTranscription.DemoTranscriptionScreen
+import com.mv.acessif.presentation.root.RootGraph
 import com.mv.acessif.ui.designSystem.components.DefaultScreenHeader
 import com.mv.acessif.ui.theme.AcessIFTheme
 import com.mv.acessif.ui.theme.L
 import com.mv.acessif.ui.theme.XXXL
-import kotlinx.serialization.Serializable
 
-@Serializable
-object WelcomeScreen : RootStartDestination
-
-fun NavGraphBuilder.welcomeScreen(
+fun NavGraphBuilder.welcomeRoute(
     modifier: Modifier,
-    rootNavController: NavHostController,
+    navController: NavHostController,
 ) {
-    composable<WelcomeScreen> {
+    composable<RootGraph.WelcomeRoute> {
         val viewModel: WelcomeScreenViewModel = hiltViewModel()
 
         WelcomeScreen(
@@ -47,15 +40,15 @@ fun NavGraphBuilder.welcomeScreen(
             onIntent = { intent ->
                 when (intent) {
                     WelcomeScreenIntent.OnTranscriptPressed -> {
-                        rootNavController.navigate(DemoTranscriptionScreen)
+                        navController.navigate(RootGraph.DemoTranscriptionRoute)
                     }
 
                     WelcomeScreenIntent.OnLoginPressed -> {
-                        rootNavController.navigate(LoginScreen)
+                        navController.navigate(RootGraph.LoginRoute)
                     }
 
                     WelcomeScreenIntent.OnSignupPressed -> {
-                        rootNavController.navigate(SignUpScreen)
+                        navController.navigate(RootGraph.SignUpRoute)
                     }
                 }
             },

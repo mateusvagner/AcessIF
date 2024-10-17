@@ -33,6 +33,7 @@ import com.mv.acessif.domain.Summary
 import com.mv.acessif.presentation.UiText
 import com.mv.acessif.presentation.home.components.SupportBottomBar
 import com.mv.acessif.presentation.home.components.TranscriptionContainer
+import com.mv.acessif.presentation.home.home.HomeGraph
 import com.mv.acessif.presentation.util.shareTextIntent
 import com.mv.acessif.ui.designSystem.components.DefaultScreenHeader
 import com.mv.acessif.ui.designSystem.components.ErrorComponent
@@ -44,19 +45,12 @@ import com.mv.acessif.ui.theme.AcessIFTheme
 import com.mv.acessif.ui.theme.L
 import com.mv.acessif.ui.theme.White
 import com.mv.acessif.ui.theme.XL
-import kotlinx.serialization.Serializable
 
-@Serializable
-data class SummaryScreen(
-    val transcriptionId: Int,
-)
-
-fun NavGraphBuilder.summaryScreen(
+fun NavGraphBuilder.summaryRoute(
     modifier: Modifier,
     navController: NavHostController,
-    rootNavController: NavHostController,
 ) {
-    composable<SummaryScreen> {
+    composable<HomeGraph.SummaryRoute> {
         val viewModel: SummaryViewModel = hiltViewModel()
 
         val context = navController.context

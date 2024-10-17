@@ -35,7 +35,7 @@ import com.mv.acessif.domain.Language
 import com.mv.acessif.domain.Segment
 import com.mv.acessif.domain.Transcription
 import com.mv.acessif.presentation.UiText
-import com.mv.acessif.presentation.home.transcriptionDetail.TranscriptionDetailScreen
+import com.mv.acessif.presentation.home.home.HomeGraph
 import com.mv.acessif.ui.designSystem.components.CustomButton
 import com.mv.acessif.ui.designSystem.components.DefaultScreenHeader
 import com.mv.acessif.ui.designSystem.components.ErrorComponent
@@ -48,55 +48,21 @@ import com.mv.acessif.ui.theme.L
 import com.mv.acessif.ui.theme.M
 import com.mv.acessif.ui.theme.S
 import com.mv.acessif.ui.theme.XL
-import kotlinx.serialization.Serializable
 import java.time.Instant
 import java.util.Date
 
-@Serializable
-object TranscriptionsScreen
-
-fun NavGraphBuilder.transcriptionsScreen(
+fun NavGraphBuilder.transcriptionsRoute(
     modifier: Modifier,
     navController: NavHostController,
-    rootNavController: NavHostController,
 ) {
-    composable<TranscriptionsScreen> {
+    composable<HomeGraph.TranscriptionsRoute> {
         val viewModel: TranscriptionsViewModel = hiltViewModel()
         val state by viewModel.state.collectAsStateWithLifecycle()
-
-        val context = navController.context
 
         TranscriptionsScreen(
             modifier = modifier,
             state = state,
-            onIntent = {
-                when (it) {
-                    TranscriptionsIntent.OnNavigateBack -> {
-                        navController.navigateUp()
-                    }
-
-                    TranscriptionsIntent.OnTryAgain -> {
-                        viewModel.getTranscriptions()
-                    }
-
-                    TranscriptionsIntent.OnNewTranscription -> {
-                        // TODO
-                    }
-
-                    is TranscriptionsIntent.OnOpenTranscriptionDetail -> {
-                        navController.navigate(
-                            TranscriptionDetailScreen(
-                                transcriptionId = it.transcriptionId,
-                                originScreen = context.getString(R.string.my_transcriptions_screen),
-                            ),
-                        )
-                    }
-
-                    is TranscriptionsIntent.OnDeleteTranscription -> {
-                        viewModel.deleteTranscription(it.transcriptionId)
-                    }
-                }
-            },
+            onIntent = viewModel::handleIntent,
         )
     }
 }

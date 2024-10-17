@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.ripple.RippleAlpha
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
@@ -37,6 +38,7 @@ import com.mv.acessif.ui.theme.S
 import com.mv.acessif.ui.theme.TitleLarge
 import com.mv.acessif.ui.theme.White
 import com.mv.acessif.ui.theme.XL
+import com.mv.acessif.ui.theme.XXXL
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -103,6 +105,8 @@ fun DefaultScreenHeader(
                 ) {
                     supportIcon.invoke()
                 }
+            } else {
+                Spacer(modifier = Modifier.size(XXXL))
             }
         }
     }
