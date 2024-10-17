@@ -96,7 +96,6 @@ fun NavGraphBuilder.homeRoute(
 
         HomeScreen(
             modifier = modifier,
-            userName = "", // TODO
             state = state,
             onIntent = { intent ->
                 when (intent) {
@@ -113,7 +112,6 @@ fun NavGraphBuilder.homeRoute(
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    userName: String,
     state: HomeScreenState,
     onIntent: (HomeIntent) -> Unit,
 ) {
@@ -131,7 +129,13 @@ fun HomeScreen(
                 modifier =
                     Modifier
                         .background(color = MaterialTheme.colorScheme.primary),
-                screenTitle = stringResource(R.string.welcome),
+                screenTitle =
+                    if (state.userName.isEmpty()) {
+                        stringResource(R.string.welcome)
+                    } else
+                        {
+                            stringResource(R.string.welcome_user, state.userName)
+                        },
                 supportIcon = {
                     Image(
                         painter = painterResource(id = R.drawable.ic_menu),
@@ -302,9 +306,9 @@ private fun HomeScreenPreview() {
     AcessIFTheme {
         HomeScreen(
             modifier = Modifier,
-            userName = "",
             state =
                 HomeScreenState(
+                    userName = "Mateus",
                     transcriptionsSectionState =
                         TranscriptionsSectionState(
                             isLoading = false,
@@ -389,7 +393,6 @@ private fun HomeScreenDarkPreview() {
     AcessIFTheme {
         HomeScreen(
             modifier = Modifier,
-            userName = "",
             state =
                 HomeScreenState(
                     transcriptionsSectionState =
@@ -476,7 +479,6 @@ private fun HomeScreenLoadingPreview() {
     AcessIFTheme {
         HomeScreen(
             modifier = Modifier,
-            userName = "",
             state =
                 HomeScreenState(
                     isLoadingTranscription = true,
@@ -564,7 +566,6 @@ private fun HomeScreenLoadingTranscriptionsPreview() {
     AcessIFTheme {
         HomeScreen(
             modifier = Modifier,
-            userName = "",
             state =
                 HomeScreenState(
                     transcriptionsSectionState =
@@ -585,7 +586,6 @@ private fun HomeScreenErrorTranscriptionsPreview() {
     AcessIFTheme {
         HomeScreen(
             modifier = Modifier,
-            userName = "",
             state =
                 HomeScreenState(
                     transcriptionsSectionState =

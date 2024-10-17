@@ -14,7 +14,9 @@ import kotlinx.serialization.Serializable
 
 sealed interface HomeGraph : Destination {
     @Serializable
-    data object HomeRoute : HomeGraph
+    data class HomeRoute(
+        val userName: String,
+    ) : HomeGraph
 
     @Serializable
     data object TranscriptionsRoute : HomeGraph
@@ -36,7 +38,7 @@ fun NavGraphBuilder.homeGraphRoute(
     navController: NavHostController,
 ) {
     navigation<RootGraph.HomeGraph>(
-        startDestination = HomeGraph.HomeRoute,
+        startDestination = HomeGraph.HomeRoute(userName = ""),
     ) {
         homeRoute(
             modifier = modifier,
