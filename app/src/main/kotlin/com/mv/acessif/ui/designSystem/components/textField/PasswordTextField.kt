@@ -71,9 +71,10 @@ fun PasswordTextField(
             trailingIcon = {
                 IconButton(onClick = { onVisibilityChanged(!isVisible) }) {
                     Image(
-                        modifier = Modifier.semantics {
-                            stateDescription = if (isVisible) stateVisible else stateNotVisible
-                        },
+                        modifier =
+                            Modifier.semantics {
+                                stateDescription = if (isVisible) stateVisible else stateNotVisible
+                            },
                         painter =
                             if (isVisible) {
                                 painterResource(

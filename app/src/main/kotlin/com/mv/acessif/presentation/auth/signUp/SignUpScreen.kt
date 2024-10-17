@@ -183,7 +183,7 @@ fun MainContent(
             modifier =
                 Modifier
                     .background(color = MaterialTheme.colorScheme.primary),
-            origin = stringResource(id = R.string.welcome_screen),
+            origin = stringResource(id = R.string.beginning),
             onBackPressed = { onIntent(SignUpScreenIntent.OnNavigateBack) },
         )
 
