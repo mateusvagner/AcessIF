@@ -9,6 +9,8 @@ sealed interface HomeIntent {
 
     data class OnTranscriptionPressed(val transcription: Transcription) : HomeIntent
 
+    data object OnReloadScreen : HomeIntent
+
     data object OnLogout : HomeIntent
 
     data object OnAboutTheProject : HomeIntent

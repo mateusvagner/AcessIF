@@ -43,9 +43,6 @@ import androidx.navigation.compose.composable
 import com.mv.acessif.R
 import com.mv.acessif.domain.returnModel.DataError
 import com.mv.acessif.presentation.asUiText
-import com.mv.acessif.presentation.auth.signUp.SignUpScreen
-import com.mv.acessif.presentation.home.home.HomeNavGraph
-import com.mv.acessif.presentation.root.welcome.WelcomeScreen
 import com.mv.acessif.presentation.root.RootGraph
 import com.mv.acessif.ui.designSystem.components.CustomButton
 import com.mv.acessif.ui.designSystem.components.DefaultScreenHeader
@@ -102,8 +99,8 @@ fun NavGraphBuilder.loginRoute(
                     }
 
                     LoginScreenIntent.OnSignUpPressed -> {
-                        navController.navigate(SignUpScreen) {
-                            popUpTo<LoginScreen> {
+                        navController.navigate(RootGraph.SignUpRoute) {
+                            popUpTo<RootGraph.LoginRoute> {
                                 inclusive = true
                             }
                         }

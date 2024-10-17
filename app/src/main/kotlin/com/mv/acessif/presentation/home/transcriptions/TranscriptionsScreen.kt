@@ -36,7 +36,6 @@ import com.mv.acessif.domain.Segment
 import com.mv.acessif.domain.Transcription
 import com.mv.acessif.presentation.UiText
 import com.mv.acessif.presentation.home.home.HomeGraph
-import com.mv.acessif.presentation.home.transcriptionDetail.TranscriptionDetailScreen
 import com.mv.acessif.ui.designSystem.components.CustomButton
 import com.mv.acessif.ui.designSystem.components.DefaultScreenHeader
 import com.mv.acessif.ui.designSystem.components.ErrorComponent
@@ -60,39 +59,10 @@ fun NavGraphBuilder.transcriptionsRoute(
         val viewModel: TranscriptionsViewModel = hiltViewModel()
         val state by viewModel.state.collectAsStateWithLifecycle()
 
-        val context = navController.context
-
         TranscriptionsScreen(
             modifier = modifier,
             state = state,
-            onIntent = {
-                when (it) {
-                    TranscriptionsIntent.OnNavigateBack -> {
-                        navController.navigateUp()
-                    }
-
-                    TranscriptionsIntent.OnTryAgain -> {
-                        viewModel.getTranscriptions()
-                    }
-
-                    TranscriptionsIntent.OnNewTranscription -> {
-                        // TODO -> Add logic
-                    }
-
-                    is TranscriptionsIntent.OnOpenTranscriptionDetail -> {
-                        navController.navigate(
-                            HomeGraph.TranscriptionDetailRoute(
-                                transcriptionId = it.transcriptionId,
-                                originScreen = R.string.my_transcriptions_screen,
-                            ),
-                        )
-                    }
-
-                    is TranscriptionsIntent.OnDeleteTranscription -> {
-                        viewModel.deleteTranscription(it.transcriptionId)
-                    }
-                }
-            },
+            onIntent = viewModel::handleIntent,
         )
     }
 }

@@ -86,7 +86,7 @@ fun NavGraphBuilder.homeRoute(
             ) { uri: Uri? ->
                 if (uri != null) {
                     viewModel.handleFileUri(
-                        uri,
+                        uri = uri,
                         context = context,
                     )
                 } else {
@@ -186,6 +186,7 @@ fun HomeScreen(
                                     .fillMaxSize()
                                     .background(color = MaterialTheme.colorScheme.background.copy(alpha = 0.95F)),
                             message = state.errorTranscription.asString(),
+                            onTryAgain = { onIntent(HomeIntent.OnReloadScreen) },
                         )
                     }
                 }

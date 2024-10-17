@@ -137,54 +137,54 @@ class HomeViewModel
                 )
         }
 
-        fun logoutUser() {
-            sharedPreferencesRepository.clearTokens()
-
-            viewModelScope.launch {
-                navigator.navigateTo(RootGraph.WelcomeRoute) {
-                    popUpTo<RootGraph.HomeGraph> {
-                        inclusive = true
-                    }
-                }
-            }
-        }
-
         fun handleIntent(intent: HomeIntent) {
-            when (intent) {
-                HomeIntent.OnAboutUs -> {
-                    // TODO
-                }
+            viewModelScope.launch {
+                when (intent) {
+                    HomeIntent.OnLogout -> {
+                        sharedPreferencesRepository.clearTokens()
 
-                HomeIntent.OnLogout -> {
-                    sharedPreferencesRepository.clearTokens()
-
-                    viewModelScope.launch {
                         navigator.navigateTo(RootGraph.WelcomeRoute) {
                             popUpTo<RootGraph.HomeGraph> {
                                 inclusive = true
                             }
                         }
                     }
-                }
 
-                HomeIntent.OnMyTranscriptions -> {
-                    viewModelScope.launch {
-                        navigator.navigateTo(HomeGraph.TranscriptionsRoute)
+                    HomeIntent.OnMyTranscriptions -> {
+                        viewModelScope.launch {
+                            navigator.navigateTo(HomeGraph.TranscriptionsRoute)
+                        }
                     }
-                }
 
-                HomeIntent.OnNewTranscription -> {
-                    // TODO
-                }
+                    HomeIntent.OnNewTranscription -> {
+                        // TODO
+                    }
 
-                is HomeIntent.OnTranscriptionPressed -> {
-                    viewModelScope.launch {
+                    is HomeIntent.OnTranscriptionPressed -> {
                         navigator.navigateTo(
                             HomeGraph.TranscriptionDetailRoute(
                                 transcriptionId = intent.transcription.id,
                                 originScreen = R.string.home_screen,
                             ),
                         )
+                    }
+
+                    HomeIntent.OnReloadScreen -> {
+                        _state.value =
+                            _state.value.copy(
+                                isLoadingTranscription = false,
+                                errorTranscription = null,
+                            )
+
+                        getLastTranscriptions()
+                    }
+
+                    HomeIntent.OnAboutTheProject -> {
+                        // TODO()
+                    }
+
+                    HomeIntent.OnContactUs -> {
+                        // TODO()
                     }
                 }
             }
