@@ -9,6 +9,8 @@ sealed interface LoginScreenIntent {
 
     data object OnSigninPressed : LoginScreenIntent
 
+    data object OnSignUpPressed : LoginScreenIntent
+
     data object OnNavigateBack : LoginScreenIntent
 
     data object OnTryAgain : LoginScreenIntent

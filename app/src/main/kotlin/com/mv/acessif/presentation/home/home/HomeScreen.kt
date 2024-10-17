@@ -3,6 +3,12 @@ package com.mv.acessif.presentation.home.home
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -20,10 +26,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -40,8 +43,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.DpOffset
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
@@ -53,6 +54,7 @@ import com.mv.acessif.domain.Segment
 import com.mv.acessif.domain.Transcription
 import com.mv.acessif.presentation.UiText
 import com.mv.acessif.presentation.components.TranscribeActionCard
+import com.mv.acessif.presentation.home.home.components.RightSideMenu
 import com.mv.acessif.presentation.home.home.components.SeeAllButton
 import com.mv.acessif.presentation.home.home.components.TranscriptionCard
 import com.mv.acessif.ui.designSystem.components.DefaultScreenHeader
@@ -62,7 +64,6 @@ import com.mv.acessif.ui.theme.AcessIFTheme
 import com.mv.acessif.ui.theme.L
 import com.mv.acessif.ui.theme.M
 import com.mv.acessif.ui.theme.S
-import com.mv.acessif.ui.theme.SmallCornerRadius
 import com.mv.acessif.ui.theme.TitleMedium
 import com.mv.acessif.ui.theme.White
 import com.mv.acessif.ui.theme.XL
@@ -116,134 +117,114 @@ fun HomeScreen(
     state: HomeScreenState,
     onIntent: (HomeIntent) -> Unit,
 ) {
-    Column(
-        modifier =
-            modifier
-                .fillMaxSize()
-                .background(color = MaterialTheme.colorScheme.background),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        var isContextMenuVisible by rememberSaveable { mutableStateOf(false) }
+    var isContextMenuVisible by rememberSaveable { mutableStateOf(false) }
 
-        DefaultScreenHeader(
+    Box {
+        Column(
             modifier =
-                Modifier
-                    .background(color = MaterialTheme.colorScheme.primary),
-            screenTitle = stringResource(R.string.welcome_user, userName),
-            supportIcon = {
-                MenuComponent(
-                    isContextMenuVisible = isContextMenuVisible,
-                    onDismissRequest = { isContextMenuVisible = false },
-                    onIntent = onIntent,
-                )
-            },
-            onSupportIconPressed = {
-                isContextMenuVisible = true
-            },
-        )
+                modifier
+                    .fillMaxSize()
+                    .background(color = MaterialTheme.colorScheme.background),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            DefaultScreenHeader(
+                modifier =
+                    Modifier
+                        .background(color = MaterialTheme.colorScheme.primary),
+                screenTitle = stringResource(R.string.welcome),
+                supportIcon = {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_menu),
+                        colorFilter = ColorFilter.tint(color = White),
+                        contentDescription = stringResource(R.string.menu),
+                    )
+                },
+                onSupportIconPressed = {
+                    isContextMenuVisible = true
+                },
+            )
 
-        Box {
-            Column(
-                modifier = Modifier.verticalScroll(rememberScrollState()),
-            ) {
-                Spacer(modifier = Modifier.height(L))
+            Box {
+                Column(
+                    modifier = Modifier.verticalScroll(rememberScrollState()),
+                ) {
+                    Spacer(modifier = Modifier.height(L))
 
-                TranscriptionsSection(
-                    state = state.transcriptionsSectionState,
-                    onIntent = onIntent,
-                )
+                    TranscriptionsSection(
+                        state = state.transcriptionsSectionState,
+                        onIntent = onIntent,
+                    )
 
-                Spacer(modifier = Modifier.height(XL))
+                    Spacer(modifier = Modifier.height(XL))
 
-                TranscribeActionCard(
-                    modifier = Modifier.padding(horizontal = L),
-                    onCardClick = { onIntent(HomeIntent.OnNewTranscription) },
-                )
+                    TranscribeActionCard(
+                        modifier = Modifier.padding(horizontal = L),
+                        onCardClick = { onIntent(HomeIntent.OnNewTranscription) },
+                    )
 
-                Spacer(modifier = Modifier.height(L))
-            }
+                    Spacer(modifier = Modifier.height(L))
+                }
 
-            if (state.isLoadingTranscription) {
-                LoadingComponent(
-                    modifier =
-                        Modifier
-                            .fillMaxSize()
-                            .clickable(
-                                indication = null,
-                                interactionSource = remember { MutableInteractionSource() },
-                                onClick = { },
-                            ),
-                    backgroundAlpha = 0.95F,
-                    label = stringResource(R.string.your_transcription_is_being_loaded),
-                )
-            } else if (state.errorTranscription != null) {
-                Surface {
-                    ErrorComponent(
+                if (state.isLoadingTranscription) {
+                    LoadingComponent(
                         modifier =
                             Modifier
                                 .fillMaxSize()
-                                .background(color = MaterialTheme.colorScheme.background.copy(alpha = 0.95F)),
-                        message = state.errorTranscription.asString(),
+                                .clickable(
+                                    indication = null,
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    onClick = { },
+                                ),
+                        backgroundAlpha = 0.95F,
+                        label = stringResource(R.string.your_transcription_is_being_loaded),
                     )
+                } else if (state.errorTranscription != null) {
+                    Surface {
+                        ErrorComponent(
+                            modifier =
+                                Modifier
+                                    .fillMaxSize()
+                                    .background(color = MaterialTheme.colorScheme.background.copy(alpha = 0.95F)),
+                            message = state.errorTranscription.asString(),
+                        )
+                    }
                 }
             }
         }
-    }
-}
 
-@Composable
-private fun MenuComponent(
-    isContextMenuVisible: Boolean,
-    onDismissRequest: () -> Unit,
-    onIntent: (HomeIntent) -> Unit,
-) {
-    Box {
-        Image(
-            painter = painterResource(id = R.drawable.ic_menu),
-            colorFilter = ColorFilter.tint(color = White),
-            contentDescription = stringResource(R.string.menu),
-        )
-
-        DropdownMenu(
-            offset = DpOffset(y = 0.dp, x = (-2).dp),
-            containerColor = MaterialTheme.colorScheme.surface,
-            shape = RoundedCornerShape(SmallCornerRadius),
-            expanded = isContextMenuVisible,
-            onDismissRequest = onDismissRequest,
+        AnimatedVisibility(
+            visible = isContextMenuVisible,
+            enter = fadeIn(),
+            exit = fadeOut(),
         ) {
-            DropdownMenuItem(
-                text = {
-                    Text(text = stringResource(R.string.logout))
+            Surface(
+                modifier = Modifier.fillMaxSize(),
+                color = MaterialTheme.colorScheme.background.copy(alpha = 0.75F),
+            ) {
+            }
+        }
+
+        AnimatedVisibility(
+            visible = isContextMenuVisible,
+            enter = slideInHorizontally(animationSpec = tween(durationMillis = 300)) { fullScreen -> fullScreen },
+            exit = slideOutHorizontally { fullScreen -> fullScreen },
+        ) {
+            RightSideMenu(
+                modifier = modifier,
+                onClose = { isContextMenuVisible = false },
+                onAboutProject = {
+                    isContextMenuVisible = false
+                    onIntent(HomeIntent.OnAboutTheProject)
                 },
-                trailingIcon = {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_logout),
-                        colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onSurface),
-                        contentDescription = stringResource(R.string.logout),
-                    )
+                onContactUs = {
+                    isContextMenuVisible = false
+                    onIntent(HomeIntent.OnContactUs)
                 },
-                onClick = {
+                onLogout = {
+                    isContextMenuVisible = false
                     onIntent(HomeIntent.OnLogout)
-                    onDismissRequest()
                 },
             )
-            // TODO Uncomment when about us screen is implemented
-//            DropdownMenuItem(
-//                text = {
-//                    Text(text = stringResource(R.string.about_us))
-//                },
-//                trailingIcon = {
-//                    Image(
-//                        painter = painterResource(id = R.drawable.ic_contacts),
-//                        colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onSurface),
-//                        contentDescription = stringResource(R.string.about_us),
-//                    )
-//                },
-//                onClick = {
-//                    onIntent(HomeIntent.OnAboutUs)
-//                    onDismissRequest()
-//                },
-//            )
         }
     }
 }
@@ -317,6 +298,93 @@ private fun TranscriptionsSection(
 @Composable
 @Preview
 private fun HomeScreenPreview() {
+    AcessIFTheme {
+        HomeScreen(
+            modifier = Modifier,
+            userName = "",
+            state =
+                HomeScreenState(
+                    transcriptionsSectionState =
+                        TranscriptionsSectionState(
+                            isLoading = false,
+                            error = null,
+                            transcriptions =
+                                listOf(
+                                    Transcription(
+                                        audioId = "audioId_10_10_24.mp3",
+                                        name = "Podcast Transcription",
+                                        id = 1,
+                                        language = Language.PT,
+                                        createdAt =
+                                            Date.from(
+                                                Instant.parse("2021-10-10T10:10:10Z"),
+                                            ),
+                                        text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                                        segments =
+                                            listOf(
+                                                Segment(
+                                                    id = 1,
+                                                    text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                                                    start = 0.0F,
+                                                    end = 1.5F,
+                                                ),
+                                                Segment(
+                                                    id = 2,
+                                                    text = "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, ",
+                                                    start = 1.51F,
+                                                    end = 2.0F,
+                                                ),
+                                                Segment(
+                                                    id = 3,
+                                                    text = "when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                                                    start = 2.1F,
+                                                    end = 2.5F,
+                                                ),
+                                            ),
+                                    ),
+                                    Transcription(
+                                        audioId = "audioId_10_10_24.mp3",
+                                        name = "Lecture Transcription",
+                                        id = 1,
+                                        language = Language.PT,
+                                        createdAt =
+                                            Date.from(
+                                                Instant.parse("2021-10-10T10:10:10Z"),
+                                            ),
+                                        text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                                        segments =
+                                            listOf(
+                                                Segment(
+                                                    id = 1,
+                                                    text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                                                    start = 0.0F,
+                                                    end = 1.5F,
+                                                ),
+                                                Segment(
+                                                    id = 2,
+                                                    text = "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, ",
+                                                    start = 1.51F,
+                                                    end = 2.0F,
+                                                ),
+                                                Segment(
+                                                    id = 3,
+                                                    text = "when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                                                    start = 2.1F,
+                                                    end = 2.5F,
+                                                ),
+                                            ),
+                                    ),
+                                ),
+                        ),
+                ),
+            onIntent = {},
+        )
+    }
+}
+
+@Composable
+@Preview(uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+private fun HomeScreenDarkPreview() {
     AcessIFTheme {
         HomeScreen(
             modifier = Modifier,

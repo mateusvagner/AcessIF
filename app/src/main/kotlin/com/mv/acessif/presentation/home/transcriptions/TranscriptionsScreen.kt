@@ -4,12 +4,12 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -36,10 +36,11 @@ import com.mv.acessif.domain.Segment
 import com.mv.acessif.domain.Transcription
 import com.mv.acessif.presentation.UiText
 import com.mv.acessif.presentation.home.home.HomeGraph
+import com.mv.acessif.presentation.home.transcriptionDetail.TranscriptionDetailScreen
+import com.mv.acessif.ui.designSystem.components.CustomButton
 import com.mv.acessif.ui.designSystem.components.DefaultScreenHeader
 import com.mv.acessif.ui.designSystem.components.ErrorComponent
 import com.mv.acessif.ui.designSystem.components.LoadingComponent
-import com.mv.acessif.ui.designSystem.components.button.MainActionButton
 import com.mv.acessif.ui.theme.AcessIFTheme
 import com.mv.acessif.ui.theme.Black
 import com.mv.acessif.ui.theme.BodyLarge
@@ -191,14 +192,18 @@ fun TranscriptionsEmptyContent(
             color = MaterialTheme.colorScheme.onBackground,
         )
 
-        MainActionButton(
-            modifier =
-                Modifier
-                    .padding(horizontal = XL)
-                    .fillMaxWidth(),
-            label = stringResource(R.string.make_first_transcription),
+        CustomButton(
+            color = MaterialTheme.colorScheme.primary,
+            isLightColor = !isSystemInDarkTheme(),
+            onClick = {
+                onIntent(TranscriptionsIntent.OnNewTranscription)
+            },
         ) {
-            onIntent(TranscriptionsIntent.OnNewTranscription)
+            Text(
+                text = stringResource(R.string.make_first_transcription),
+                style = BodyMedium.copy(fontWeight = FontWeight.Bold),
+                color = MaterialTheme.colorScheme.onPrimary,
+            )
         }
     }
 }
