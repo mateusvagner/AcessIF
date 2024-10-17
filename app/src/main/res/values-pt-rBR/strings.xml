@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">AcessIF</string>
-    <string name="welcome_user">Bem-vindo(a) %s!</string>
+    <string name="welcome_user">Bem-vindo(a), %s!</string>
 
     <string name="no_internet">Sem conexão com a internet. Verifique suas configurações de rede.</string>
     <string name="timeout">A solicitação demorou muito. Tente novamente mais tarde.</string>

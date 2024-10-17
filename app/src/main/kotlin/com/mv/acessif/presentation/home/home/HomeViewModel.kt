@@ -2,11 +2,14 @@ package com.mv.acessif.presentation.home.home
 
 import android.content.Context
 import android.net.Uri
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.mv.acessif.R
 import com.mv.acessif.domain.repository.SharedPreferencesRepository
 import com.mv.acessif.domain.repository.TranscriptionRepository
+import com.mv.acessif.domain.repository.UserRepository
 import com.mv.acessif.domain.returnModel.DataError
 import com.mv.acessif.domain.returnModel.Result
 import com.mv.acessif.presentation.asErrorUiText
@@ -26,11 +29,17 @@ import javax.inject.Inject
 class HomeViewModel
     @Inject
     constructor(
+        savedStateHandle: SavedStateHandle,
         private val sharedPreferencesRepository: SharedPreferencesRepository,
+        private val userRepository: UserRepository,
         private val transcriptionRepository: TranscriptionRepository,
-        private val navigator: Navigator,
+        navigator: Navigator,
     ) : ViewModel(), Navigator by navigator {
-        private val _state = MutableStateFlow(HomeScreenState())
+        private val _state =
+            MutableStateFlow(
+                HomeScreenState(userName = savedStateHandle.toRoute<HomeGraph.HomeRoute>().userName),
+            )
+
         val state =
             _state
                 .onStart { getLastTranscriptions() }
@@ -110,7 +119,7 @@ class HomeViewModel
                                 errorTranscription = null,
                             )
 
-                        navigator.navigateTo(
+                        navigateTo(
                             HomeGraph.TranscriptionDetailRoute(
                                 transcriptionId = transcriptionResult.data,
                                 originScreen = R.string.home_screen,
@@ -142,8 +151,9 @@ class HomeViewModel
                 when (intent) {
                     HomeIntent.OnLogout -> {
                         sharedPreferencesRepository.clearTokens()
+                        userRepository.logout()
 
-                        navigator.navigateTo(RootGraph.WelcomeRoute) {
+                        navigateTo(RootGraph.WelcomeRoute) {
                             popUpTo<RootGraph.HomeGraph> {
                                 inclusive = true
                             }
@@ -152,7 +162,7 @@ class HomeViewModel
 
                     HomeIntent.OnMyTranscriptions -> {
                         viewModelScope.launch {
-                            navigator.navigateTo(HomeGraph.TranscriptionsRoute)
+                            navigateTo(HomeGraph.TranscriptionsRoute)
                         }
                     }
 
@@ -161,7 +171,7 @@ class HomeViewModel
                     }
 
                     is HomeIntent.OnTranscriptionPressed -> {
-                        navigator.navigateTo(
+                        navigateTo(
                             HomeGraph.TranscriptionDetailRoute(
                                 transcriptionId = intent.transcription.id,
                                 originScreen = R.string.home_screen,

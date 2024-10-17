@@ -25,7 +25,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -38,7 +37,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.mv.acessif.R
 import com.mv.acessif.domain.returnModel.DataError
@@ -60,61 +58,14 @@ import com.mv.acessif.ui.theme.XL
 import com.mv.acessif.ui.theme.XXL
 import com.mv.acessif.ui.theme.XXXL
 
-fun NavGraphBuilder.loginRoute(
-    modifier: Modifier,
-    navController: NavHostController,
-) {
+fun NavGraphBuilder.loginRoute(modifier: Modifier) {
     composable<RootGraph.LoginRoute> {
         val viewModel: LoginScreenViewModel = hiltViewModel()
-
-        LaunchedEffect(key1 = Unit) {
-            viewModel.onSigninSuccess.collect {
-                navController.navigate(RootGraph.HomeGraph) {
-                    popUpTo<RootGraph.WelcomeRoute> {
-                        inclusive = true
-                    }
-                }
-            }
-        }
 
         LoginScreen(
             modifier = modifier,
             screenState = viewModel.loginScreenState,
-            onIntent = {
-                when (it) {
-                    is LoginScreenIntent.OnEmailChanged -> {
-                        viewModel.onEmailChanged(it.email)
-                    }
-
-                    is LoginScreenIntent.OnPasswordChanged -> {
-                        viewModel.onPasswordChanged(it.password)
-                    }
-
-                    LoginScreenIntent.OnTogglePasswordVisibility -> {
-                        viewModel.onTogglePasswordVisibility()
-                    }
-
-                    LoginScreenIntent.OnSigninPressed -> {
-                        viewModel.onSigninPressed()
-                    }
-
-                    LoginScreenIntent.OnSignUpPressed -> {
-                        navController.navigate(RootGraph.SignUpRoute) {
-                            popUpTo<RootGraph.LoginRoute> {
-                                inclusive = true
-                            }
-                        }
-                    }
-
-                    LoginScreenIntent.OnNavigateBack -> {
-                        navController.navigateUp()
-                    }
-
-                    LoginScreenIntent.OnTryAgain -> {
-                        viewModel.onTryAgain()
-                    }
-                }
-            },
+            onIntent = viewModel::handleIntent,
         )
     }
 }

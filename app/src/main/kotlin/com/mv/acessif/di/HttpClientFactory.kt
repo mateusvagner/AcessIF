@@ -34,11 +34,13 @@ object HttpClientFactory {
             defaultRequest { url(HttpRoutes.BASE_URL) }
 
             install(Auth) {
-                val accessToken = sharedPreferencesManager.getAccessToken()
-                val refreshToken = sharedPreferencesManager.getRefreshToken()
-
                 bearer {
 //                    loadTokens {
+//                        sendWithoutRequest { true }
+//
+//                        val accessToken = sharedPreferencesManager.getAccessToken()
+//                        val refreshToken = sharedPreferencesManager.getRefreshToken()
+//
 //                        if (accessToken != null && refreshToken != null) {
 //                            BearerTokens(
 //                                accessToken = accessToken,
@@ -48,16 +50,21 @@ object HttpClientFactory {
 //                            null
 //                        }
 //                    }
-//
+
                     refreshTokens {
+                        val refreshToken = sharedPreferencesManager.getRefreshToken()
+
                         val result =
                             client.post {
                                 url(HttpRoutes.REFRESH_TOKEN)
                                 markAsRefreshTokenRequest()
                                 headers {
+                                    remove(HttpHeaders.Authorization)
                                     append(HttpHeaders.Authorization, "Bearer $refreshToken")
                                 }
                             }.body<AccessTokenDto>()
+
+                        sharedPreferencesManager.saveAccessToken(result.accessToken)
 
                         BearerTokens(
                             accessToken = result.accessToken,
@@ -85,10 +92,10 @@ object HttpClientFactory {
                 )
             }
         }.apply {
-            val accessToken = sharedPreferencesManager.getAccessToken().orEmpty()
-            val refreshToken = sharedPreferencesManager.getRefreshToken().orEmpty()
-
             this.plugin(HttpSend).intercept { request ->
+                val accessToken = sharedPreferencesManager.getAccessToken().orEmpty()
+                val refreshToken = sharedPreferencesManager.getRefreshToken().orEmpty()
+
                 val authToken =
                     if (request.url.encodedPath.contains(HttpRoutes.REFRESH_TOKEN)) {
                         refreshToken
@@ -97,8 +104,10 @@ object HttpClientFactory {
                     }
 
                 request.headers {
+                    remove(HttpHeaders.Authorization)
                     append(HttpHeaders.Authorization, "Bearer $authToken")
                 }
+
                 execute(request)
             }
         }

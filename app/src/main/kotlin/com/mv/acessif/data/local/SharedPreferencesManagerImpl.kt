@@ -21,10 +21,12 @@ class SharedPreferencesManagerImpl
         }
 
         override fun saveAccessToken(token: String) {
+            println("\nLOGGUE saveAccessToken: $token")
             sharedPreferences.edit().putString(ACCESS_TOKEN, token).apply()
         }
 
         override fun getAccessToken(): String? {
+            println("\nLOGGUE getAcessToken: ${sharedPreferences.getString(ACCESS_TOKEN, null)}")
             return sharedPreferences.getString(ACCESS_TOKEN, null)
         }
 

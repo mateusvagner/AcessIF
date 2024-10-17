@@ -12,202 +12,227 @@ import com.mv.acessif.presentation.asErrorUiText
 import com.mv.acessif.presentation.auth.commonState.EmailError
 import com.mv.acessif.presentation.auth.commonState.NameError
 import com.mv.acessif.presentation.auth.commonState.PasswordError
+import com.mv.acessif.presentation.home.home.HomeGraph
+import com.mv.acessif.presentation.navigation.Navigator
+import com.mv.acessif.presentation.root.RootGraph
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SignUpScreenViewModel(
-    private val signUpUseCase: SignUpUseCase,
-    private val dispatcher: CoroutineDispatcher,
-) : ViewModel() {
+class SignUpScreenViewModel
     @Inject
     constructor(
-        signUpUseCase: SignUpUseCase,
-    ) : this(
-        signUpUseCase = signUpUseCase,
-        dispatcher = Dispatchers.IO,
-    )
+        private val signUpUseCase: SignUpUseCase,
+        navigator: Navigator,
+    ) : ViewModel(), Navigator by navigator {
+        var signupScreenState by mutableStateOf(SignUpScreenState())
+            private set
 
-    var signupScreenState by mutableStateOf(SignUpScreenState())
-        private set
-
-    private val _onSignupSuccess = Channel<Unit>()
-    val onSignupSuccess =
-        _onSignupSuccess.receiveAsFlow().shareIn(viewModelScope, SharingStarted.Lazily)
-
-    fun onNameChanged(name: String) {
-        signupScreenState =
-            signupScreenState.copy(
-                nameTextFieldState =
-                    signupScreenState.nameTextFieldState.copy(
-                        value = name,
-                        isError = false,
-                    ),
-            )
-    }
-
-    fun onEmailChanged(email: String) {
-        signupScreenState =
-            signupScreenState.copy(
-                emailTextFieldState =
-                    signupScreenState.emailTextFieldState.copy(
-                        email = email,
-                        isError = false,
-                    ),
-            )
-    }
-
-    fun onPasswordChanged(password: String) {
-        signupScreenState =
-            signupScreenState.copy(
-                passwordTextFieldState =
-                    signupScreenState.passwordTextFieldState.copy(
-                        password = password,
-                        isError = false,
-                    ),
-            )
-    }
-
-    fun onTogglePasswordVisibility() {
-        signupScreenState =
-            signupScreenState.copy(
-                passwordTextFieldState =
-                    signupScreenState.passwordTextFieldState.copy(
-                        isVisible = !signupScreenState.passwordTextFieldState.isVisible,
-                    ),
-            )
-    }
-
-    fun onSignupPressed() {
-        if (isNameValid(signupScreenState.nameTextFieldState.value) &&
-            isEmailValid(signupScreenState.emailTextFieldState.email) &&
-            isPasswordValid(signupScreenState.passwordTextFieldState.password)
-        ) {
-            val signupBody =
-                SignUp(
-                    name = signupScreenState.nameTextFieldState.value,
-                    email = signupScreenState.emailTextFieldState.email,
-                    password = signupScreenState.passwordTextFieldState.password,
-                )
-
-            viewModelScope.launch {
+        private fun isNameValid(name: String): Boolean {
+            if (name.isEmpty()) {
                 signupScreenState =
                     signupScreenState.copy(
-                        isLoading = true,
+                        nameTextFieldState =
+                            signupScreenState.nameTextFieldState.copy(
+                                isError = true,
+                                nameError = NameError.EMPTY,
+                            ),
+                    )
+                return false
+            }
+
+            if (name.length < 3) {
+                signupScreenState =
+                    signupScreenState.copy(
+                        nameTextFieldState =
+                            signupScreenState.nameTextFieldState.copy(
+                                isError = true,
+                                nameError = NameError.SHORT,
+                            ),
+                    )
+                return false
+            }
+
+            return true
+        }
+
+        private fun isEmailValid(email: String): Boolean {
+            if (email.isEmpty()) {
+                signupScreenState =
+                    signupScreenState.copy(
+                        emailTextFieldState =
+                            signupScreenState.emailTextFieldState.copy(
+                                isError = true,
+                                emailError = EmailError.EMPTY,
+                            ),
+                    )
+                return false
+            }
+
+            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                signupScreenState =
+                    signupScreenState.copy(
+                        emailTextFieldState =
+                            signupScreenState.emailTextFieldState.copy(
+                                isError = true,
+                                emailError = EmailError.INVALID,
+                            ),
+                    )
+                return false
+            }
+
+            return true
+        }
+
+        private fun isPasswordValid(password: String): Boolean {
+            if (password.isEmpty()) {
+                signupScreenState =
+                    signupScreenState.copy(
+                        passwordTextFieldState =
+                            signupScreenState.passwordTextFieldState.copy(
+                                isError = true,
+                                passwordError = PasswordError.EMPTY,
+                            ),
+                    )
+                return false
+            }
+
+            return true
+        }
+
+        private fun onNameChanged(name: String) {
+            signupScreenState =
+                signupScreenState.copy(
+                    nameTextFieldState =
+                        signupScreenState.nameTextFieldState.copy(
+                            value = name,
+                            isError = false,
+                        ),
+                )
+        }
+
+        private fun onEmailChanged(email: String) {
+            signupScreenState =
+                signupScreenState.copy(
+                    emailTextFieldState =
+                        signupScreenState.emailTextFieldState.copy(
+                            email = email,
+                            isError = false,
+                        ),
+                )
+        }
+
+        private fun onPasswordChanged(password: String) {
+            signupScreenState =
+                signupScreenState.copy(
+                    passwordTextFieldState =
+                        signupScreenState.passwordTextFieldState.copy(
+                            password = password,
+                            isError = false,
+                        ),
+                )
+        }
+
+        private fun onTogglePasswordVisibility() {
+            signupScreenState =
+                signupScreenState.copy(
+                    passwordTextFieldState =
+                        signupScreenState.passwordTextFieldState.copy(
+                            isVisible = !signupScreenState.passwordTextFieldState.isVisible,
+                        ),
+                )
+        }
+
+        private fun onSignupPressed() {
+            if (isNameValid(signupScreenState.nameTextFieldState.value) &&
+                isEmailValid(signupScreenState.emailTextFieldState.email) &&
+                isPasswordValid(signupScreenState.passwordTextFieldState.password)
+            ) {
+                val signupBody =
+                    SignUp(
+                        name = signupScreenState.nameTextFieldState.value,
+                        email = signupScreenState.emailTextFieldState.email,
+                        password = signupScreenState.passwordTextFieldState.password,
                     )
 
-                val result =
-                    signUpUseCase.execute(
-                        signUp = signupBody,
-                    )
+                viewModelScope.launch {
+                    signupScreenState =
+                        signupScreenState.copy(
+                            isLoading = true,
+                        )
 
-                when (result) {
-                    is Result.Success -> {
-                        signupScreenState =
-                            signupScreenState.copy(
-                                isLoading = false,
-                                signUpError = null,
-                            )
+                    val userResult =
+                        signUpUseCase.execute(
+                            signUp = signupBody,
+                        )
 
-                        _onSignupSuccess.send(Unit)
+                    when (userResult) {
+                        is Result.Success -> {
+                            signupScreenState =
+                                signupScreenState.copy(
+                                    isLoading = false,
+                                    signUpError = null,
+                                )
+
+                            navigateTo(HomeGraph.HomeRoute(userName = userResult.data.name)) {
+                                popUpTo<RootGraph.WelcomeRoute> {
+                                    inclusive = true
+                                }
+                            }
+                        }
+
+                        is Result.Error -> {
+                            signupScreenState =
+                                signupScreenState.copy(
+                                    isLoading = false,
+                                    signUpError = userResult.asErrorUiText(),
+                                )
+                        }
+                    }
+                }
+            }
+        }
+
+        private fun onTryAgain() {
+            signupScreenState =
+                signupScreenState.copy(
+                    signUpError = null,
+                    isLoading = false,
+                )
+        }
+
+        fun handleIntent(intent: SignUpScreenIntent) {
+            viewModelScope.launch {
+                when (intent) {
+                    is SignUpScreenIntent.OnNameChanged -> {
+                        onNameChanged(intent.name)
                     }
 
-                    is Result.Error -> {
-                        signupScreenState =
-                            signupScreenState.copy(
-                                isLoading = false,
-                                signUpError = result.asErrorUiText(),
-                            )
+                    is SignUpScreenIntent.OnEmailChanged -> {
+                        onEmailChanged(intent.email)
+                    }
+
+                    is SignUpScreenIntent.OnPasswordChanged -> {
+                        onPasswordChanged(intent.password)
+                    }
+
+                    SignUpScreenIntent.OnTogglePasswordVisibility -> {
+                        onTogglePasswordVisibility()
+                    }
+
+                    SignUpScreenIntent.OnSignupPressed -> {
+                        onSignupPressed()
+                    }
+
+                    SignUpScreenIntent.OnNavigateBack -> {
+                        navigateUp()
+                    }
+
+                    SignUpScreenIntent.OnTryAgain -> {
+                        onTryAgain()
                     }
                 }
             }
         }
     }
-
-    fun onTryAgain() {
-        signupScreenState =
-            signupScreenState.copy(
-                signUpError = null,
-                isLoading = false,
-            )
-    }
-
-    private fun isNameValid(name: String): Boolean {
-        if (name.isEmpty()) {
-            signupScreenState =
-                signupScreenState.copy(
-                    nameTextFieldState =
-                        signupScreenState.nameTextFieldState.copy(
-                            isError = true,
-                            nameError = NameError.EMPTY,
-                        ),
-                )
-            return false
-        }
-
-        if (name.length < 3) {
-            signupScreenState =
-                signupScreenState.copy(
-                    nameTextFieldState =
-                        signupScreenState.nameTextFieldState.copy(
-                            isError = true,
-                            nameError = NameError.SHORT,
-                        ),
-                )
-            return false
-        }
-
-        return true
-    }
-
-    private fun isEmailValid(email: String): Boolean {
-        if (email.isEmpty()) {
-            signupScreenState =
-                signupScreenState.copy(
-                    emailTextFieldState =
-                        signupScreenState.emailTextFieldState.copy(
-                            isError = true,
-                            emailError = EmailError.EMPTY,
-                        ),
-                )
-            return false
-        }
-
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            signupScreenState =
-                signupScreenState.copy(
-                    emailTextFieldState =
-                        signupScreenState.emailTextFieldState.copy(
-                            isError = true,
-                            emailError = EmailError.INVALID,
-                        ),
-                )
-            return false
-        }
-
-        return true
-    }
-
-    private fun isPasswordValid(password: String): Boolean {
-        if (password.isEmpty()) {
-            signupScreenState =
-                signupScreenState.copy(
-                    passwordTextFieldState =
-                        signupScreenState.passwordTextFieldState.copy(
-                            isError = true,
-                            passwordError = PasswordError.EMPTY,
-                        ),
-                )
-            return false
-        }
-
-        return true
-    }
-}

@@ -16,7 +16,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -55,50 +54,10 @@ fun NavGraphBuilder.signUpRoute(
     composable<RootGraph.SignUpRoute> {
         val viewModel: SignUpScreenViewModel = hiltViewModel()
 
-        LaunchedEffect(key1 = Unit) {
-            viewModel.onSignupSuccess.collect {
-                navController.navigate(RootGraph.HomeGraph) {
-                    popUpTo<RootGraph.WelcomeRoute> {
-                        inclusive = true
-                    }
-                }
-            }
-        }
-
         SignUpScreen(
             modifier = modifier,
             screenState = viewModel.signupScreenState,
-            onIntent = { intent ->
-                when (intent) {
-                    is SignUpScreenIntent.OnNameChanged -> {
-                        viewModel.onNameChanged(intent.name)
-                    }
-
-                    is SignUpScreenIntent.OnEmailChanged -> {
-                        viewModel.onEmailChanged(intent.email)
-                    }
-
-                    is SignUpScreenIntent.OnPasswordChanged -> {
-                        viewModel.onPasswordChanged(intent.password)
-                    }
-
-                    SignUpScreenIntent.OnTogglePasswordVisibility -> {
-                        viewModel.onTogglePasswordVisibility()
-                    }
-
-                    SignUpScreenIntent.OnSignupPressed -> {
-                        viewModel.onSignupPressed()
-                    }
-
-                    SignUpScreenIntent.OnNavigateBack -> {
-                        navController.navigateUp()
-                    }
-
-                    SignUpScreenIntent.OnTryAgain -> {
-                        viewModel.onTryAgain()
-                    }
-                }
-            },
+            onIntent = viewModel::handleIntent,
         )
     }
 }
