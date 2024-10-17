@@ -55,7 +55,6 @@ import com.mv.acessif.domain.Transcription
 import com.mv.acessif.presentation.UiText
 import com.mv.acessif.presentation.home.components.SupportBottomBar
 import com.mv.acessif.presentation.home.components.TranscriptionContainer
-import com.mv.acessif.presentation.home.newTranscription.NewTranscriptionScreen
 import com.mv.acessif.presentation.home.summary.SummaryScreen
 import com.mv.acessif.presentation.util.formatTo
 import com.mv.acessif.presentation.util.shareTextIntent
@@ -150,18 +149,6 @@ fun NavGraphBuilder.transcriptionDetailScreen(
                 when (intent) {
                     TranscriptionDetailIntent.OnNavigateBack -> {
                         navController.navigateUp()
-                    }
-
-                    TranscriptionDetailIntent.OnNewTranscription -> {
-                        navController.navigate(
-                            NewTranscriptionScreen(
-                                originScreen = entry.toRoute<TranscriptionDetailScreen>().originScreen,
-                            ),
-                        ) {
-                            popUpTo(TranscriptionDetailScreen) {
-                                inclusive = true
-                            }
-                        }
                     }
 
                     TranscriptionDetailIntent.OnShareTranscription -> {

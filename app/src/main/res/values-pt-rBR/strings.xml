@@ -35,6 +35,7 @@
 
     <string name="sign_in">Entrar</string>
     <string name="sign_up">Cadastrar</string>
+    <string name="sign_up_now">Inscreva-se agora</string>
     <string name="logout">Sair</string>
     <string name="about_us">Sobre nós</string>
 
@@ -43,6 +44,7 @@
     <string name="password">Senha</string>
 
     <string name="welcome_screen">Tela de Boas-vindas</string>
+    <string name="beginning">Início</string>
     <string name="welcome">Bem-vindo(a)!</string>
     <string name="home_screen">Tela Inicial</string>
     <string name="new_transcription_screen">Tela de Nova Transcrição</string>
@@ -125,4 +127,10 @@
 
     <string name="signin_and_do_more">Entre e faça mais!</string>
     <string name="signin_and_do_more_instruction">Entre para acessar o histórico de suas transcrições e criar resumos inteligentes!</string>
+
+    <string name="dark_mode">Tema: Escuro</string>"
+    <string name="light_mode">Tema: Claro</string>"
+
+    <string name="about_the_project">Sobre o Projeto</string>
+    <string name="contact">Contato</string>
 </resources>

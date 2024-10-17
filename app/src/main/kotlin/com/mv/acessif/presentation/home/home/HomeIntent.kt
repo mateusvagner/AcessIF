@@ -11,5 +11,7 @@ sealed interface HomeIntent {
 
     data object OnLogout : HomeIntent
 
-    data object OnAboutUs : HomeIntent
+    data object OnAboutTheProject : HomeIntent
+
+    data object OnContactUs : HomeIntent
 }

@@ -1,5 +1,7 @@
 package com.mv.acessif.presentation.root
 
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -16,33 +18,35 @@ fun RootNavGraph(
     startDestination: RootStartDestination,
     rootNavController: NavHostController,
 ) {
-    NavHost(
-        startDestination = startDestination,
-        navController = rootNavController,
-    ) {
-        welcomeScreen(
-            modifier = modifier,
-            rootNavController = rootNavController,
-        )
+    Scaffold { innerPadding ->
+        NavHost(
+            startDestination = startDestination,
+            navController = rootNavController,
+        ) {
+            welcomeScreen(
+                modifier = modifier.padding(bottom = innerPadding.calculateBottomPadding()),
+                rootNavController = rootNavController,
+            )
 
-        demoTranscriptionScreen(
-            modifier = modifier,
-            rootNavController = rootNavController,
-        )
+            demoTranscriptionScreen(
+                modifier = modifier.padding(bottom = innerPadding.calculateBottomPadding()),
+                rootNavController = rootNavController,
+            )
 
-        loginScreen(
-            modifier = modifier,
-            rootNavController = rootNavController,
-        )
+            loginScreen(
+                modifier = modifier.padding(bottom = innerPadding.calculateBottomPadding()),
+                rootNavController = rootNavController,
+            )
 
-        signUpScreen(
-            modifier = modifier,
-            rootNavController = rootNavController,
-        )
+            signUpScreen(
+                modifier = modifier.padding(bottom = innerPadding.calculateBottomPadding()),
+                rootNavController = rootNavController,
+            )
 
-        homeNavGraph(
-            modifier = modifier,
-            rootNavController = rootNavController,
-        )
+            homeNavGraph(
+                modifier = modifier.padding(bottom = innerPadding.calculateBottomPadding()),
+                rootNavController = rootNavController,
+            )
+        }
     }
 }

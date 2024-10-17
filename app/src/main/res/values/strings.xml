@@ -34,6 +34,7 @@
 
     <string name="sign_in">Sign in</string>
     <string name="sign_up">Sign up</string>
+    <string name="sign_up_now">Sign up now</string>
     <string name="logout">Logout</string>
     <string name="about_us">About Us</string>
 
@@ -42,6 +43,7 @@
     <string name="password">Password</string>
 
     <string name="welcome_screen">Welcome Screen</string>
+    <string name="beginning">Beginning</string>
     <string name="welcome">Welcome!</string>
     <string name="home_screen">Home Screen</string>
     <string name="new_transcription_screen">New Transcription Screen</string>
@@ -125,4 +127,9 @@
     <string name="signin_and_do_more">Signin and do more!</string>
     <string name="signin_and_do_more_instruction">Signin to access your transcription history and create smart summaries!</string>
 
+    <string name="dark_mode">Theme: Dark mode</string>"
+    <string name="light_mode">Theme: Light mode</string>"
+
+    <string name="about_the_project">About the project</string>
+    <string name="contact">Contact Us</string>
 </resources>
