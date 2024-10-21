@@ -108,6 +108,7 @@
     <string name="you_dont_have_transcriptions">You don\'t have transcriptions yet.</string>
 
     <string name="open_transcription_from">Open transcription from day %s</string>
+    <string name="open_transcription_name">Open transcription %s</string>
     <string name="unknown_date">Unknown date</string>
     <string name="unknown_audio_id">Unknown audio id</string>
 
@@ -132,4 +133,10 @@
 
     <string name="about_the_project">About the project</string>
     <string name="contact">Contact Us</string>
+
+    <string name="delete_transcription_alert_title">Are you sure you want to delete the transcript?</string>
+    <string name="delete_transcription_alert_message">This action cannot be reversed</string>
+
+    <string name="confirm">Confirm</string>
+    <string name="dismiss">Dispersar</string>
 </resources>

@@ -24,6 +24,9 @@ class TranscriptionsViewModel
         private val transcriptionRepository: TranscriptionRepository,
         private val navigator: Navigator,
     ) : ViewModel(), Navigator by navigator {
+
+        private var transcriptionToDelete: Int? = null
+
         private val _state = MutableStateFlow(TranscriptionsScreenState())
         val state =
             _state
@@ -34,7 +37,7 @@ class TranscriptionsViewModel
                     TranscriptionsScreenState(),
                 )
 
-        fun getTranscriptions() {
+        private fun getTranscriptions() {
             viewModelScope.launch {
                 _state.value =
                     _state.value.copy(
@@ -68,7 +71,7 @@ class TranscriptionsViewModel
             }
         }
 
-        fun deleteTranscription(id: Int) {
+        private fun deleteTranscription(id: Int) {
             viewModelScope.launch {
                 _state.value =
                     _state.value.copy(
@@ -77,6 +80,7 @@ class TranscriptionsViewModel
 
                 when (val result = transcriptionRepository.deleteTranscription(id)) {
                     is Result.Success -> {
+                        transcriptionToDelete = null
                         getTranscriptions()
                     }
 
@@ -118,7 +122,33 @@ class TranscriptionsViewModel
                     }
 
                     is TranscriptionsIntent.OnDeleteTranscription -> {
-                        deleteTranscription(intent.transcriptionId)
+                        transcriptionToDelete = intent.transcriptionId
+
+                        _state.value =
+                            _state.value.copy(
+                                showDeleteTranscriptionDialog = true,
+                            )
+                    }
+
+                    TranscriptionsIntent.OnConfirmDeletion -> {
+                        transcriptionToDelete?.let {
+                            deleteTranscription(it)
+                        }
+
+                        _state.value =
+
+                            _state.value.copy(
+                                showDeleteTranscriptionDialog = false,
+                            )
+                    }
+
+                    TranscriptionsIntent.OnCancelDeletion -> {
+                        transcriptionToDelete = null
+                        _state.value =
+
+                            _state.value.copy(
+                                showDeleteTranscriptionDialog = false,
+                            )
                     }
                 }
             }

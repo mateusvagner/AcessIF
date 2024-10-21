@@ -39,13 +39,13 @@ import com.mv.acessif.presentation.home.components.SupportBottomBar
 import com.mv.acessif.presentation.home.components.TranscriptionContainer
 import com.mv.acessif.presentation.root.RootGraph
 import com.mv.acessif.presentation.util.shareTextIntent
-import com.mv.acessif.ui.designSystem.components.CustomButton
+import com.mv.acessif.ui.designSystem.components.button.CustomButton
 import com.mv.acessif.ui.designSystem.components.DefaultScreenHeader
 import com.mv.acessif.ui.designSystem.components.ErrorComponent
 import com.mv.acessif.ui.designSystem.components.LoadingComponent
-import com.mv.acessif.ui.designSystem.components.button.util.BASE_FONT_SIZE
-import com.mv.acessif.ui.designSystem.components.button.util.MAX_FONT_SIZE
-import com.mv.acessif.ui.designSystem.components.button.util.MIN_FONT_SIZE
+import com.mv.acessif.ui.designSystem.util.BASE_FONT_SIZE
+import com.mv.acessif.ui.designSystem.util.MAX_FONT_SIZE
+import com.mv.acessif.ui.designSystem.util.MIN_FONT_SIZE
 import com.mv.acessif.ui.theme.AcessIFTheme
 import com.mv.acessif.ui.theme.L
 import com.mv.acessif.ui.theme.S

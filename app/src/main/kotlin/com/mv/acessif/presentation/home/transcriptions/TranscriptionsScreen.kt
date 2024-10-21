@@ -21,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,7 +37,8 @@ import com.mv.acessif.domain.Segment
 import com.mv.acessif.domain.Transcription
 import com.mv.acessif.presentation.UiText
 import com.mv.acessif.presentation.home.home.HomeGraph
-import com.mv.acessif.ui.designSystem.components.CustomButton
+import com.mv.acessif.ui.designSystem.components.CustomAlertDialog
+import com.mv.acessif.ui.designSystem.components.button.CustomButton
 import com.mv.acessif.ui.designSystem.components.DefaultScreenHeader
 import com.mv.acessif.ui.designSystem.components.ErrorComponent
 import com.mv.acessif.ui.designSystem.components.LoadingComponent
@@ -73,17 +75,31 @@ fun TranscriptionsScreen(
     state: TranscriptionsScreenState,
     onIntent: (TranscriptionsIntent) -> Unit,
 ) {
+    if (state.showDeleteTranscriptionDialog) {
+        CustomAlertDialog(
+            dialogTitle = stringResource(R.string.delete_transcription_alert_title),
+            dialogText = stringResource(R.string.delete_transcription_alert_message),
+            icon = painterResource(R.drawable.ic_delete),
+            onConfirmation = {
+                onIntent(TranscriptionsIntent.OnConfirmDeletion)
+            },
+            onDismissRequest = {
+                onIntent(TranscriptionsIntent.OnCancelDeletion)
+            }
+        )
+    }
+
     Column(
         modifier =
-            modifier
-                .fillMaxSize()
-                .background(color = MaterialTheme.colorScheme.background),
+        modifier
+            .fillMaxSize()
+            .background(color = MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         DefaultScreenHeader(
             modifier =
-                Modifier
-                    .background(color = MaterialTheme.colorScheme.primary),
+            Modifier
+                .background(color = MaterialTheme.colorScheme.primary),
             origin = stringResource(id = R.string.home_screen),
             onBackPressed = { onIntent(TranscriptionsIntent.OnNavigateBack) },
         )
@@ -93,26 +109,26 @@ fun TranscriptionsScreen(
         if (state.error != null) {
             ErrorComponent(
                 modifier =
-                    Modifier
-                        .padding(horizontal = XL)
-                        .fillMaxSize(),
+                Modifier
+                    .padding(horizontal = XL)
+                    .fillMaxSize(),
                 message = state.error.asString(),
                 onTryAgain = { onIntent(TranscriptionsIntent.OnTryAgain) },
             )
         } else if (state.isLoading) {
             LoadingComponent(
                 modifier =
-                    Modifier
-                        .padding(horizontal = XL)
-                        .fillMaxSize(),
+                Modifier
+                    .padding(horizontal = XL)
+                    .fillMaxSize(),
                 label = stringResource(id = R.string.your_transcriptions_are_being_loaded),
             )
         } else if (state.transcriptions.isEmpty()) {
             TranscriptionsEmptyContent(
                 modifier =
-                    Modifier
-                        .padding(horizontal = XL)
-                        .fillMaxSize(),
+                Modifier
+                    .padding(horizontal = XL)
+                    .fillMaxSize(),
                 onIntent = onIntent,
             )
         } else {
@@ -126,14 +142,14 @@ fun TranscriptionsScreen(
                 if (state.isDeletingTranscription) {
                     LoadingComponent(
                         modifier =
-                            Modifier
-                                .fillMaxSize()
-                                .background(color = MaterialTheme.colorScheme.background.copy(alpha = 0.95F))
-                                .clickable(
-                                    indication = null,
-                                    interactionSource = remember { MutableInteractionSource() },
-                                    onClick = { },
-                                ),
+                        Modifier
+                            .fillMaxSize()
+                            .background(color = MaterialTheme.colorScheme.background.copy(alpha = 0.95F))
+                            .clickable(
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() },
+                                onClick = { },
+                            ),
                         label = stringResource(R.string.your_transcription_is_being_deleting),
                     )
                 }
@@ -143,7 +159,7 @@ fun TranscriptionsScreen(
 }
 
 @Composable
-fun TranscriptionsEmptyContent(
+private fun TranscriptionsEmptyContent(
     modifier: Modifier = Modifier,
     onIntent: (TranscriptionsIntent) -> Unit,
 ) {
@@ -154,9 +170,9 @@ fun TranscriptionsEmptyContent(
     ) {
         Text(
             modifier =
-                Modifier
-                    .padding(M)
-                    .background(color = MaterialTheme.colorScheme.background),
+            Modifier
+                .padding(M)
+                .background(color = MaterialTheme.colorScheme.background),
             text = stringResource(R.string.you_dont_have_transcriptions),
             style = BodyMedium,
             color = MaterialTheme.colorScheme.onBackground,
@@ -180,7 +196,7 @@ fun TranscriptionsEmptyContent(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun TranscriptionsContent(
+private fun TranscriptionsContent(
     modifier: Modifier = Modifier,
     transcriptions: Map<String, List<Transcription>>,
     onIntent: (TranscriptionsIntent) -> Unit,
@@ -229,11 +245,11 @@ private fun TranscriptionScreenPreview() {
         TranscriptionsScreen(
             modifier = Modifier,
             state =
-                TranscriptionsScreenState(
-                    isLoading = false,
-                    error = null,
-                    transcriptions = fakeTranscriptions(),
-                ),
+            TranscriptionsScreenState(
+                isLoading = false,
+                error = null,
+                transcriptions = fakeTranscriptions(),
+            ),
             onIntent = {},
         )
     }
@@ -246,12 +262,12 @@ private fun TranscriptionScreenDeletingPreview() {
         TranscriptionsScreen(
             modifier = Modifier,
             state =
-                TranscriptionsScreenState(
-                    isLoading = false,
-                    error = null,
-                    transcriptions = fakeTranscriptions(),
-                    isDeletingTranscription = true,
-                ),
+            TranscriptionsScreenState(
+                isLoading = false,
+                error = null,
+                transcriptions = fakeTranscriptions(),
+                isDeletingTranscription = true,
+            ),
             onIntent = {},
         )
     }
@@ -264,11 +280,11 @@ private fun TranscriptionScreenEmptyPreview() {
         TranscriptionsScreen(
             modifier = Modifier,
             state =
-                TranscriptionsScreenState(
-                    isLoading = false,
-                    error = null,
-                    transcriptions = emptyMap(),
-                ),
+            TranscriptionsScreenState(
+                isLoading = false,
+                error = null,
+                transcriptions = emptyMap(),
+            ),
             onIntent = {},
         )
     }
@@ -281,11 +297,11 @@ private fun TranscriptionScreenLoadingPreview() {
         TranscriptionsScreen(
             modifier = Modifier,
             state =
-                TranscriptionsScreenState(
-                    isLoading = true,
-                    error = null,
-                    transcriptions = emptyMap(),
-                ),
+            TranscriptionsScreenState(
+                isLoading = true,
+                error = null,
+                transcriptions = emptyMap(),
+            ),
             onIntent = {},
         )
     }
@@ -298,11 +314,11 @@ private fun TranscriptionScreenErrorPreview() {
         TranscriptionsScreen(
             modifier = Modifier,
             state =
-                TranscriptionsScreenState(
-                    isLoading = false,
-                    error = UiText.StringResource(id = R.string.no_internet),
-                    transcriptions = emptyMap(),
-                ),
+            TranscriptionsScreenState(
+                isLoading = false,
+                error = UiText.StringResource(id = R.string.no_internet),
+                transcriptions = emptyMap(),
+            ),
             onIntent = {},
         )
     }
@@ -311,18 +327,18 @@ private fun TranscriptionScreenErrorPreview() {
 private fun fakeTranscriptions() =
     mapOf(
         "10/10/2024" to
-            listOf(
-                Transcription(
-                    audioId = "audioId_10_10_24.mp3",
-                    name = "Podcast Transcription",
-                    id = 1,
-                    language = Language.PT,
-                    createdAt =
+                listOf(
+                    Transcription(
+                        audioId = "audioId_10_10_24.mp3",
+                        name = "Podcast Transcription",
+                        id = 1,
+                        language = Language.PT,
+                        createdAt =
                         Date.from(
                             Instant.parse("2021-10-10T10:10:10Z"),
                         ),
-                    text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-                    segments =
+                        text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                        segments =
                         listOf(
                             Segment(
                                 id = 1,
@@ -343,18 +359,18 @@ private fun fakeTranscriptions() =
                                 end = 2.5F,
                             ),
                         ),
-                ),
-                Transcription(
-                    audioId = "audioId_10_10_24.mp3",
-                    name = "Lecture Transcription",
-                    id = 1,
-                    language = Language.PT,
-                    createdAt =
+                    ),
+                    Transcription(
+                        audioId = "audioId_10_10_24.mp3",
+                        name = "Lecture Transcription",
+                        id = 1,
+                        language = Language.PT,
+                        createdAt =
                         Date.from(
                             Instant.parse("2021-10-10T10:10:10Z"),
                         ),
-                    text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-                    segments =
+                        text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                        segments =
                         listOf(
                             Segment(
                                 id = 1,
@@ -375,21 +391,21 @@ private fun fakeTranscriptions() =
                                 end = 2.5F,
                             ),
                         ),
+                    ),
                 ),
-            ),
         "12/10/2024" to
-            listOf(
-                Transcription(
-                    audioId = "audioId_12_10_24.mp3",
-                    name = "audioId_12_10_24.mp3",
-                    id = 1,
-                    language = Language.PT,
-                    createdAt =
+                listOf(
+                    Transcription(
+                        audioId = "audioId_12_10_24.mp3",
+                        name = "audioId_12_10_24.mp3",
+                        id = 1,
+                        language = Language.PT,
+                        createdAt =
                         Date.from(
                             Instant.parse("2021-10-12T10:10:10Z"),
                         ),
-                    text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-                    segments =
+                        text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                        segments =
                         listOf(
                             Segment(
                                 id = 1,
@@ -410,18 +426,18 @@ private fun fakeTranscriptions() =
                                 end = 2.5F,
                             ),
                         ),
-                ),
-                Transcription(
-                    audioId = "audioId_12_10_24.mp3",
-                    name = "audioId_12_10_24.mp3",
-                    id = 1,
-                    language = Language.PT,
-                    createdAt =
+                    ),
+                    Transcription(
+                        audioId = "audioId_12_10_24.mp3",
+                        name = "audioId_12_10_24.mp3",
+                        id = 1,
+                        language = Language.PT,
+                        createdAt =
                         Date.from(
                             Instant.parse("2021-10-12T10:10:10Z"),
                         ),
-                    text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-                    segments =
+                        text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                        segments =
                         listOf(
                             Segment(
                                 id = 1,
@@ -442,21 +458,21 @@ private fun fakeTranscriptions() =
                                 end = 2.5F,
                             ),
                         ),
+                    ),
                 ),
-            ),
         "15/12/2024" to
-            listOf(
-                Transcription(
-                    audioId = "audioId_15_12_24.mp3",
-                    name = "audioId_15_12_24.mp3",
-                    id = 1,
-                    language = Language.PT,
-                    createdAt =
+                listOf(
+                    Transcription(
+                        audioId = "audioId_15_12_24.mp3",
+                        name = "audioId_15_12_24.mp3",
+                        id = 1,
+                        language = Language.PT,
+                        createdAt =
                         Date.from(
                             Instant.parse("2021-12-15T10:10:10Z"),
                         ),
-                    text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-                    segments =
+                        text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                        segments =
                         listOf(
                             Segment(
                                 id = 1,
@@ -477,6 +493,6 @@ private fun fakeTranscriptions() =
                                 end = 2.5F,
                             ),
                         ),
+                    ),
                 ),
-            ),
     )

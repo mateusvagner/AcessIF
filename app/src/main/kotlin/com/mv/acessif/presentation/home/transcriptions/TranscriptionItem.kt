@@ -33,7 +33,7 @@ import com.mv.acessif.domain.Language
 import com.mv.acessif.domain.Segment
 import com.mv.acessif.domain.Transcription
 import com.mv.acessif.presentation.util.formatTo
-import com.mv.acessif.ui.designSystem.components.CustomButton
+import com.mv.acessif.ui.designSystem.components.button.CustomButton
 import com.mv.acessif.ui.theme.AcessIFTheme
 import com.mv.acessif.ui.theme.BaseCornerRadius
 import com.mv.acessif.ui.theme.L
@@ -61,12 +61,13 @@ fun TranscriptionItem(
 
     Surface(
         modifier =
-            modifier
-                .fillMaxWidth()
-                .semantics {
-                    contentDescription = semantics
-                    role = Role.Button
-                },
+        modifier
+            .fillMaxWidth()
+            .semantics {
+                contentDescription = semantics
+                role = Role.Button
+            },
+        onClick = { onClick(transcription) },
         color = MaterialTheme.colorScheme.surface,
         shape = RoundedCornerShape(BaseCornerRadius),
         shadowElevation = 2.dp,
@@ -75,51 +76,38 @@ fun TranscriptionItem(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                CustomButton(
+                Column(
                     modifier =
-                        Modifier
-                            .weight(1f)
-                            .padding(vertical = S)
-                            .padding(start = XS)
-                            .semantics {
-                                contentDescription = semantics
-                            },
-                    color = MaterialTheme.colorScheme.surface,
-                    isLightColor = !isSystemInDarkTheme(),
-                    onClick = { onClick(transcription) },
+                    Modifier
+                        .weight(1f)
+                        .padding(start = L, end = M, top = M, bottom = M),
                 ) {
-                    Column(
+                    Text(
                         modifier =
-                            Modifier
-                                .weight(1f)
-                                .padding(end = M),
-                    ) {
-                        Text(
-                            modifier =
-                                Modifier
-                                    .clearAndSetSemantics { },
-                            text = transcription.name,
-                            maxLines = 2,
-                            style = TitleMedium.copy(fontWeight = FontWeight.Bold),
-                            overflow = TextOverflow.Ellipsis,
-                            color = MaterialTheme.colorScheme.onSurface,
-                        )
+                        Modifier
+                            .clearAndSetSemantics { },
+                        text = transcription.name,
+                        maxLines = 2,
+                        style = TitleMedium.copy(fontWeight = FontWeight.Bold),
+                        overflow = TextOverflow.Ellipsis,
+                        color = MaterialTheme.colorScheme.onSurface,
+                    )
 
-                        Text(
-                            modifier =
-                                Modifier
-                                    .padding(top = XS)
-                                    .clearAndSetSemantics { },
-                            text =
-                                stringResource(
-                                    R.string.transcribed_at,
-                                    formatedDate,
-                                ),
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75F),
-                            style = TitleSmall,
-                        )
-                    }
+                    Text(
+                        modifier =
+                        Modifier
+                            .padding(top = XS)
+                            .clearAndSetSemantics { },
+                        text =
+                        stringResource(
+                            R.string.transcribed_at,
+                            formatedDate,
+                        ),
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75F),
+                        style = TitleSmall,
+                    )
                 }
+
 
                 IconButton(
                     onClick = { onDeleteClick(transcription) },
@@ -136,9 +124,10 @@ fun TranscriptionItem(
 
             Text(
                 modifier =
-                    Modifier
-                        .padding(horizontal = L + XS)
-                        .padding(bottom = M),
+                Modifier
+                    .padding(horizontal = L)
+                    .padding(bottom = M)
+                    .clearAndSetSemantics { },
                 text = transcription.text,
                 maxLines = 2,
                 style = TitleSmall,
@@ -156,38 +145,38 @@ private fun TranscriptionItemPreview() {
         TranscriptionItem(
             modifier = Modifier.padding(M),
             transcription =
-                Transcription(
-                    audioId = "audioId.mp3",
-                    name = "Lecture Transcription",
-                    id = 1,
-                    language = Language.PT,
-                    createdAt =
-                        Date.from(
-                            Instant.parse("2021-10-10T10:10:10Z"),
-                        ),
-                    text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-                    segments =
-                        listOf(
-                            Segment(
-                                id = 1,
-                                text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-                                start = 0.0F,
-                                end = 1.5F,
-                            ),
-                            Segment(
-                                id = 2,
-                                text = "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, ",
-                                start = 1.5F,
-                                end = 2.0F,
-                            ),
-                            Segment(
-                                id = 3,
-                                text = "when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-                                start = 2.0F,
-                                end = 2.5F,
-                            ),
-                        ),
+            Transcription(
+                audioId = "audioId.mp3",
+                name = "Lecture Transcription",
+                id = 1,
+                language = Language.PT,
+                createdAt =
+                Date.from(
+                    Instant.parse("2021-10-10T10:10:10Z"),
                 ),
+                text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                segments =
+                listOf(
+                    Segment(
+                        id = 1,
+                        text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                        start = 0.0F,
+                        end = 1.5F,
+                    ),
+                    Segment(
+                        id = 2,
+                        text = "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, ",
+                        start = 1.5F,
+                        end = 2.0F,
+                    ),
+                    Segment(
+                        id = 3,
+                        text = "when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                        start = 2.0F,
+                        end = 2.5F,
+                    ),
+                ),
+            ),
             onClick = { },
             onDeleteClick = { },
         )
@@ -201,38 +190,38 @@ private fun TranscriptionItemDarkPreview() {
         TranscriptionItem(
             modifier = Modifier.padding(M),
             transcription =
-                Transcription(
-                    audioId = "audioId.mp3",
-                    name = "Lecture Transcription",
-                    id = 1,
-                    language = Language.PT,
-                    createdAt =
-                        Date.from(
-                            Instant.parse("2021-10-10T10:10:10Z"),
-                        ),
-                    text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-                    segments =
-                        listOf(
-                            Segment(
-                                id = 1,
-                                text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-                                start = 0.0F,
-                                end = 1.5F,
-                            ),
-                            Segment(
-                                id = 2,
-                                text = "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, ",
-                                start = 1.5F,
-                                end = 2.0F,
-                            ),
-                            Segment(
-                                id = 3,
-                                text = "when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-                                start = 2.0F,
-                                end = 2.5F,
-                            ),
-                        ),
+            Transcription(
+                audioId = "audioId.mp3",
+                name = "Lecture Transcription",
+                id = 1,
+                language = Language.PT,
+                createdAt =
+                Date.from(
+                    Instant.parse("2021-10-10T10:10:10Z"),
                 ),
+                text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                segments =
+                listOf(
+                    Segment(
+                        id = 1,
+                        text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                        start = 0.0F,
+                        end = 1.5F,
+                    ),
+                    Segment(
+                        id = 2,
+                        text = "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, ",
+                        start = 1.5F,
+                        end = 2.0F,
+                    ),
+                    Segment(
+                        id = 3,
+                        text = "when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                        start = 2.0F,
+                        end = 2.5F,
+                    ),
+                ),
+            ),
             onClick = { },
             onDeleteClick = { },
         )

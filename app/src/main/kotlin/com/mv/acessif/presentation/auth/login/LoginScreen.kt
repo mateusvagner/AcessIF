@@ -42,7 +42,7 @@ import com.mv.acessif.R
 import com.mv.acessif.domain.returnModel.DataError
 import com.mv.acessif.presentation.asUiText
 import com.mv.acessif.presentation.root.RootGraph
-import com.mv.acessif.ui.designSystem.components.CustomButton
+import com.mv.acessif.ui.designSystem.components.button.CustomButton
 import com.mv.acessif.ui.designSystem.components.DefaultScreenHeader
 import com.mv.acessif.ui.designSystem.components.ErrorComponent
 import com.mv.acessif.ui.designSystem.components.LoadingComponent

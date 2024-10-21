@@ -25,7 +25,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.mv.acessif.R
-import com.mv.acessif.ui.designSystem.components.CustomButton
+import com.mv.acessif.ui.designSystem.components.button.CustomButton
 import com.mv.acessif.ui.theme.AcessIFTheme
 import com.mv.acessif.ui.theme.Black
 import com.mv.acessif.ui.theme.BodyLarge
