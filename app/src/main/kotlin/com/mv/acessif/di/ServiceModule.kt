@@ -4,10 +4,12 @@ import com.mv.acessif.network.service.AudioFileService
 import com.mv.acessif.network.service.AuthService
 import com.mv.acessif.network.service.SummaryService
 import com.mv.acessif.network.service.TranscriptionService
+import com.mv.acessif.network.service.UserService
 import com.mv.acessif.network.service.impl.KtorAudioFileService
 import com.mv.acessif.network.service.impl.KtorAuthService
 import com.mv.acessif.network.service.impl.KtorSummaryService
 import com.mv.acessif.network.service.impl.KtorTranscriptionService
+import com.mv.acessif.network.service.impl.KtorUserService
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -32,4 +34,8 @@ abstract class ServiceModule {
     @Binds
     @Singleton
     abstract fun bindsTranscriptionService(impl: KtorTranscriptionService): TranscriptionService
+
+    @Binds
+    @Singleton
+    abstract fun bindsUserService(impl: KtorUserService): UserService
 }

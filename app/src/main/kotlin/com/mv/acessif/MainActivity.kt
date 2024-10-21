@@ -32,8 +32,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-            val navController = rememberNavController()
-            navController.observeNavigationEvents(navigator)
+            val navController =
+                rememberNavController().also {
+                    it.observeNavigationEvents(navigator)
+                }
 
             AcessIFTheme {
                 RootNavGraph(

@@ -8,6 +8,9 @@ object HttpRoutes {
     const val LOGIN = "signin"
     const val REFRESH_TOKEN = "refresh"
 
+    // User
+    const val USER = "user"
+
     // Transcription
     const val TRANSCRIPTIONS = "transcriptions"
     const val LAST_TRANSCRIPTIONS = "last-transcriptions"

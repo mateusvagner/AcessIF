@@ -19,7 +19,7 @@ class MainViewModel
     @Inject
     constructor(
         private val refreshTokenUseCase: RefreshTokenUseCase,
-        private val navigator: Navigator,
+        navigator: Navigator,
     ) : ViewModel(), Navigator by navigator {
         private val _isLoading = MutableStateFlow(true)
         val isLoading = _isLoading.asStateFlow()
@@ -32,18 +32,21 @@ class MainViewModel
             _isLoading.value = true
             viewModelScope.launch {
                 val result = refreshTokenUseCase.execute()
-
                 if (result is Result.Success) {
-                    navigateTo(HomeGraph.HomeRoute) { // TODO change to RootGraph.HomeGraph ??
-                        popUpTo<RootGraph.WelcomeRoute> {
-                            inclusive = true
-                        }
-                    }
+                    navigateToHome(result.data.name)
                 }
 
                 delay(300)
 
                 _isLoading.value = false
+            }
+        }
+
+        private suspend fun navigateToHome(userName: String) {
+            navigateTo(HomeGraph.HomeRoute(userName = userName)) {
+                popUpTo<RootGraph.WelcomeRoute> {
+                    inclusive = true
+                }
             }
         }
     }

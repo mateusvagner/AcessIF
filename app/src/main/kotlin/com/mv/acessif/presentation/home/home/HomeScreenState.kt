@@ -4,6 +4,7 @@ import com.mv.acessif.domain.Transcription
 import com.mv.acessif.presentation.UiText
 
 data class HomeScreenState(
+    val userName: String = "",
     val transcriptionsSectionState: TranscriptionsSectionState = TranscriptionsSectionState(),
     val isLoadingTranscription: Boolean = false,
     val errorTranscription: UiText? = null,
