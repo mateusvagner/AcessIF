@@ -1,5 +1,6 @@
 package com.mv.acessif.presentation.navigation
 
+import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import com.mv.acessif.presentation.navigation.model.NavigationAction
@@ -15,6 +16,7 @@ import com.mv.acessif.presentation.util.collectWithLifecycle
  *
  * @param navigator The [Navigator] from which to collect navigation actions.
  */
+@SuppressLint("ComposableNaming")
 @Composable
 fun NavHostController.observeNavigationEvents(navigator: Navigator) {
     navigator.navigationActions.collectWithLifecycle { action ->
