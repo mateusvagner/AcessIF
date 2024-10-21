@@ -203,7 +203,7 @@ fun HomeScreen(
         ) {
             Surface(
                 modifier = Modifier.fillMaxSize(),
-                color = MaterialTheme.colorScheme.background.copy(alpha = 0.75F),
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6F),
             ) {
             }
         }

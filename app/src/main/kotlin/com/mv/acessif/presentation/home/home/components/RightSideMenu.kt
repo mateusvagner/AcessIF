@@ -28,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -69,8 +70,20 @@ fun RightSideMenu(
                     0.2f,
                 ),
         )
-    CompositionLocalProvider(LocalRippleConfiguration provides rippleConfiguration) {
-        Row {
+
+    val rippleConfigurationClear =
+        RippleConfiguration(
+            color = Color.Transparent,
+            rippleAlpha =
+                RippleAlpha(
+                    0.0f,
+                    0.0f,
+                    0.0f,
+                    0.0f,
+                ),
+        )
+    Row {
+        CompositionLocalProvider(LocalRippleConfiguration provides rippleConfigurationClear) {
             Spacer(
                 modifier =
                     Modifier
@@ -79,7 +92,9 @@ fun RightSideMenu(
                         .clickable { onClose() }
                         .clearAndSetSemantics { },
             )
+        }
 
+        CompositionLocalProvider(LocalRippleConfiguration provides rippleConfiguration) {
             Column(
                 modifier =
                     modifier
