@@ -39,7 +39,7 @@ fun CustomAlertDialog(
             TextButton(
                 onClick = {
                     onConfirmation()
-                }
+                },
             ) {
                 Text(stringResource(R.string.confirm))
             }
@@ -48,11 +48,11 @@ fun CustomAlertDialog(
             TextButton(
                 onClick = {
                     onDismissRequest()
-                }
+                },
             ) {
                 Text(stringResource(R.string.dismiss))
             }
-        }
+        },
     )
 }
 

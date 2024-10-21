@@ -3,12 +3,14 @@ package com.mv.acessif.presentation.home.transcriptions
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mv.acessif.R
+import com.mv.acessif.domain.Transcription
 import com.mv.acessif.domain.repository.TranscriptionRepository
 import com.mv.acessif.domain.returnModel.Result
 import com.mv.acessif.presentation.asUiText
 import com.mv.acessif.presentation.home.home.HomeGraph
 import com.mv.acessif.presentation.navigation.Navigator
 import com.mv.acessif.presentation.util.groupByFormattedDate
+import com.mv.acessif.presentation.util.unaccented
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -24,8 +26,8 @@ class TranscriptionsViewModel
         private val transcriptionRepository: TranscriptionRepository,
         private val navigator: Navigator,
     ) : ViewModel(), Navigator by navigator {
-
         private var transcriptionToDelete: Int? = null
+        private var transcriptions: List<Transcription> = emptyList()
 
         private val _state = MutableStateFlow(TranscriptionsScreenState())
         val state =
@@ -49,11 +51,13 @@ class TranscriptionsViewModel
 
                 when (val transcriptionsResult = transcriptionRepository.getTranscriptions()) {
                     is Result.Success -> {
+                        transcriptions = transcriptionsResult.data
+
                         _state.value =
                             _state.value.copy(
                                 isLoading = false,
                                 error = null,
-                                transcriptions = transcriptionsResult.data.groupByFormattedDate(),
+                                transcriptions = transcriptions.groupByFormattedDate(),
                                 isDeletingTranscription = false,
                             )
                     }
@@ -149,6 +153,24 @@ class TranscriptionsViewModel
                             _state.value.copy(
                                 showDeleteTranscriptionDialog = false,
                             )
+                    }
+
+                    is TranscriptionsIntent.OnSearchTranscriptions -> {
+                        val filteredTranscriptions =
+                            transcriptions.filter { transcription ->
+                                transcription.name.unaccented().contains(
+                                    intent.query.trim().unaccented(),
+                                    ignoreCase = true,
+                                )
+                            }
+
+                        viewModelScope.launch {
+                            _state.value =
+                                _state.value.copy(
+                                    searchText = intent.query,
+                                    transcriptions = filteredTranscriptions.groupByFormattedDate(),
+                                )
+                        }
                     }
                 }
             }

@@ -23,7 +23,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalRippleConfiguration
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RippleConfiguration
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -63,33 +62,35 @@ fun RightSideMenu(
         RippleConfiguration(
             color = if (isSystemInDarkTheme()) Black else White,
             rippleAlpha =
-            RippleAlpha(
-                0.2f,
-                0.2f,
-                0.2f,
-                0.2f,
-            ),
+                RippleAlpha(
+                    0.2f,
+                    0.2f,
+                    0.2f,
+                    0.2f,
+                ),
         )
     CompositionLocalProvider(LocalRippleConfiguration provides rippleConfiguration) {
         Row {
-            Spacer(modifier = Modifier
-                .width(105.dp)
-                .fillMaxHeight()
-                .clickable { onClose() }
-                .clearAndSetSemantics {  }
+            Spacer(
+                modifier =
+                    Modifier
+                        .width(105.dp)
+                        .fillMaxHeight()
+                        .clickable { onClose() }
+                        .clearAndSetSemantics { },
             )
 
             Column(
                 modifier =
-                modifier
-                    .fillMaxSize()
-                    .background(color = MaterialTheme.colorScheme.primary),
+                    modifier
+                        .fillMaxSize()
+                        .background(color = MaterialTheme.colorScheme.primary),
             ) {
                 Row(
                     modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(top = L, end = M),
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(top = L, end = M),
                     horizontalArrangement = Arrangement.End,
                 ) {
                     IconButton(
@@ -108,14 +109,14 @@ fun RightSideMenu(
 
                 Column(
                     modifier =
-                    Modifier
-                        .padding(top = 64.dp),
+                        Modifier
+                            .padding(top = 64.dp),
                 ) {
                     Image(
                         modifier =
-                        Modifier
-                            .padding(start = XL)
-                            .size(48.dp),
+                            Modifier
+                                .padding(start = XL)
+                                .size(48.dp),
                         painter = painterResource(R.drawable.img_moon),
                         contentDescription = null,
                     )
@@ -124,8 +125,8 @@ fun RightSideMenu(
 
                     CustomButton(
                         modifier =
-                        Modifier
-                            .padding(horizontal = S),
+                            Modifier
+                                .padding(horizontal = S),
                         color = MaterialTheme.colorScheme.primary,
                         isLightColor = isSystemInDarkTheme(),
                         onClick = {
@@ -149,14 +150,14 @@ fun RightSideMenu(
 
                     Text(
                         modifier =
-                        Modifier
-                            .padding(start = XL),
+                            Modifier
+                                .padding(start = XL),
                         text =
-                        if (isSystemInDarkTheme()) {
-                            stringResource(R.string.dark_mode)
-                        } else {
-                            stringResource(R.string.light_mode)
-                        },
+                            if (isSystemInDarkTheme()) {
+                                stringResource(R.string.dark_mode)
+                            } else {
+                                stringResource(R.string.light_mode)
+                            },
                         style = TitleMedium.copy(color = MaterialTheme.colorScheme.onPrimary),
                     )
 
@@ -164,8 +165,8 @@ fun RightSideMenu(
 
                     CustomButton(
                         modifier =
-                        Modifier
-                            .padding(horizontal = S),
+                            Modifier
+                                .padding(horizontal = S),
                         color = MaterialTheme.colorScheme.primary,
                         isLightColor = isSystemInDarkTheme(),
                         onClick = {
@@ -190,9 +191,9 @@ fun RightSideMenu(
 
                 CustomButton(
                     modifier =
-                    Modifier
-                        .padding(horizontal = S)
-                        .padding(bottom = L),
+                        Modifier
+                            .padding(horizontal = S)
+                            .padding(bottom = L),
                     color = MaterialTheme.colorScheme.primary,
                     isLightColor = isSystemInDarkTheme(),
                     onClick = {
@@ -222,7 +223,6 @@ fun RightSideMenu(
                 }
             }
         }
-
     }
 }
 

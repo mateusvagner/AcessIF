@@ -138,5 +138,10 @@
     <string name="delete_transcription_alert_message">This action cannot be reversed</string>
 
     <string name="confirm">Confirm</string>
-    <string name="dismiss">Dispersar</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="search_for_transcription">Search for transcription</string>
+    <string name="type_to_search">Type do search…</string>
+    <string name="search">Search</string>
+    <string name="no_transcriptions_found">No transcriptions found</string>
+
 </resources>

@@ -9,4 +9,5 @@ data class TranscriptionsScreenState(
     val transcriptions: Map<String, List<Transcription>> = emptyMap(),
     val isDeletingTranscription: Boolean = false,
     val showDeleteTranscriptionDialog: Boolean = false,
+    val searchText: String = "",
 )

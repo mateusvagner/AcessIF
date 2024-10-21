@@ -140,4 +140,9 @@
 
     <string name="confirm">Confirmar</string>
     <string name="dismiss">Cancelar</string>
+    <string name="search_for_transcription">Procurar por transcrição</string>
+    <string name="type_to_search">Digite para pesquisar…</string>
+    <string name="search">Procurar</string>
+    <string name="no_transcriptions_found">Não foram encontradas transcrições com esse nome</string>
+
 </resources>

@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import com.mv.acessif.R
 import com.mv.acessif.ui.designSystem.components.button.common.ButtonContent
 import com.mv.acessif.ui.theme.Black
-import com.mv.acessif.ui.theme.LightGrey
 import com.mv.acessif.ui.theme.S
 import com.mv.acessif.ui.theme.XS
 
