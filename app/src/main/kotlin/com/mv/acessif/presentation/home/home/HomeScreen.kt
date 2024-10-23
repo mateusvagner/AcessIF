@@ -132,10 +132,9 @@ fun HomeScreen(
                 screenTitle =
                     if (state.userName.isEmpty()) {
                         stringResource(R.string.welcome)
-                    } else
-                        {
-                            stringResource(R.string.welcome_user, state.userName)
-                        },
+                    } else {
+                        stringResource(R.string.welcome_user, state.userName)
+                    },
                 supportIcon = {
                     Image(
                         painter = painterResource(id = R.drawable.ic_menu),

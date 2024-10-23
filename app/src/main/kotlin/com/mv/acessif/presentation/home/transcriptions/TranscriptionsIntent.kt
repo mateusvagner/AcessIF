@@ -10,4 +10,6 @@ sealed interface TranscriptionsIntent {
     data class OnOpenTranscriptionDetail(val transcriptionId: Int) : TranscriptionsIntent
 
     data class OnDeleteTranscription(val transcriptionId: Int) : TranscriptionsIntent
+
+    data class OnFavoriteTranscription(val transcriptionId: Int) : TranscriptionsIntent
 }
