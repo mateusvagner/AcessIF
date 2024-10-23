@@ -71,14 +71,14 @@ fun TranscriptionItem(
         onClick = { onClick(transcription) },
     ) {
         Column(
-            modifier = Modifier.padding(top = S),
+            modifier = Modifier.padding(top = XS),
             verticalArrangement = Arrangement.spacedBy(M),
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 IconButton(
-                    modifier = Modifier.padding(start = S),
+                    modifier = Modifier.padding(start = XS),
                     onClick = { onClickFavorite(transcription) },
                 ) {
                     if (transcription.isFavorite) {
@@ -102,11 +102,12 @@ fun TranscriptionItem(
                     modifier =
                         Modifier
                             .weight(1f)
-                            .padding(end = M),
+                            .padding(start = XS, end = M),
                 ) {
                     Text(
                         modifier =
                             Modifier
+                                .padding(top = S)
                                 .clearAndSetSemantics { },
                         text = transcription.name,
                         maxLines = 2,
