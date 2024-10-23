@@ -26,4 +26,6 @@ interface TranscriptionRepository {
     fun getAudioUrl(audioId: String): String
 
     suspend fun deleteTranscription(id: Int): Result<Unit, DataError>
+
+    suspend fun favoriteTranscription(id: Int): Result<Transcription, DataError>
 }
