@@ -46,7 +46,8 @@ class TranscriptionsViewModel
                         isLoading = true,
                         error = null,
                         transcriptions = emptyMap(),
-                        isDeletingTranscription = false,
+                        favoriteTranscriptions = emptyList(),
+                        transcriptionUpdateType = null,
                     )
 
                 when (val transcriptionsResult = transcriptionRepository.getTranscriptions()) {
@@ -57,8 +58,9 @@ class TranscriptionsViewModel
                             _state.value.copy(
                                 isLoading = false,
                                 error = null,
-                                transcriptions = transcriptions.groupByFormattedDate(),
-                                isDeletingTranscription = false,
+                                transcriptions = transcriptionsResult.data.groupByFormattedDate(),
+                                favoriteTranscriptions = transcriptionsResult.data.filter { it.isFavorite },
+                                transcriptionUpdateType = null,
                             )
                     }
 
@@ -68,7 +70,8 @@ class TranscriptionsViewModel
                                 isLoading = false,
                                 error = transcriptionsResult.error.asUiText(),
                                 transcriptions = emptyMap(),
-                                isDeletingTranscription = false,
+                                favoriteTranscriptions = emptyList(),
+                                transcriptionUpdateType = null,
                             )
                     }
                 }
@@ -79,7 +82,7 @@ class TranscriptionsViewModel
             viewModelScope.launch {
                 _state.value =
                     _state.value.copy(
-                        isDeletingTranscription = true,
+                        transcriptionUpdateType = TranscriptionUpdateType.DELETE,
                     )
 
                 when (val result = transcriptionRepository.deleteTranscription(id)) {
@@ -94,7 +97,34 @@ class TranscriptionsViewModel
                                 isLoading = false,
                                 error = result.error.asUiText(),
                                 transcriptions = emptyMap(),
-                                isDeletingTranscription = false,
+                                favoriteTranscriptions = emptyList(),
+                                transcriptionUpdateType = null,
+                            )
+                    }
+                }
+            }
+        }
+
+        fun favoriteTranscription(id: Int) {
+            viewModelScope.launch {
+                _state.value =
+                    _state.value.copy(
+                        transcriptionUpdateType = TranscriptionUpdateType.FAVORITE,
+                    )
+
+                when (val result = transcriptionRepository.favoriteTranscription(id)) {
+                    is Result.Success -> {
+                        getTranscriptions()
+                    }
+
+                    is Result.Error -> {
+                        _state.value =
+                            _state.value.copy(
+                                isLoading = false,
+                                error = result.error.asUiText(),
+                                transcriptions = emptyMap(),
+                                favoriteTranscriptions = emptyList(),
+                                transcriptionUpdateType = null,
                             )
                     }
                 }
@@ -171,6 +201,10 @@ class TranscriptionsViewModel
                                     transcriptions = filteredTranscriptions.groupByFormattedDate(),
                                 )
                         }
+                    }
+
+                    is TranscriptionsIntent.OnFavoriteTranscription -> {
+                        favoriteTranscription(intent.transcriptionId)
                     }
                 }
             }

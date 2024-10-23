@@ -16,7 +16,7 @@ object TranscriptionMapper {
             summary = SummaryMapper.mapSummaryDtoToSummary(transcriptionDto.summary),
             text = transcriptionDto.text,
             createdAt = transcriptionDto.createdAt?.let { DateConverter.isoStringToDate(it) },
-            isFavorite = transcriptionDto.isFavorite
+            isFavorite = transcriptionDto.isFavorite,
         )
     }
 
