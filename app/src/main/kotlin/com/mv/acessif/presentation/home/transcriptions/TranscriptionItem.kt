@@ -150,7 +150,7 @@ fun TranscriptionItem(
                         .padding(horizontal = 56.dp)
                         .padding(bottom = M)
                         .clearAndSetSemantics { },
-                text = transcription.text,
+                text = transcription.text.trim(),
                 maxLines = 2,
                 style = TitleSmall,
                 overflow = TextOverflow.Ellipsis,
