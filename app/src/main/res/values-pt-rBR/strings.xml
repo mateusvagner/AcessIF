@@ -88,6 +88,7 @@
     <string name="your_transcriptions_are_being_loaded">Aguarde enquanto carregamos suas transcrições.</string>
     <string name="your_summary_is_being_loaded">Seu resumo de transcrição está sendo carregado</string>
     <string name="your_transcription_is_being_deleting">Aguarde enquanto processamos seu pedido de exclusão.</string>
+    <string name="your_transcription_is_being_favorited">Aguarde enquanto atualizamos suas transcrições.</string>
 
     <string name="semantics_decrease_font_size">Diminuir tamanho da fonte</string>
     <string name="semantics_increase_font_size">Aumentar tamanho da fonte</string>
@@ -133,4 +134,9 @@
 
     <string name="about_the_project">Sobre o Projeto</string>
     <string name="contact">Contato</string>
+
+    <string name="favorite_transcriptions">Adicionar transcrição aos favoritos</string>
+    <string name="remove_favorite_transcriptions">Remover transcrição dos favotiros</string>
+    <string name="favorites">Favoritas</string>
+
 </resources>
