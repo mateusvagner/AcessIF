@@ -150,7 +150,7 @@ fun TranscriptionItem(
                     Modifier
                         .padding(horizontal = 56.dp)
                         .padding(bottom = M),
-                text = transcription.text,
+                text = transcription.text.trim(),
                 maxLines = 2,
                 style = TitleSmall,
                 overflow = TextOverflow.Ellipsis,
