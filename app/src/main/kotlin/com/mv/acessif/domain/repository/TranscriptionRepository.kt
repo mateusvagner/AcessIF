@@ -23,7 +23,7 @@ interface TranscriptionRepository {
         name: String,
     ): Result<Transcription, DataError>
 
-    fun getAudioUrl(audioId: String): String
+    suspend fun getAudioUrl(audioId: String): String
 
     suspend fun deleteTranscription(id: Int): Result<Unit, DataError>
 
