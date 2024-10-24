@@ -1,7 +1,7 @@
 package com.mv.acessif.di
 
-import com.mv.acessif.data.util.DefaultDispatcherProvider
-import com.mv.acessif.data.util.DispatcherProvider
+import com.mv.acessif.util.DefaultDispatcherProvider
+import com.mv.acessif.util.DispatcherProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,5 +13,5 @@ import javax.inject.Singleton
 object DispatcherModule {
     @Singleton
     @Provides
-    fun providesDispatcherProvider(): DispatcherProvider = DefaultDispatcherProvider()
+    fun providesDispatcherProvider(): DispatcherProvider = DefaultDispatcherProvider
 }

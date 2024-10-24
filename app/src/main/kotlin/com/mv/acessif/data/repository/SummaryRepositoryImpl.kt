@@ -2,12 +2,12 @@ package com.mv.acessif.data.repository
 
 import com.mv.acessif.data.mapper.ErrorMapper
 import com.mv.acessif.data.mapper.SummaryMapper
-import com.mv.acessif.data.util.DispatcherProvider
 import com.mv.acessif.domain.Summary
 import com.mv.acessif.domain.repository.SummaryRepository
 import com.mv.acessif.domain.returnModel.DataError
 import com.mv.acessif.domain.returnModel.Result
 import com.mv.acessif.network.service.SummaryService
+import com.mv.acessif.util.DispatcherProvider
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -18,7 +18,7 @@ class SummaryRepositoryImpl
         private val dispatcherProvider: DispatcherProvider,
     ) : SummaryRepository {
         override suspend fun summarizeTranscription(transcriptionId: Int): Result<Summary, DataError.Network> {
-            return withContext(dispatcherProvider.ioDispatcher) {
+            return withContext(dispatcherProvider.io) {
                 try {
                     val summaryDto = summaryService.postSummarize(transcriptionId)
                     val summary = SummaryMapper.mapSummaryDtoToSummary(summaryDto)

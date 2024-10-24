@@ -2,10 +2,10 @@ package com.mv.acessif.data.repository
 
 import com.mv.acessif.data.local.SharedPreferencesManager
 import com.mv.acessif.data.mapper.ErrorMapper
-import com.mv.acessif.data.util.DispatcherProvider
 import com.mv.acessif.domain.repository.SharedPreferencesRepository
 import com.mv.acessif.domain.returnModel.DataError
 import com.mv.acessif.domain.returnModel.Result
+import com.mv.acessif.util.DispatcherProvider
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -16,7 +16,7 @@ class SharedPreferencesRepositoryImpl
         private val dispatcherProvider: DispatcherProvider,
     ) : SharedPreferencesRepository {
         override suspend fun saveAccessToken(acessToken: String): Result<Unit, DataError.Local> {
-            return withContext(dispatcherProvider.ioDispatcher) {
+            return withContext(dispatcherProvider.io) {
                 try {
                     sharedPreferencesManager.saveAccessToken(acessToken)
                     Result.Success(Unit)
@@ -29,7 +29,7 @@ class SharedPreferencesRepositoryImpl
         }
 
         override suspend fun saveRefreshToken(refreshToken: String): Result<Unit, DataError.Local> {
-            return withContext(dispatcherProvider.ioDispatcher) {
+            return withContext(dispatcherProvider.io) {
                 try {
                     sharedPreferencesManager.saveRefreshToken(refreshToken)
                     Result.Success(Unit)
@@ -45,7 +45,7 @@ class SharedPreferencesRepositoryImpl
             accessToken: String,
             refreshToken: String,
         ): Result<Unit, DataError.Local> {
-            return withContext(dispatcherProvider.ioDispatcher) {
+            return withContext(dispatcherProvider.io) {
                 try {
                     sharedPreferencesManager.saveAccessToken(accessToken)
                     sharedPreferencesManager.saveRefreshToken(refreshToken)
@@ -59,7 +59,7 @@ class SharedPreferencesRepositoryImpl
         }
 
         override suspend fun getAccessToken(): Result<String, DataError.Local> {
-            return withContext(dispatcherProvider.ioDispatcher) {
+            return withContext(dispatcherProvider.io) {
                 try {
                     val accessToken = sharedPreferencesManager.getAccessToken().orEmpty()
 
@@ -77,7 +77,7 @@ class SharedPreferencesRepositoryImpl
         }
 
         override suspend fun getRefreshToken(): Result<String, DataError.Local> {
-            return withContext(dispatcherProvider.ioDispatcher) {
+            return withContext(dispatcherProvider.io) {
                 try {
                     val refreshToken = sharedPreferencesManager.getRefreshToken().orEmpty()
 
@@ -95,7 +95,7 @@ class SharedPreferencesRepositoryImpl
         }
 
         override suspend fun clearTokens(): Result<Unit, DataError.Local> {
-            return withContext(dispatcherProvider.ioDispatcher) {
+            return withContext(dispatcherProvider.io) {
                 try {
                     sharedPreferencesManager.clearAccessToken()
                     sharedPreferencesManager.clearRefreshToken()
