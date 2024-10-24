@@ -32,8 +32,6 @@ import com.mv.acessif.ui.theme.BodyLarge
 import com.mv.acessif.ui.theme.BodyMedium
 import com.mv.acessif.ui.theme.CardBrushGradient
 import com.mv.acessif.ui.theme.DarkCardBrushGradient
-import com.mv.acessif.ui.theme.DarkOnSurface
-import com.mv.acessif.ui.theme.DarkSurface
 import com.mv.acessif.ui.theme.L
 import com.mv.acessif.ui.theme.LargeCornerRadius
 import com.mv.acessif.ui.theme.LightPrimary
@@ -55,9 +53,9 @@ fun TranscribeActionCard(
         }
     Surface(
         modifier =
-        modifier
-            .fillMaxWidth()
-            .background(brush = brush, shape = RoundedCornerShape(LargeCornerRadius)),
+            modifier
+                .fillMaxWidth()
+                .background(brush = brush, shape = RoundedCornerShape(LargeCornerRadius)),
         color = Color.Transparent,
         shape = RoundedCornerShape(LargeCornerRadius),
     ) {
@@ -74,9 +72,9 @@ fun TranscribeActionCard(
 
             Column(
                 modifier =
-                Modifier
-                    .padding(horizontal = L)
-                    .padding(bottom = L),
+                    Modifier
+                        .padding(horizontal = L)
+                        .padding(bottom = L),
                 horizontalAlignment = Alignment.Start,
             ) {
                 Column(
@@ -105,9 +103,9 @@ fun TranscribeActionCard(
                 ) {
                     Row(
                         modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = L, vertical = S),
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = L, vertical = S),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center,
                     ) {

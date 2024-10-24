@@ -10,10 +10,7 @@ import com.mv.acessif.presentation.root.RootGraph
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,7 +21,6 @@ class MainViewModel
         private val refreshTokenUseCase: RefreshTokenUseCase,
         navigator: Navigator,
     ) : ViewModel(), Navigator by navigator {
-
         private val _isLoading = MutableStateFlow(true)
         val isLoading = _isLoading.asStateFlow()
 

@@ -1,6 +1,5 @@
 package com.mv.acessif.ui.designSystem.components
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme

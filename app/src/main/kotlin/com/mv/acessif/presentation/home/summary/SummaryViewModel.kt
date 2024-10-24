@@ -18,69 +18,70 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SummaryViewModel @Inject constructor(
-    private val summaryRepository: SummaryRepository,
-    savedStateHandle: SavedStateHandle,
-    navigator: Navigator,
-) : ViewModel(), Navigator by navigator {
+class SummaryViewModel
+    @Inject
+    constructor(
+        private val summaryRepository: SummaryRepository,
+        savedStateHandle: SavedStateHandle,
+        navigator: Navigator,
+    ) : ViewModel(), Navigator by navigator {
+        private val transcriptionId: Int = savedStateHandle.toRoute<HomeGraph.SummaryRoute>().transcriptionId
 
-    private val transcriptionId: Int = savedStateHandle.toRoute<HomeGraph.SummaryRoute>().transcriptionId
-
-    private val _state = MutableStateFlow(SummaryScreenState())
-    val state = _state
-        .onStart { getSummary() }
-        .stateIn(
-            viewModelScope,
-            SharingStarted.WhileSubscribed(5000L),
-            SummaryScreenState()
-        )
-
-    private fun getSummary() {
-        viewModelScope.launch {
-            _state.value =
-                _state.value.copy(
-                    isLoading = true,
-                    error = null,
-                    summary = null,
+        private val _state = MutableStateFlow(SummaryScreenState())
+        val state =
+            _state
+                .onStart { getSummary() }
+                .stateIn(
+                    viewModelScope,
+                    SharingStarted.WhileSubscribed(5000L),
+                    SummaryScreenState(),
                 )
 
-            when (
-                val summaryResult =
-                    summaryRepository.summarizeTranscription(transcriptionId)
-            ) {
-                is Result.Success -> {
-                    _state.value =
-                        _state.value.copy(
-                            isLoading = false,
-                            summary = summaryResult.data,
-                        )
-                }
+        private fun getSummary() {
+            viewModelScope.launch {
+                _state.value =
+                    _state.value.copy(
+                        isLoading = true,
+                        error = null,
+                        summary = null,
+                    )
 
-                is Result.Error -> {
-                    _state.value =
-                        _state.value.copy(
-                            isLoading = false,
-                            error = summaryResult.error.asUiText(),
-                        )
+                when (
+                    val summaryResult =
+                        summaryRepository.summarizeTranscription(transcriptionId)
+                ) {
+                    is Result.Success -> {
+                        _state.value =
+                            _state.value.copy(
+                                isLoading = false,
+                                summary = summaryResult.data,
+                            )
+                    }
+
+                    is Result.Error -> {
+                        _state.value =
+                            _state.value.copy(
+                                isLoading = false,
+                                error = summaryResult.error.asUiText(),
+                            )
+                    }
+                }
+            }
+        }
+
+        fun handleIntent(intent: SummaryIntent) {
+            viewModelScope.launch {
+                when (intent) {
+                    SummaryIntent.OnNavigateBack -> {
+                        navigateUp()
+                    }
+
+                    SummaryIntent.OnTryAgain -> {
+                        getSummary()
+                    }
+
+                    else -> Unit
                 }
             }
         }
     }
-
-    fun handleIntent(intent: SummaryIntent) {
-        viewModelScope.launch {
-            when (intent) {
-                SummaryIntent.OnNavigateBack -> {
-                    navigateUp()
-                }
-
-                SummaryIntent.OnTryAgain -> {
-                    getSummary()
-                }
-
-                else -> Unit
-            }
-        }
-
-    }
-}

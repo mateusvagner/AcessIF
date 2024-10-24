@@ -18,67 +18,69 @@ import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
-class DemoTranscriptionViewModel @Inject constructor(
-    private val transcriptionRepository: TranscriptionRepository,
-) : ViewModel() {
+class DemoTranscriptionViewModel
+    @Inject
+    constructor(
+        private val transcriptionRepository: TranscriptionRepository,
+    ) : ViewModel() {
+        private val _state = MutableStateFlow(DemoTranscriptionScreenState())
+        val state =
+            _state
+                .stateIn(
+                    viewModelScope,
+                    SharingStarted.WhileSubscribed(5000L),
+                    DemoTranscriptionScreenState(),
+                )
 
-    private val _state = MutableStateFlow(DemoTranscriptionScreenState())
-    val state = _state
-        .stateIn(
-            viewModelScope,
-            SharingStarted.WhileSubscribed(5000L),
-            DemoTranscriptionScreenState()
-        )
-
-    fun handleFileUri(
-        uri: Uri,
-        context: Context,
-    ) {
-        val inputStream = context.contentResolver.openInputStream(uri)
-        val file = File(context.cacheDir, "selected_audio_file")
-        inputStream?.use { input ->
-            file.outputStream().use { output ->
-                input.copyTo(output)
-            }
-        }
-        transcribeFile(file)
-    }
-
-    private fun transcribeFile(file: File) {
-        _state.value =
-            _state.value.copy(
-                isLoading = true,
-                error = null,
-            )
-
-        viewModelScope.launch {
-            val transcriptionResult =
-                transcriptionRepository.transcribeDemo(file)
-            when (transcriptionResult) {
-                is Result.Success -> {
-                    _state.value =
-                        _state.value.copy(
-                            isLoading = false,
-                            transcription = transcriptionResult.data.text,
-                        )
-                }
-
-                is Result.Error -> {
-                    _state.value =
-                        _state.value.copy(
-                            isLoading = false,
-                            error = transcriptionResult.asErrorUiText(),
-                        )
+        fun handleFileUri(
+            uri: Uri,
+            context: Context,
+        ) {
+            val inputStream = context.contentResolver.openInputStream(uri)
+            val file = File(context.cacheDir, "selected_audio_file")
+            inputStream?.use { input ->
+                file.outputStream().use { output ->
+                    input.copyTo(output)
                 }
             }
+            transcribeFile(file)
+        }
+
+        private fun transcribeFile(file: File) {
+            _state.value =
+                _state.value.copy(
+                    isLoading = true,
+                    error = null,
+                )
+
+            viewModelScope.launch {
+                val transcriptionResult =
+                    transcriptionRepository.transcribeDemo(file)
+                when (transcriptionResult) {
+                    is Result.Success -> {
+                        _state.value =
+                            _state.value.copy(
+                                isLoading = false,
+                                transcription = transcriptionResult.data.text,
+                            )
+                    }
+
+                    is Result.Error -> {
+                        _state.value =
+                            _state.value.copy(
+                                isLoading = false,
+                                error = transcriptionResult.asErrorUiText(),
+                            )
+                    }
+                }
+            }
+        }
+
+        fun handleFileUriError() {
+            _state.value =
+                _state.value.copy(
+                    isLoading = false,
+                    error = DataError.Local.FILE_NOT_FOUND.asUiText(),
+                )
         }
     }
-
-    fun handleFileUriError() {
-        _state.value =
-            _state.value.copy(
-                isLoading = false,
-                error = DataError.Local.FILE_NOT_FOUND.asUiText(),
-            )
-    }
-}

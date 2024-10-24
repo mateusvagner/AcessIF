@@ -47,9 +47,7 @@ import com.mv.acessif.ui.theme.L
 import com.mv.acessif.ui.theme.White
 import com.mv.acessif.ui.theme.XL
 
-fun NavGraphBuilder.summaryRoute(
-    modifier: Modifier,
-) {
+fun NavGraphBuilder.summaryRoute(modifier: Modifier) {
     composable<HomeGraph.SummaryRoute> {
         val viewModel: SummaryViewModel = hiltViewModel()
         val state by viewModel.state.collectAsStateWithLifecycle()

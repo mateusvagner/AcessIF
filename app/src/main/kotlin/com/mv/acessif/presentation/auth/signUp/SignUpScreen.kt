@@ -29,7 +29,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.mv.acessif.R
 import com.mv.acessif.domain.returnModel.DataError
@@ -49,9 +48,7 @@ import com.mv.acessif.ui.theme.L
 import com.mv.acessif.ui.theme.XXL
 import com.mv.acessif.ui.theme.XXXL
 
-fun NavGraphBuilder.signUpRoute(
-    modifier: Modifier,
-) {
+fun NavGraphBuilder.signUpRoute(modifier: Modifier) {
     composable<RootGraph.SignUpRoute> {
         val viewModel: SignUpScreenViewModel = hiltViewModel()
         val state by viewModel.state.collectAsStateWithLifecycle()

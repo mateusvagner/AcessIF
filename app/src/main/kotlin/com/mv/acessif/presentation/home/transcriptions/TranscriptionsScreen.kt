@@ -45,7 +45,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.mv.acessif.R
 import com.mv.acessif.domain.Language
@@ -59,7 +58,6 @@ import com.mv.acessif.ui.designSystem.components.ErrorComponent
 import com.mv.acessif.ui.designSystem.components.LoadingComponent
 import com.mv.acessif.ui.designSystem.components.button.CustomButton
 import com.mv.acessif.ui.theme.AcessIFTheme
-import com.mv.acessif.ui.theme.Black
 import com.mv.acessif.ui.theme.BodyLarge
 import com.mv.acessif.ui.theme.BodyMedium
 import com.mv.acessif.ui.theme.L
@@ -71,9 +69,7 @@ import com.mv.acessif.ui.theme.XXXL
 import java.time.Instant
 import java.util.Date
 
-fun NavGraphBuilder.transcriptionsRoute(
-    modifier: Modifier,
-) {
+fun NavGraphBuilder.transcriptionsRoute(modifier: Modifier) {
     composable<HomeGraph.TranscriptionsRoute> {
         val viewModel: TranscriptionsViewModel = hiltViewModel()
         val state by viewModel.state.collectAsStateWithLifecycle()
