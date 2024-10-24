@@ -51,7 +51,7 @@ fun TranscriptionCard(
                 Modifier
                     .padding(M)
                     .width(180.dp)
-                    .height(164.dp),
+                    .height(160.dp),
         ) {
             val textColor =
                 if (isSystemInDarkTheme()) {
@@ -63,6 +63,8 @@ fun TranscriptionCard(
             Text(
                 text = transcription.name,
                 color = textColor,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
                 style = TitleLarge.copy(fontWeight = FontWeight.Bold),
             )
 
@@ -87,7 +89,7 @@ fun TranscriptionCard(
             Spacer(modifier = Modifier.height(L))
 
             Text(
-                text = transcription.text,
+                text = transcription.text.trim(),
                 overflow = TextOverflow.Ellipsis,
                 color = MaterialTheme.colorScheme.onSurface,
                 style = TitleSmall,

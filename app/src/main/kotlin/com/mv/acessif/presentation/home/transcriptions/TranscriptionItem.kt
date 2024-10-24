@@ -1,13 +1,15 @@
 package com.mv.acessif.presentation.home.transcriptions
 
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -15,7 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -34,8 +35,8 @@ import com.mv.acessif.domain.Transcription
 import com.mv.acessif.presentation.util.formatTo
 import com.mv.acessif.ui.theme.AcessIFTheme
 import com.mv.acessif.ui.theme.BaseCornerRadius
-import com.mv.acessif.ui.theme.L
 import com.mv.acessif.ui.theme.M
+import com.mv.acessif.ui.theme.S
 import com.mv.acessif.ui.theme.TitleMedium
 import com.mv.acessif.ui.theme.TitleSmall
 import com.mv.acessif.ui.theme.XS
@@ -48,7 +49,8 @@ fun TranscriptionItem(
     modifier: Modifier = Modifier,
     transcription: Transcription,
     onClick: (Transcription) -> Unit,
-    onDeleteClick: (Transcription) -> Unit,
+    onClickDelete: (Transcription) -> Unit,
+    onClickFavorite: (Transcription) -> Unit,
 ) {
     val formatedDate =
         transcription.createdAt?.formatTo("dd/MM/yyyy")
@@ -64,24 +66,49 @@ fun TranscriptionItem(
                     contentDescription = semantics
                     role = Role.Button
                 },
-        onClick = { onClick(transcription) },
         color = MaterialTheme.colorScheme.surface,
         shape = RoundedCornerShape(BaseCornerRadius),
         shadowElevation = 2.dp,
+        onClick = { onClick(transcription) },
     ) {
-        Column {
+        Column(
+            modifier = Modifier.padding(top = XS),
+            verticalArrangement = Arrangement.spacedBy(M),
+        ) {
             Row(
-                verticalAlignment = Alignment.CenterVertically,
+                verticalAlignment = Alignment.Top,
             ) {
+                IconButton(
+                    modifier = Modifier.padding(start = XS),
+                    onClick = { onClickFavorite(transcription) },
+                ) {
+                    if (transcription.isFavorite) {
+                        Icon(
+                            modifier = Modifier.size(32.dp),
+                            painter = painterResource(R.drawable.ic_star_filled),
+                            tint = MaterialTheme.colorScheme.primary,
+                            contentDescription = stringResource(R.string.remove_favorite_transcriptions),
+                        )
+                    } else {
+                        Icon(
+                            modifier = Modifier.size(32.dp),
+                            painter = painterResource(R.drawable.ic_star),
+                            tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6F),
+                            contentDescription = stringResource(R.string.favorite_transcriptions),
+                        )
+                    }
+                }
+
                 Column(
                     modifier =
                         Modifier
                             .weight(1f)
-                            .padding(start = L, end = M, top = M, bottom = M),
+                            .padding(start = XS, end = M),
                 ) {
                     Text(
                         modifier =
                             Modifier
+                                .padding(top = S)
                                 .clearAndSetSemantics { },
                         text = transcription.name,
                         maxLines = 2,
@@ -106,11 +133,11 @@ fun TranscriptionItem(
                 }
 
                 IconButton(
-                    onClick = { onDeleteClick(transcription) },
+                    onClick = { onClickDelete(transcription) },
                 ) {
-                    Image(
+                    Icon(
                         painter = painterResource(R.drawable.ic_delete),
-                        colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onSurface),
+                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6F),
                         contentDescription = stringResource(R.string.delete_transcription),
                     )
                 }
@@ -121,10 +148,10 @@ fun TranscriptionItem(
             Text(
                 modifier =
                     Modifier
-                        .padding(horizontal = L)
+                        .padding(horizontal = 56.dp)
                         .padding(bottom = M)
                         .clearAndSetSemantics { },
-                text = transcription.text,
+                text = transcription.text.trim(),
                 maxLines = 2,
                 style = TitleSmall,
                 overflow = TextOverflow.Ellipsis,
@@ -174,7 +201,8 @@ private fun TranscriptionItemPreview() {
                         ),
                 ),
             onClick = { },
-            onDeleteClick = { },
+            onClickDelete = { },
+            onClickFavorite = { },
         )
     }
 }
@@ -219,7 +247,8 @@ private fun TranscriptionItemDarkPreview() {
                         ),
                 ),
             onClick = { },
-            onDeleteClick = { },
+            onClickDelete = { },
+            onClickFavorite = { },
         )
     }
 }

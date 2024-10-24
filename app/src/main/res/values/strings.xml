@@ -87,6 +87,7 @@
     <string name="your_transcriptions_are_being_loaded">Please wait while we load your transcriptions.</string>
     <string name="your_summary_is_being_loaded">Your transcription summary is being loaded</string>
     <string name="your_transcription_is_being_deleting">Please wait while we process your deletion request.</string>
+    <string name="your_transcription_is_being_favorited">Please wait while we process your request.</string>
 
     <string name="semantics_decrease_font_size">Decrease font size</string>
     <string name="semantics_increase_font_size">Increase font size</string>
@@ -144,4 +145,7 @@
     <string name="search">Search</string>
     <string name="no_transcriptions_found">No transcriptions found</string>
 
+    <string name="favorite_transcriptions">Favorite Transcription</string>
+    <string name="remove_favorite_transcriptions">Remove from favorite transcriptions</string>
+    <string name="favorites">Favorites</string>
 </resources>

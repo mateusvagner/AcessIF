@@ -64,7 +64,6 @@ import com.mv.acessif.ui.theme.L
 import com.mv.acessif.ui.theme.M
 import com.mv.acessif.ui.theme.S
 import com.mv.acessif.ui.theme.XL
-import com.mv.acessif.ui.theme.XS
 import com.mv.acessif.ui.theme.XXXL
 import java.time.Instant
 import java.util.Date
@@ -150,10 +149,11 @@ fun TranscriptionsScreen(
                     modifier = Modifier,
                     transcriptions = state.transcriptions,
                     searchText = state.searchText,
+                    favoriteTranscriptions = state.favoriteTranscriptions,
                     onIntent = onIntent,
                 )
 
-                if (state.isDeletingTranscription) {
+                if (state.transcriptionUpdateType != null) {
                     LoadingComponent(
                         modifier =
                             Modifier
@@ -164,7 +164,13 @@ fun TranscriptionsScreen(
                                     interactionSource = remember { MutableInteractionSource() },
                                     onClick = { },
                                 ),
-                        label = stringResource(R.string.your_transcription_is_being_deleting),
+                        label =
+                            stringResource(
+                                when (state.transcriptionUpdateType) {
+                                    TranscriptionUpdateType.DELETE -> R.string.your_transcription_is_being_deleting
+                                    TranscriptionUpdateType.FAVORITE -> R.string.your_transcription_is_being_favorited
+                                },
+                            ),
                     )
                 }
             }
@@ -213,6 +219,7 @@ private fun TranscriptionsEmptyContent(
 private fun TranscriptionsContent(
     modifier: Modifier = Modifier,
     transcriptions: Map<String, List<Transcription>>,
+    favoriteTranscriptions: List<Transcription>,
     searchText: String = "",
     onIntent: (TranscriptionsIntent) -> Unit,
 ) {
@@ -221,14 +228,13 @@ private fun TranscriptionsContent(
     ) {
         val focusManager = LocalFocusManager.current
 
-        // label state
         var isTextFieldFocused by remember { mutableStateOf(false) }
 
         OutlinedTextField(
             modifier =
                 Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = M)
+                    .padding(horizontal = L)
                     .onFocusChanged {
                         isTextFieldFocused = it.isFocused
                     },
@@ -289,7 +295,7 @@ private fun TranscriptionsContent(
                 modifier =
                     Modifier
                         .fillMaxSize()
-                        .padding(horizontal = M, vertical = S),
+                        .padding(horizontal = L, vertical = S),
                 verticalArrangement = Arrangement.Top,
             ) {
                 Spacer(modifier = Modifier.height(XXXL))
@@ -307,31 +313,18 @@ private fun TranscriptionsContent(
             }
         } else {
             LazyColumn(
-                modifier = Modifier.padding(top = S),
+                modifier = Modifier.padding(vertical = S),
             ) {
-                transcriptions.forEach { (date, groupedTranscriptions) ->
+                if (favoriteTranscriptions.isNotEmpty()) {
                     stickyHeader {
-                        Column(
-                            modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .background(color = MaterialTheme.colorScheme.background),
-                        ) {
-                            Text(
-                                modifier =
-                                    Modifier
-                                        .fillMaxWidth()
-                                        .padding(horizontal = M, vertical = S),
-                                text = date,
-                                style = BodyLarge.copy(fontWeight = FontWeight.Bold),
-                                color = MaterialTheme.colorScheme.onBackground,
-                            )
-                        }
+                        SectionHeader(
+                            text = stringResource(R.string.favorites).uppercase(),
+                        )
                     }
 
-                    items(groupedTranscriptions) { transcription ->
+                    items(favoriteTranscriptions) { transcription ->
                         TranscriptionItem(
-                            modifier = Modifier.padding(horizontal = M, vertical = XS),
+                            modifier = Modifier.padding(horizontal = L, vertical = S),
                             transcription = transcription,
                             onClick = {
                                 onIntent(
@@ -340,9 +333,52 @@ private fun TranscriptionsContent(
                                     ),
                                 )
                             },
-                            onDeleteClick = {
+                            onClickDelete = {
                                 onIntent(
                                     TranscriptionsIntent.OnDeleteTranscription(
+                                        transcription.id,
+                                    ),
+                                )
+                            },
+                            onClickFavorite = {
+                                onIntent(
+                                    TranscriptionsIntent.OnFavoriteTranscription(
+                                        transcription.id,
+                                    ),
+                                )
+                            },
+                        )
+                    }
+                }
+
+                transcriptions.forEach { (date, groupedTranscriptions) ->
+                    stickyHeader {
+                        SectionHeader(
+                            text = date,
+                        )
+                    }
+
+                    items(groupedTranscriptions) { transcription ->
+                        TranscriptionItem(
+                            modifier = Modifier.padding(horizontal = L, vertical = S),
+                            transcription = transcription,
+                            onClick = {
+                                onIntent(
+                                    TranscriptionsIntent.OnOpenTranscriptionDetail(
+                                        transcription.id,
+                                    ),
+                                )
+                            },
+                            onClickDelete = {
+                                onIntent(
+                                    TranscriptionsIntent.OnDeleteTranscription(
+                                        transcription.id,
+                                    ),
+                                )
+                            },
+                            onClickFavorite = {
+                                onIntent(
+                                    TranscriptionsIntent.OnFavoriteTranscription(
                                         transcription.id,
                                     ),
                                 )
@@ -352,6 +388,28 @@ private fun TranscriptionsContent(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun SectionHeader(
+    modifier: Modifier = Modifier,
+    text: String,
+) {
+    Column(
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .background(color = MaterialTheme.colorScheme.background),
+    ) {
+        Text(
+            modifier =
+                Modifier
+                    .padding(horizontal = L, vertical = S),
+            text = text,
+            style = BodyLarge.copy(fontWeight = FontWeight.Bold),
+            color = MaterialTheme.colorScheme.onBackground,
+        )
     }
 }
 
@@ -366,6 +424,42 @@ private fun TranscriptionScreenPreview() {
                     isLoading = false,
                     error = null,
                     transcriptions = fakeTranscriptions(),
+                    favoriteTranscriptions =
+                        listOf(
+                            Transcription(
+                                audioId = "audioId_12_10_24.mp3",
+                                name = "audioId_12_10_24.mp3",
+                                id = 1,
+                                language = Language.PT,
+                                createdAt =
+                                    Date.from(
+                                        Instant.parse("2021-10-12T10:10:10Z"),
+                                    ),
+                                text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                                isFavorite = true,
+                                segments =
+                                    listOf(
+                                        Segment(
+                                            id = 1,
+                                            text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                                            start = 0.0F,
+                                            end = 1.5F,
+                                        ),
+                                        Segment(
+                                            id = 2,
+                                            text = "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, ",
+                                            start = 1.51F,
+                                            end = 2.0F,
+                                        ),
+                                        Segment(
+                                            id = 3,
+                                            text = "when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                                            start = 2.1F,
+                                            end = 2.5F,
+                                        ),
+                                    ),
+                            ),
+                        ),
                     searchText = "",
                 ),
             onIntent = {},
@@ -384,7 +478,7 @@ private fun TranscriptionScreenDeletingPreview() {
                     isLoading = false,
                     error = null,
                     transcriptions = fakeTranscriptions(),
-                    isDeletingTranscription = true,
+                    transcriptionUpdateType = TranscriptionUpdateType.DELETE,
                 ),
             onIntent = {},
         )
@@ -590,6 +684,7 @@ private fun fakeTranscriptions() =
                             Instant.parse("2021-12-15T10:10:10Z"),
                         ),
                     text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                    isFavorite = true,
                     segments =
                         listOf(
                             Segment(

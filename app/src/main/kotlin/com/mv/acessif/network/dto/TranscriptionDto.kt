@@ -15,4 +15,6 @@ data class TranscriptionDto(
     val text: String,
     @SerialName("created_at")
     val createdAt: String? = null,
+    @SerialName("is_favorite")
+    val isFavorite: Boolean = false,
 )

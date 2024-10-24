@@ -11,4 +11,5 @@ data class Transcription(
     val summary: Summary? = null,
     val text: String,
     val createdAt: Date? = null,
+    val isFavorite: Boolean = false,
 )

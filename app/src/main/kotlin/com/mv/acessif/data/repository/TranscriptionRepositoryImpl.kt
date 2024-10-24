@@ -145,4 +145,19 @@ class TranscriptionRepositoryImpl
                 }
             }
         }
+
+        override suspend fun favoriteTranscription(id: Int): Result<Transcription, DataError> {
+            return withContext(Dispatchers.IO) {
+                try {
+                    val transcriptionDto = transcriptionService.putFavoriteTranscription(id)
+                    val transcription =
+                        TranscriptionMapper.mapTranscriptionDtoToTranscription(transcriptionDto)
+                    Result.Success(transcription)
+                } catch (e: Exception) {
+                    Result.Error(
+                        ErrorMapper.mapNetworkExceptionToNetworkDataError(e),
+                    )
+                }
+            }
+        }
     }

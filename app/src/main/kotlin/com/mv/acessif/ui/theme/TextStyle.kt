@@ -6,105 +6,105 @@ import androidx.compose.ui.unit.sp
 
 val DisplayLarge =
     TextStyle(
-        fontSize = 57.sp,
+        fontSize = 58.sp,
         fontWeight = FontWeight.Bold,
-        lineHeight = 64.sp,
+        lineHeight = 68.sp,
     )
 
 val DisplayMedium =
     TextStyle(
-        fontSize = 45.sp,
+        fontSize = 46.sp,
         fontWeight = FontWeight.Bold,
-        lineHeight = 52.sp,
+        lineHeight = 54.sp,
     )
 
 val DisplaySmall =
     TextStyle(
-        fontSize = 36.sp,
+        fontSize = 38.sp,
         fontWeight = FontWeight.Bold,
-        lineHeight = 44.sp,
+        lineHeight = 46.sp,
     )
 
 val HeadlineLarge =
     TextStyle(
-        fontSize = 32.sp,
+        fontSize = 34.sp,
         fontWeight = FontWeight.Bold,
-        lineHeight = 40.sp,
+        lineHeight = 42.sp,
     )
 
 val HeadlineMedium =
     TextStyle(
-        fontSize = 28.sp,
+        fontSize = 30.sp,
         fontWeight = FontWeight.Medium,
-        lineHeight = 36.sp,
+        lineHeight = 38.sp,
     )
 
 val HeadlineSmall =
     TextStyle(
-        fontSize = 24.sp,
+        fontSize = 26.sp,
         fontWeight = FontWeight.Medium,
-        lineHeight = 32.sp,
+        lineHeight = 34.sp,
     )
 
 val TitleLarge =
     TextStyle(
-        fontSize = 22.sp,
+        fontSize = 24.sp,
         fontWeight = FontWeight.Medium,
-        lineHeight = 28.sp,
+        lineHeight = 30.sp,
     )
 
 val TitleMedium =
     TextStyle(
-        fontSize = 16.sp,
+        fontSize = 18.sp,
         fontWeight = FontWeight.Medium,
-        lineHeight = 24.sp,
+        lineHeight = 26.sp,
     )
 
 val TitleSmall =
     TextStyle(
-        fontSize = 14.sp,
+        fontSize = 16.sp,
         fontWeight = FontWeight.Medium,
-        lineHeight = 20.sp,
+        lineHeight = 24.sp,
     )
 
 val BodyLarge =
     TextStyle(
-        fontSize = 16.sp,
+        fontSize = 18.sp,
         fontWeight = FontWeight.Normal,
-        lineHeight = 24.sp,
+        lineHeight = 28.sp,
     )
 
 val BodyMedium =
     TextStyle(
-        fontSize = 14.sp,
+        fontSize = 16.sp,
         fontWeight = FontWeight.Normal,
         lineHeight = 20.sp,
     )
 
 val BodySmall =
     TextStyle(
-        fontSize = 12.sp,
+        fontSize = 14.sp,
         fontWeight = FontWeight.Normal,
-        lineHeight = 16.sp,
+        lineHeight = 18.sp,
     )
 
 val LabelLarge =
     TextStyle(
-        fontSize = 14.sp,
+        fontSize = 16.sp,
         fontWeight = FontWeight.Medium,
-        lineHeight = 20.sp,
+        lineHeight = 22.sp,
     )
 
 val LabelMedium =
     TextStyle(
-        fontSize = 12.sp,
+        fontSize = 14.sp,
         fontWeight = FontWeight.Medium,
-        lineHeight = 16.sp,
+        lineHeight = 18.sp,
     )
 
 val LabelSmall =
     TextStyle(
-        fontSize = 11.sp,
+        fontSize = 12.sp,
         fontWeight = FontWeight.Medium,
         lineHeight = 16.sp,
     )

@@ -16,4 +16,6 @@ sealed interface TranscriptionsIntent {
     data object OnCancelDeletion : TranscriptionsIntent
 
     data class OnSearchTranscriptions(val query: String) : TranscriptionsIntent
+
+    data class OnFavoriteTranscription(val transcriptionId: Int) : TranscriptionsIntent
 }

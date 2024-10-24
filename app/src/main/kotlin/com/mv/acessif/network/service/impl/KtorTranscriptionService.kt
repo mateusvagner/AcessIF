@@ -83,4 +83,11 @@ class KtorTranscriptionService
                 url("${HttpRoutes.TRANSCRIPTIONS}/$id")
             }.body()
         }
+
+        override suspend fun putFavoriteTranscription(id: Int): TranscriptionDto {
+            return client.put {
+                url("${HttpRoutes.TRANSCRIPTIONS}/$id/favorite")
+                contentType(ContentType.Application.Json)
+            }.body()
+        }
     }
