@@ -55,9 +55,9 @@ fun TranscribeActionCard(
         }
     Surface(
         modifier =
-            modifier
-                .fillMaxWidth()
-                .background(brush = brush, shape = RoundedCornerShape(LargeCornerRadius)),
+        modifier
+            .fillMaxWidth()
+            .background(brush = brush, shape = RoundedCornerShape(LargeCornerRadius)),
         color = Color.Transparent,
         shape = RoundedCornerShape(LargeCornerRadius),
     ) {
@@ -74,19 +74,17 @@ fun TranscribeActionCard(
 
             Column(
                 modifier =
-                    Modifier
-                        .padding(horizontal = L)
-                        .padding(bottom = L),
+                Modifier
+                    .padding(horizontal = L)
+                    .padding(bottom = L),
                 horizontalAlignment = Alignment.Start,
             ) {
-                val textColor = if (isSystemInDarkTheme()) Black else White
-
                 Column(
                     modifier = Modifier.semantics(mergeDescendants = true) {},
                 ) {
                     Text(
                         text = stringResource(R.string.create_transcription),
-                        color = textColor,
+                        color = White,
                         style = BodyLarge.copy(fontWeight = FontWeight.Black),
                     )
 
@@ -94,7 +92,7 @@ fun TranscribeActionCard(
 
                     Text(
                         text = stringResource(R.string.create_transcription_instruction),
-                        color = textColor,
+                        color = White,
                         style = BodyMedium,
                     )
                 }
@@ -103,23 +101,19 @@ fun TranscribeActionCard(
 
                 CustomButton(
                     modifier = Modifier.fillMaxWidth(),
-                    isLightColor = !isSystemInDarkTheme(),
-                    color = if (isSystemInDarkTheme()) DarkSurface else White,
                     onClick = onCardClick,
                 ) {
-                    val contentColor = if (isSystemInDarkTheme()) DarkOnSurface else LightPrimary
-
                     Row(
                         modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = L, vertical = S),
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = L, vertical = S),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center,
                     ) {
                         Image(
                             painter = painterResource(R.drawable.ic_upload_file),
-                            colorFilter = ColorFilter.tint(color = contentColor),
+                            colorFilter = ColorFilter.tint(color = LightPrimary),
                             contentDescription = null,
                         )
 
@@ -128,7 +122,7 @@ fun TranscribeActionCard(
                         Text(
                             text = stringResource(R.string.send_recording),
                             style = BodyLarge.copy(fontWeight = FontWeight.Bold),
-                            color = contentColor,
+                            color = LightPrimary,
                         )
                     }
                 }

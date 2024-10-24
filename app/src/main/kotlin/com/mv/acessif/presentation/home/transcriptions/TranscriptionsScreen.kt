@@ -73,7 +73,6 @@ import java.util.Date
 
 fun NavGraphBuilder.transcriptionsRoute(
     modifier: Modifier,
-    navController: NavHostController,
 ) {
     composable<HomeGraph.TranscriptionsRoute> {
         val viewModel: TranscriptionsViewModel = hiltViewModel()
@@ -329,7 +328,7 @@ private fun TranscriptionsContent(
                                         .padding(horizontal = M, vertical = S),
                                 text = date,
                                 style = BodyLarge.copy(fontWeight = FontWeight.Bold),
-                                color = Black,
+                                color = MaterialTheme.colorScheme.onBackground,
                             )
                         }
                     }

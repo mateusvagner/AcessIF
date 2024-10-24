@@ -25,6 +25,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -36,6 +37,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.mv.acessif.R
@@ -61,10 +63,11 @@ import com.mv.acessif.ui.theme.XXXL
 fun NavGraphBuilder.loginRoute(modifier: Modifier) {
     composable<RootGraph.LoginRoute> {
         val viewModel: LoginScreenViewModel = hiltViewModel()
+        val state by viewModel.state.collectAsStateWithLifecycle()
 
         LoginScreen(
             modifier = modifier,
-            screenState = viewModel.loginScreenState,
+            screenState = state,
             onIntent = viewModel::handleIntent,
         )
     }

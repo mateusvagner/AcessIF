@@ -58,7 +58,6 @@ fun RootNavGraph(
 
             signUpRoute(
                 modifier = modifier.padding(bottom = innerPadding.calculateBottomPadding()),
-                navController = navController,
             )
 
             homeGraphRoute(
