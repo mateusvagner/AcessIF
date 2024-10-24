@@ -138,6 +138,7 @@ fun DemoTranscriptionScreen(
             modifier = Modifier.fillMaxWidth().padding(horizontal = XL),
             isLightColor = isSystemInDarkTheme(),
             color = MaterialTheme.colorScheme.primary,
+            isEnabled = state.isLoading.not(),
             onClick = { onIntent(DemoTranscriptionIntent.OnAttachFile) },
         ) {
             Image(
@@ -210,7 +211,7 @@ private fun MainContent(
         ) {
             Text(
                 modifier = Modifier.verticalScroll(rememberScrollState()).padding(horizontal = L),
-                text = state.transcription,
+                text = state.transcription.trim(),
                 color = MaterialTheme.colorScheme.onBackground,
                 fontSize = fontSize.sp,
                 lineHeight = (fontSize * 1.5).sp,
