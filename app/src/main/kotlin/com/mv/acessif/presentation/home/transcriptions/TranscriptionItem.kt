@@ -36,6 +36,7 @@ import com.mv.acessif.presentation.util.formatTo
 import com.mv.acessif.ui.theme.AcessIFTheme
 import com.mv.acessif.ui.theme.BaseCornerRadius
 import com.mv.acessif.ui.theme.M
+import com.mv.acessif.ui.theme.S
 import com.mv.acessif.ui.theme.TitleMedium
 import com.mv.acessif.ui.theme.TitleSmall
 import com.mv.acessif.ui.theme.XS
@@ -75,7 +76,7 @@ fun TranscriptionItem(
             verticalArrangement = Arrangement.spacedBy(M),
         ) {
             Row(
-                verticalAlignment = Alignment.CenterVertically,
+                verticalAlignment = Alignment.Top,
             ) {
                 IconButton(
                     modifier = Modifier.padding(start = XS),

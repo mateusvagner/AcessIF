@@ -42,7 +42,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
@@ -59,14 +58,12 @@ import com.mv.acessif.ui.designSystem.components.ErrorComponent
 import com.mv.acessif.ui.designSystem.components.LoadingComponent
 import com.mv.acessif.ui.designSystem.components.button.CustomButton
 import com.mv.acessif.ui.theme.AcessIFTheme
-import com.mv.acessif.ui.theme.Black
 import com.mv.acessif.ui.theme.BodyLarge
 import com.mv.acessif.ui.theme.BodyMedium
 import com.mv.acessif.ui.theme.L
 import com.mv.acessif.ui.theme.M
 import com.mv.acessif.ui.theme.S
 import com.mv.acessif.ui.theme.XL
-import com.mv.acessif.ui.theme.XS
 import com.mv.acessif.ui.theme.XXXL
 import java.time.Instant
 import java.util.Date
@@ -231,14 +228,13 @@ private fun TranscriptionsContent(
     ) {
         val focusManager = LocalFocusManager.current
 
-        // label state
         var isTextFieldFocused by remember { mutableStateOf(false) }
 
         OutlinedTextField(
             modifier =
                 Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = M)
+                    .padding(horizontal = L)
                     .onFocusChanged {
                         isTextFieldFocused = it.isFocused
                     },
@@ -299,7 +295,7 @@ private fun TranscriptionsContent(
                 modifier =
                     Modifier
                         .fillMaxSize()
-                        .padding(horizontal = M, vertical = S),
+                        .padding(horizontal = L, vertical = S),
                 verticalArrangement = Arrangement.Top,
             ) {
                 Spacer(modifier = Modifier.height(XXXL))
@@ -317,21 +313,18 @@ private fun TranscriptionsContent(
             }
         } else {
             LazyColumn(
-                modifier = modifier,
+                modifier = Modifier.padding(vertical = S),
             ) {
                 if (favoriteTranscriptions.isNotEmpty()) {
                     stickyHeader {
-                        Text(
-                            modifier = Modifier.padding(M),
+                        SectionHeader(
                             text = stringResource(R.string.favorites).uppercase(),
-                            style = BodyLarge.copy(fontWeight = FontWeight.Bold),
-                            color = Black,
                         )
                     }
 
                     items(favoriteTranscriptions) { transcription ->
                         TranscriptionItem(
-                            modifier = Modifier.padding(horizontal = S, vertical = 2.dp),
+                            modifier = Modifier.padding(horizontal = L, vertical = S),
                             transcription = transcription,
                             onClick = {
                                 onIntent(
@@ -360,17 +353,14 @@ private fun TranscriptionsContent(
 
                 transcriptions.forEach { (date, groupedTranscriptions) ->
                     stickyHeader {
-                        Text(
-                            modifier = Modifier.padding(M),
+                        SectionHeader(
                             text = date,
-                            style = BodyLarge.copy(fontWeight = FontWeight.Bold),
-                            color = Black,
                         )
                     }
 
                     items(groupedTranscriptions) { transcription ->
                         TranscriptionItem(
-                            modifier = Modifier.padding(horizontal = S, vertical = 2.dp),
+                            modifier = Modifier.padding(horizontal = L, vertical = S),
                             transcription = transcription,
                             onClick = {
                                 onIntent(
@@ -398,6 +388,28 @@ private fun TranscriptionsContent(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun SectionHeader(
+    modifier: Modifier = Modifier,
+    text: String,
+) {
+    Column(
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .background(color = MaterialTheme.colorScheme.background),
+    ) {
+        Text(
+            modifier =
+                Modifier
+                    .padding(horizontal = L, vertical = S),
+            text = text,
+            style = BodyLarge.copy(fontWeight = FontWeight.Bold),
+            color = MaterialTheme.colorScheme.onBackground,
+        )
     }
 }
 

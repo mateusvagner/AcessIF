@@ -63,6 +63,8 @@ fun TranscriptionCard(
             Text(
                 text = transcription.name,
                 color = textColor,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
                 style = TitleLarge.copy(fontWeight = FontWeight.Bold),
             )
 

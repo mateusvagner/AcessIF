@@ -58,10 +58,12 @@ class TranscriptionsViewModel
                             _state.value.copy(
                                 isLoading = false,
                                 error = null,
-                                transcriptions = transcriptionsResult.data.groupByFormattedDate(),
-                                favoriteTranscriptions = transcriptionsResult.data.filter { it.isFavorite },
                                 transcriptionUpdateType = null,
                             )
+
+                        searchTranscriptions(
+                            _state.value.searchText,
+                        )
                     }
 
                     is Result.Error -> {
@@ -105,7 +107,7 @@ class TranscriptionsViewModel
             }
         }
 
-        fun favoriteTranscription(id: Int) {
+        private fun favoriteTranscription(id: Int) {
             viewModelScope.launch {
                 _state.value =
                     _state.value.copy(
@@ -128,6 +130,25 @@ class TranscriptionsViewModel
                             )
                     }
                 }
+            }
+        }
+
+        private fun searchTranscriptions(searchText: String = "") {
+            val filteredTranscriptions =
+                transcriptions.filter { transcription ->
+                    transcription.name.unaccented().contains(
+                        searchText.trim().unaccented(),
+                        ignoreCase = true,
+                    )
+                }
+
+            viewModelScope.launch {
+                _state.value =
+                    _state.value.copy(
+                        searchText = searchText,
+                        transcriptions = filteredTranscriptions.groupByFormattedDate(),
+                        favoriteTranscriptions = filteredTranscriptions.filter { it.isFavorite },
+                    )
             }
         }
 
@@ -186,21 +207,7 @@ class TranscriptionsViewModel
                     }
 
                     is TranscriptionsIntent.OnSearchTranscriptions -> {
-                        val filteredTranscriptions =
-                            transcriptions.filter { transcription ->
-                                transcription.name.unaccented().contains(
-                                    intent.query.trim().unaccented(),
-                                    ignoreCase = true,
-                                )
-                            }
-
-                        viewModelScope.launch {
-                            _state.value =
-                                _state.value.copy(
-                                    searchText = intent.query,
-                                    transcriptions = filteredTranscriptions.groupByFormattedDate(),
-                                )
-                        }
+                        searchTranscriptions(intent.query)
                     }
 
                     is TranscriptionsIntent.OnFavoriteTranscription -> {
