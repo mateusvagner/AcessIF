@@ -70,10 +70,7 @@ fun NavGraphBuilder.demoTranscriptionRoute(
                 contract = ActivityResultContracts.OpenDocument(),
             ) { uri: Uri? ->
                 if (uri != null) {
-                    viewModel.handleFileUri(
-                        uri,
-                        context = context,
-                    )
+                    viewModel.handleFileUri(uri)
                 } else {
                     viewModel.handleFileUriError()
                 }
