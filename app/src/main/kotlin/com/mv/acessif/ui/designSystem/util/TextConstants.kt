@@ -1,4 +1,4 @@
-package com.mv.acessif.ui.designSystem.components.button.util
+package com.mv.acessif.ui.designSystem.util
 
 const val MIN_FONT_SIZE = 12
 const val MAX_FONT_SIZE = 36

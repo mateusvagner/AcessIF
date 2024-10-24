@@ -1,4 +1,4 @@
-package com.mv.acessif.ui.designSystem.components
+package com.mv.acessif.ui.designSystem.components.button
 
 import android.media.AudioManager
 import android.os.VibrationEffect

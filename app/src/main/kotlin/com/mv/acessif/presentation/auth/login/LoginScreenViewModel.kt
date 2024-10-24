@@ -1,8 +1,5 @@
 package com.mv.acessif.presentation.auth.login
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mv.acessif.domain.Login
@@ -15,6 +12,9 @@ import com.mv.acessif.presentation.home.home.HomeGraph
 import com.mv.acessif.presentation.navigation.Navigator
 import com.mv.acessif.presentation.root.RootGraph
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,14 +25,20 @@ class LoginScreenViewModel
         private val loginUseCase: LoginUseCase,
         navigator: Navigator,
     ) : ViewModel(), Navigator by navigator {
-        var loginScreenState by mutableStateOf(LoginScreenState())
-            private set
+        private val _state = MutableStateFlow(LoginScreenState())
+        val state =
+            _state
+                .stateIn(
+                    viewModelScope,
+                    SharingStarted.WhileSubscribed(5000L),
+                    initialValue = LoginScreenState(),
+                )
 
         private fun onEmailChanged(email: String) {
-            loginScreenState =
-                loginScreenState.copy(
+            _state.value =
+                _state.value.copy(
                     emailTextFieldState =
-                        loginScreenState.emailTextFieldState.copy(
+                        _state.value.emailTextFieldState.copy(
                             email = email,
                             isError = false,
                         ),
@@ -40,10 +46,10 @@ class LoginScreenViewModel
         }
 
         private fun onPasswordChanged(password: String) {
-            loginScreenState =
-                loginScreenState.copy(
+            _state.value =
+                _state.value.copy(
                     passwordTextFieldState =
-                        loginScreenState.passwordTextFieldState.copy(
+                        _state.value.passwordTextFieldState.copy(
                             password = password,
                             isError = false,
                         ),
@@ -51,28 +57,28 @@ class LoginScreenViewModel
         }
 
         private fun onTogglePasswordVisibility() {
-            loginScreenState =
-                loginScreenState.copy(
+            _state.value =
+                _state.value.copy(
                     passwordTextFieldState =
-                        loginScreenState.passwordTextFieldState.copy(
-                            isVisible = !loginScreenState.passwordTextFieldState.isVisible,
+                        _state.value.passwordTextFieldState.copy(
+                            isVisible = !_state.value.passwordTextFieldState.isVisible,
                         ),
                 )
         }
 
         private fun onSigninPressed() {
-            if (isEmailValid(loginScreenState.emailTextFieldState.email) &&
-                isPasswordValid(loginScreenState.passwordTextFieldState.password)
+            if (isEmailValid(_state.value.emailTextFieldState.email) &&
+                isPasswordValid(_state.value.passwordTextFieldState.password)
             ) {
                 val loginBody =
                     Login(
-                        email = loginScreenState.emailTextFieldState.email,
-                        password = loginScreenState.passwordTextFieldState.password,
+                        email = _state.value.emailTextFieldState.email,
+                        password = _state.value.passwordTextFieldState.password,
                     )
 
                 viewModelScope.launch {
-                    loginScreenState =
-                        loginScreenState.copy(
+                    _state.value =
+                        _state.value.copy(
                             isLoading = true,
                         )
                     val userResult =
@@ -80,8 +86,8 @@ class LoginScreenViewModel
 
                     when (userResult) {
                         is Result.Success -> {
-                            loginScreenState =
-                                loginScreenState.copy(
+                            _state.value =
+                                _state.value.copy(
                                     isLoading = false,
                                     signinError = null,
                                 )
@@ -94,8 +100,8 @@ class LoginScreenViewModel
                         }
 
                         is Result.Error -> {
-                            loginScreenState =
-                                loginScreenState.copy(
+                            _state.value =
+                                _state.value.copy(
                                     isLoading = false,
                                     signinError = userResult.asErrorUiText(),
                                 )
@@ -107,10 +113,10 @@ class LoginScreenViewModel
 
         private fun isEmailValid(email: String): Boolean {
             if (email.isEmpty()) {
-                loginScreenState =
-                    loginScreenState.copy(
+                _state.value =
+                    _state.value.copy(
                         emailTextFieldState =
-                            loginScreenState.emailTextFieldState.copy(
+                            _state.value.emailTextFieldState.copy(
                                 isError = true,
                                 emailError = EmailError.EMPTY,
                             ),
@@ -119,10 +125,10 @@ class LoginScreenViewModel
             }
 
             if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                loginScreenState =
-                    loginScreenState.copy(
+                _state.value =
+                    _state.value.copy(
                         emailTextFieldState =
-                            loginScreenState.emailTextFieldState.copy(
+                            _state.value.emailTextFieldState.copy(
                                 isError = true,
                                 emailError = EmailError.INVALID,
                             ),
@@ -135,10 +141,10 @@ class LoginScreenViewModel
 
         private fun isPasswordValid(password: String): Boolean {
             if (password.isEmpty()) {
-                loginScreenState =
-                    loginScreenState.copy(
+                _state.value =
+                    _state.value.copy(
                         passwordTextFieldState =
-                            loginScreenState.passwordTextFieldState.copy(
+                            _state.value.passwordTextFieldState.copy(
                                 isError = true,
                                 passwordError = PasswordError.EMPTY,
                             ),
@@ -149,9 +155,9 @@ class LoginScreenViewModel
             return true
         }
 
-        fun onTryAgain() {
-            loginScreenState =
-                loginScreenState.copy(
+        private fun onTryAgain() {
+            _state.value =
+                _state.value.copy(
                     signinError = null,
                     isLoading = false,
                 )

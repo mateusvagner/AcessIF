@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import com.mv.acessif.R
 import com.mv.acessif.ui.designSystem.components.button.common.ButtonContent
 import com.mv.acessif.ui.theme.Black
-import com.mv.acessif.ui.theme.LightGrey
 import com.mv.acessif.ui.theme.S
 import com.mv.acessif.ui.theme.XS
 
@@ -68,7 +68,7 @@ private fun TextButtonComponentPreview() {
     Column(
         modifier =
             Modifier
-                .background(color = LightGrey),
+                .background(color = MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(S),
     ) {

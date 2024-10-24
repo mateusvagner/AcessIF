@@ -47,7 +47,6 @@ fun NavGraphBuilder.homeGraphRoute(
 
         transcriptionsRoute(
             modifier = modifier,
-            navController = navController,
         )
 
         transcriptionDetailRoute(
@@ -57,7 +56,6 @@ fun NavGraphBuilder.homeGraphRoute(
 
         summaryRoute(
             modifier = modifier,
-            navController = navController,
         )
     }
 }

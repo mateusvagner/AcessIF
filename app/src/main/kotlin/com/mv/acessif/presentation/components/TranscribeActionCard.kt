@@ -25,15 +25,13 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.mv.acessif.R
-import com.mv.acessif.ui.designSystem.components.CustomButton
+import com.mv.acessif.ui.designSystem.components.button.CustomButton
 import com.mv.acessif.ui.theme.AcessIFTheme
 import com.mv.acessif.ui.theme.Black
 import com.mv.acessif.ui.theme.BodyLarge
 import com.mv.acessif.ui.theme.BodyMedium
 import com.mv.acessif.ui.theme.CardBrushGradient
 import com.mv.acessif.ui.theme.DarkCardBrushGradient
-import com.mv.acessif.ui.theme.DarkOnSurface
-import com.mv.acessif.ui.theme.DarkSurface
 import com.mv.acessif.ui.theme.L
 import com.mv.acessif.ui.theme.LargeCornerRadius
 import com.mv.acessif.ui.theme.LightPrimary
@@ -79,14 +77,12 @@ fun TranscribeActionCard(
                         .padding(bottom = L),
                 horizontalAlignment = Alignment.Start,
             ) {
-                val textColor = if (isSystemInDarkTheme()) Black else White
-
                 Column(
                     modifier = Modifier.semantics(mergeDescendants = true) {},
                 ) {
                     Text(
                         text = stringResource(R.string.create_transcription),
-                        color = textColor,
+                        color = White,
                         style = BodyLarge.copy(fontWeight = FontWeight.Black),
                     )
 
@@ -94,7 +90,7 @@ fun TranscribeActionCard(
 
                     Text(
                         text = stringResource(R.string.create_transcription_instruction),
-                        color = textColor,
+                        color = White,
                         style = BodyMedium,
                     )
                 }
@@ -103,12 +99,8 @@ fun TranscribeActionCard(
 
                 CustomButton(
                     modifier = Modifier.fillMaxWidth(),
-                    isLightColor = !isSystemInDarkTheme(),
-                    color = if (isSystemInDarkTheme()) DarkSurface else White,
                     onClick = onCardClick,
                 ) {
-                    val contentColor = if (isSystemInDarkTheme()) DarkOnSurface else LightPrimary
-
                     Row(
                         modifier =
                             Modifier
@@ -119,7 +111,7 @@ fun TranscribeActionCard(
                     ) {
                         Image(
                             painter = painterResource(R.drawable.ic_upload_file),
-                            colorFilter = ColorFilter.tint(color = contentColor),
+                            colorFilter = ColorFilter.tint(color = LightPrimary),
                             contentDescription = null,
                         )
 
@@ -128,7 +120,7 @@ fun TranscribeActionCard(
                         Text(
                             text = stringResource(R.string.send_recording),
                             style = BodyLarge.copy(fontWeight = FontWeight.Bold),
-                            color = contentColor,
+                            color = LightPrimary,
                         )
                     }
                 }

@@ -1,8 +1,5 @@
 package com.mv.acessif.presentation.auth.signUp
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mv.acessif.domain.SignUp
@@ -16,6 +13,9 @@ import com.mv.acessif.presentation.home.home.HomeGraph
 import com.mv.acessif.presentation.navigation.Navigator
 import com.mv.acessif.presentation.root.RootGraph
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,15 +26,21 @@ class SignUpScreenViewModel
         private val signUpUseCase: SignUpUseCase,
         navigator: Navigator,
     ) : ViewModel(), Navigator by navigator {
-        var signupScreenState by mutableStateOf(SignUpScreenState())
-            private set
+        private val _state = MutableStateFlow(SignUpScreenState())
+        val state =
+            _state
+                .stateIn(
+                    viewModelScope,
+                    SharingStarted.WhileSubscribed(5000L),
+                    initialValue = SignUpScreenState(),
+                )
 
         private fun isNameValid(name: String): Boolean {
             if (name.isEmpty()) {
-                signupScreenState =
-                    signupScreenState.copy(
+                _state.value =
+                    _state.value.copy(
                         nameTextFieldState =
-                            signupScreenState.nameTextFieldState.copy(
+                            _state.value.nameTextFieldState.copy(
                                 isError = true,
                                 nameError = NameError.EMPTY,
                             ),
@@ -43,10 +49,10 @@ class SignUpScreenViewModel
             }
 
             if (name.length < 3) {
-                signupScreenState =
-                    signupScreenState.copy(
+                _state.value =
+                    _state.value.copy(
                         nameTextFieldState =
-                            signupScreenState.nameTextFieldState.copy(
+                            _state.value.nameTextFieldState.copy(
                                 isError = true,
                                 nameError = NameError.SHORT,
                             ),
@@ -59,10 +65,10 @@ class SignUpScreenViewModel
 
         private fun isEmailValid(email: String): Boolean {
             if (email.isEmpty()) {
-                signupScreenState =
-                    signupScreenState.copy(
+                _state.value =
+                    _state.value.copy(
                         emailTextFieldState =
-                            signupScreenState.emailTextFieldState.copy(
+                            _state.value.emailTextFieldState.copy(
                                 isError = true,
                                 emailError = EmailError.EMPTY,
                             ),
@@ -71,10 +77,10 @@ class SignUpScreenViewModel
             }
 
             if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                signupScreenState =
-                    signupScreenState.copy(
+                _state.value =
+                    _state.value.copy(
                         emailTextFieldState =
-                            signupScreenState.emailTextFieldState.copy(
+                            _state.value.emailTextFieldState.copy(
                                 isError = true,
                                 emailError = EmailError.INVALID,
                             ),
@@ -87,10 +93,10 @@ class SignUpScreenViewModel
 
         private fun isPasswordValid(password: String): Boolean {
             if (password.isEmpty()) {
-                signupScreenState =
-                    signupScreenState.copy(
+                _state.value =
+                    _state.value.copy(
                         passwordTextFieldState =
-                            signupScreenState.passwordTextFieldState.copy(
+                            _state.value.passwordTextFieldState.copy(
                                 isError = true,
                                 passwordError = PasswordError.EMPTY,
                             ),
@@ -102,10 +108,10 @@ class SignUpScreenViewModel
         }
 
         private fun onNameChanged(name: String) {
-            signupScreenState =
-                signupScreenState.copy(
+            _state.value =
+                _state.value.copy(
                     nameTextFieldState =
-                        signupScreenState.nameTextFieldState.copy(
+                        _state.value.nameTextFieldState.copy(
                             value = name,
                             isError = false,
                         ),
@@ -113,10 +119,10 @@ class SignUpScreenViewModel
         }
 
         private fun onEmailChanged(email: String) {
-            signupScreenState =
-                signupScreenState.copy(
+            _state.value =
+                _state.value.copy(
                     emailTextFieldState =
-                        signupScreenState.emailTextFieldState.copy(
+                        _state.value.emailTextFieldState.copy(
                             email = email,
                             isError = false,
                         ),
@@ -124,10 +130,10 @@ class SignUpScreenViewModel
         }
 
         private fun onPasswordChanged(password: String) {
-            signupScreenState =
-                signupScreenState.copy(
+            _state.value =
+                _state.value.copy(
                     passwordTextFieldState =
-                        signupScreenState.passwordTextFieldState.copy(
+                        _state.value.passwordTextFieldState.copy(
                             password = password,
                             isError = false,
                         ),
@@ -135,68 +141,66 @@ class SignUpScreenViewModel
         }
 
         private fun onTogglePasswordVisibility() {
-            signupScreenState =
-                signupScreenState.copy(
+            _state.value =
+                _state.value.copy(
                     passwordTextFieldState =
-                        signupScreenState.passwordTextFieldState.copy(
-                            isVisible = !signupScreenState.passwordTextFieldState.isVisible,
+                        _state.value.passwordTextFieldState.copy(
+                            isVisible = !_state.value.passwordTextFieldState.isVisible,
                         ),
                 )
         }
 
-        private fun onSignupPressed() {
-            if (isNameValid(signupScreenState.nameTextFieldState.value) &&
-                isEmailValid(signupScreenState.emailTextFieldState.email) &&
-                isPasswordValid(signupScreenState.passwordTextFieldState.password)
+        private suspend fun onSignupPressed() {
+            if (isNameValid(_state.value.nameTextFieldState.value) &&
+                isEmailValid(_state.value.emailTextFieldState.email) &&
+                isPasswordValid(_state.value.passwordTextFieldState.password)
             ) {
                 val signupBody =
                     SignUp(
-                        name = signupScreenState.nameTextFieldState.value,
-                        email = signupScreenState.emailTextFieldState.email,
-                        password = signupScreenState.passwordTextFieldState.password,
+                        name = _state.value.nameTextFieldState.value,
+                        email = _state.value.emailTextFieldState.email,
+                        password = _state.value.passwordTextFieldState.password,
                     )
 
-                viewModelScope.launch {
-                    signupScreenState =
-                        signupScreenState.copy(
-                            isLoading = true,
-                        )
+                _state.value =
+                    _state.value.copy(
+                        isLoading = true,
+                    )
 
-                    val userResult =
-                        signUpUseCase.execute(
-                            signUp = signupBody,
-                        )
+                val userResult =
+                    signUpUseCase.execute(
+                        signUp = signupBody,
+                    )
 
-                    when (userResult) {
-                        is Result.Success -> {
-                            signupScreenState =
-                                signupScreenState.copy(
-                                    isLoading = false,
-                                    signUpError = null,
-                                )
+                when (userResult) {
+                    is Result.Success -> {
+                        _state.value =
+                            _state.value.copy(
+                                isLoading = false,
+                                signUpError = null,
+                            )
 
-                            navigateTo(HomeGraph.HomeRoute(userName = userResult.data.name)) {
-                                popUpTo<RootGraph.WelcomeRoute> {
-                                    inclusive = true
-                                }
+                        navigateTo(HomeGraph.HomeRoute(userName = userResult.data.name)) {
+                            popUpTo<RootGraph.WelcomeRoute> {
+                                inclusive = true
                             }
                         }
+                    }
 
-                        is Result.Error -> {
-                            signupScreenState =
-                                signupScreenState.copy(
-                                    isLoading = false,
-                                    signUpError = userResult.asErrorUiText(),
-                                )
-                        }
+                    is Result.Error -> {
+                        _state.value =
+                            _state.value.copy(
+                                isLoading = false,
+                                signUpError = userResult.asErrorUiText(),
+                            )
                     }
                 }
             }
         }
 
         private fun onTryAgain() {
-            signupScreenState =
-                signupScreenState.copy(
+            _state.value =
+                _state.value.copy(
                     signUpError = null,
                     isLoading = false,
                 )

@@ -20,13 +20,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.mv.acessif.R
 import com.mv.acessif.domain.Summary
@@ -38,42 +39,34 @@ import com.mv.acessif.presentation.util.shareTextIntent
 import com.mv.acessif.ui.designSystem.components.DefaultScreenHeader
 import com.mv.acessif.ui.designSystem.components.ErrorComponent
 import com.mv.acessif.ui.designSystem.components.LoadingComponent
-import com.mv.acessif.ui.designSystem.components.button.util.BASE_FONT_SIZE
-import com.mv.acessif.ui.designSystem.components.button.util.MAX_FONT_SIZE
-import com.mv.acessif.ui.designSystem.components.button.util.MIN_FONT_SIZE
+import com.mv.acessif.ui.designSystem.util.BASE_FONT_SIZE
+import com.mv.acessif.ui.designSystem.util.MAX_FONT_SIZE
+import com.mv.acessif.ui.designSystem.util.MIN_FONT_SIZE
 import com.mv.acessif.ui.theme.AcessIFTheme
 import com.mv.acessif.ui.theme.L
 import com.mv.acessif.ui.theme.White
 import com.mv.acessif.ui.theme.XL
 
-fun NavGraphBuilder.summaryRoute(
-    modifier: Modifier,
-    navController: NavHostController,
-) {
+fun NavGraphBuilder.summaryRoute(modifier: Modifier) {
     composable<HomeGraph.SummaryRoute> {
         val viewModel: SummaryViewModel = hiltViewModel()
+        val state by viewModel.state.collectAsStateWithLifecycle()
 
-        val context = navController.context
+        val context = LocalContext.current
 
         SummaryScreen(
             modifier = modifier,
-            state = viewModel.state.value,
+            state = state,
             onIntent = { intent ->
                 when (intent) {
-                    SummaryIntent.OnNavigateBack -> {
-                        navController.navigateUp()
-                    }
-
-                    SummaryIntent.OnTryAgain -> {
-                        viewModel.getSummary()
-                    }
-
                     SummaryIntent.OnShareSummary -> {
                         val summaryText = viewModel.state.value.summary?.text
                         if (summaryText != null) {
                             context.shareTextIntent(summaryText)
                         }
                     }
+
+                    else -> viewModel.handleIntent(intent)
                 }
             },
         )

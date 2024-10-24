@@ -1,7 +1,6 @@
 package com.mv.acessif.presentation.home.transcriptions
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -33,12 +32,10 @@ import com.mv.acessif.domain.Language
 import com.mv.acessif.domain.Segment
 import com.mv.acessif.domain.Transcription
 import com.mv.acessif.presentation.util.formatTo
-import com.mv.acessif.ui.designSystem.components.CustomButton
 import com.mv.acessif.ui.theme.AcessIFTheme
 import com.mv.acessif.ui.theme.BaseCornerRadius
 import com.mv.acessif.ui.theme.L
 import com.mv.acessif.ui.theme.M
-import com.mv.acessif.ui.theme.S
 import com.mv.acessif.ui.theme.TitleMedium
 import com.mv.acessif.ui.theme.TitleSmall
 import com.mv.acessif.ui.theme.XS
@@ -67,6 +64,7 @@ fun TranscriptionItem(
                     contentDescription = semantics
                     role = Role.Button
                 },
+        onClick = { onClick(transcription) },
         color = MaterialTheme.colorScheme.surface,
         shape = RoundedCornerShape(BaseCornerRadius),
         shadowElevation = 2.dp,
@@ -75,50 +73,36 @@ fun TranscriptionItem(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                CustomButton(
+                Column(
                     modifier =
                         Modifier
                             .weight(1f)
-                            .padding(vertical = S)
-                            .padding(start = XS)
-                            .semantics {
-                                contentDescription = semantics
-                            },
-                    color = MaterialTheme.colorScheme.surface,
-                    isLightColor = !isSystemInDarkTheme(),
-                    onClick = { onClick(transcription) },
+                            .padding(start = L, end = M, top = M, bottom = M),
                 ) {
-                    Column(
+                    Text(
                         modifier =
                             Modifier
-                                .weight(1f)
-                                .padding(end = M),
-                    ) {
-                        Text(
-                            modifier =
-                                Modifier
-                                    .clearAndSetSemantics { },
-                            text = transcription.name,
-                            maxLines = 2,
-                            style = TitleMedium.copy(fontWeight = FontWeight.Bold),
-                            overflow = TextOverflow.Ellipsis,
-                            color = MaterialTheme.colorScheme.onSurface,
-                        )
+                                .clearAndSetSemantics { },
+                        text = transcription.name,
+                        maxLines = 2,
+                        style = TitleMedium.copy(fontWeight = FontWeight.Bold),
+                        overflow = TextOverflow.Ellipsis,
+                        color = MaterialTheme.colorScheme.onSurface,
+                    )
 
-                        Text(
-                            modifier =
-                                Modifier
-                                    .padding(top = XS)
-                                    .clearAndSetSemantics { },
-                            text =
-                                stringResource(
-                                    R.string.transcribed_at,
-                                    formatedDate,
-                                ),
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75F),
-                            style = TitleSmall,
-                        )
-                    }
+                    Text(
+                        modifier =
+                            Modifier
+                                .padding(top = XS)
+                                .clearAndSetSemantics { },
+                        text =
+                            stringResource(
+                                R.string.transcribed_at,
+                                formatedDate,
+                            ),
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75F),
+                        style = TitleSmall,
+                    )
                 }
 
                 IconButton(
@@ -137,8 +121,9 @@ fun TranscriptionItem(
             Text(
                 modifier =
                     Modifier
-                        .padding(horizontal = L + XS)
-                        .padding(bottom = M),
+                        .padding(horizontal = L)
+                        .padding(bottom = M)
+                        .clearAndSetSemantics { },
                 text = transcription.text,
                 maxLines = 2,
                 style = TitleSmall,

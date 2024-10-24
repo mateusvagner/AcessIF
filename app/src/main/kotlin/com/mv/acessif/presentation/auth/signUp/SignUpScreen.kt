@@ -16,6 +16,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -26,17 +27,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.mv.acessif.R
 import com.mv.acessif.domain.returnModel.DataError
 import com.mv.acessif.presentation.asUiText
 import com.mv.acessif.presentation.root.RootGraph
-import com.mv.acessif.ui.designSystem.components.CustomButton
 import com.mv.acessif.ui.designSystem.components.DefaultScreenHeader
 import com.mv.acessif.ui.designSystem.components.ErrorComponent
 import com.mv.acessif.ui.designSystem.components.LoadingComponent
+import com.mv.acessif.ui.designSystem.components.button.CustomButton
 import com.mv.acessif.ui.designSystem.components.textField.EmailTextField
 import com.mv.acessif.ui.designSystem.components.textField.PasswordTextField
 import com.mv.acessif.ui.designSystem.components.textField.SimpleTextField
@@ -47,16 +48,14 @@ import com.mv.acessif.ui.theme.L
 import com.mv.acessif.ui.theme.XXL
 import com.mv.acessif.ui.theme.XXXL
 
-fun NavGraphBuilder.signUpRoute(
-    modifier: Modifier,
-    navController: NavHostController,
-) {
+fun NavGraphBuilder.signUpRoute(modifier: Modifier) {
     composable<RootGraph.SignUpRoute> {
         val viewModel: SignUpScreenViewModel = hiltViewModel()
+        val state by viewModel.state.collectAsStateWithLifecycle()
 
         SignUpScreen(
             modifier = modifier,
-            screenState = viewModel.signupScreenState,
+            screenState = state,
             onIntent = viewModel::handleIntent,
         )
     }
