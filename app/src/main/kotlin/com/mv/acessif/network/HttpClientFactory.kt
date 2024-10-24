@@ -1,8 +1,7 @@
-package com.mv.acessif.di
+package com.mv.acessif.network
 
 import android.util.Log
 import com.mv.acessif.data.local.SharedPreferencesManager
-import com.mv.acessif.network.HttpRoutes
 import com.mv.acessif.network.dto.AccessTokenDto
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -19,7 +18,6 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.plugins.plugin
 import io.ktor.client.request.headers
 import io.ktor.client.request.post
-import io.ktor.client.request.request
 import io.ktor.client.request.url
 import io.ktor.http.HttpHeaders
 import io.ktor.http.encodedPath

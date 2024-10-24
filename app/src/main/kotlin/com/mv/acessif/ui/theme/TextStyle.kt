@@ -55,7 +55,7 @@ val TitleLarge =
 
 val TitleMedium =
     TextStyle(
-        fontSize = 18.sp,
+        fontSize = 20.sp,
         fontWeight = FontWeight.Medium,
         lineHeight = 26.sp,
     )
