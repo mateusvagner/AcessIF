@@ -7,7 +7,7 @@ import com.mv.acessif.domain.repository.UserRepository
 import com.mv.acessif.domain.returnModel.DataError
 import com.mv.acessif.domain.returnModel.Result
 import com.mv.acessif.network.service.UserService
-import kotlinx.coroutines.Dispatchers
+import com.mv.acessif.util.DispatcherProvider
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -15,14 +15,13 @@ class UserRepositoryImpl
     @Inject
     constructor(
         private val userService: UserService,
+        private val dispatcherProvider: DispatcherProvider,
     ) : UserRepository {
         override suspend fun getUser(): Result<User, DataError> {
-            return withContext(Dispatchers.IO) {
+            return withContext(dispatcherProvider.io) {
                 try {
                     val user = userService.getUser()
-                    Result.Success(
-                        UserMapper.mapUserDtoToUser(user),
-                    )
+                    Result.Success(UserMapper.mapUserDtoToUser(user))
                 } catch (e: Exception) {
                     Result.Error(
                         ErrorMapper.mapNetworkExceptionToNetworkDataError(e),
@@ -32,7 +31,7 @@ class UserRepositoryImpl
         }
 
         override suspend fun logout(): Result<Unit, DataError> {
-            return withContext(Dispatchers.IO) {
+            return withContext(dispatcherProvider.io) {
                 try {
                     userService.logout()
                     Result.Success(Unit)

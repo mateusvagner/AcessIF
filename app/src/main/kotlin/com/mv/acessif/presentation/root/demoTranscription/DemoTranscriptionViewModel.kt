@@ -1,6 +1,5 @@
 package com.mv.acessif.presentation.root.demoTranscription
 
-import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,6 +8,7 @@ import com.mv.acessif.domain.returnModel.DataError
 import com.mv.acessif.domain.returnModel.Result
 import com.mv.acessif.presentation.asErrorUiText
 import com.mv.acessif.presentation.asUiText
+import com.mv.acessif.util.FileReader
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -22,6 +22,7 @@ class DemoTranscriptionViewModel
     @Inject
     constructor(
         private val transcriptionRepository: TranscriptionRepository,
+        private val fileReader: FileReader,
     ) : ViewModel() {
         private val _state = MutableStateFlow(DemoTranscriptionScreenState())
         val state =
@@ -32,18 +33,11 @@ class DemoTranscriptionViewModel
                     DemoTranscriptionScreenState(),
                 )
 
-        fun handleFileUri(
-            uri: Uri,
-            context: Context,
-        ) {
-            val inputStream = context.contentResolver.openInputStream(uri)
-            val file = File(context.cacheDir, "selected_audio_file")
-            inputStream?.use { input ->
-                file.outputStream().use { output ->
-                    input.copyTo(output)
-                }
+        fun handleFileUri(uri: Uri) {
+            viewModelScope.launch {
+                val file = fileReader.getFileFromUri(uri)
+                transcribeFile(file)
             }
-            transcribeFile(file)
         }
 
         private fun transcribeFile(file: File) {

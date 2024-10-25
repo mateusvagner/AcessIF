@@ -5,91 +5,106 @@ import com.mv.acessif.data.mapper.ErrorMapper
 import com.mv.acessif.domain.repository.SharedPreferencesRepository
 import com.mv.acessif.domain.returnModel.DataError
 import com.mv.acessif.domain.returnModel.Result
+import com.mv.acessif.util.DispatcherProvider
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class SharedPreferencesRepositoryImpl
     @Inject
     constructor(
         private val sharedPreferencesManager: SharedPreferencesManager,
+        private val dispatcherProvider: DispatcherProvider,
     ) : SharedPreferencesRepository {
-        override fun saveAccessToken(acessToken: String): Result<Unit, DataError.Local> {
-            try {
-                sharedPreferencesManager.saveAccessToken(acessToken)
-                return Result.Success(Unit)
-            } catch (e: Exception) {
-                return Result.Error(
-                    ErrorMapper.mapLocalExceptionToLocalDataError(e),
-                )
+        override suspend fun saveAccessToken(acessToken: String): Result<Unit, DataError.Local> {
+            return withContext(dispatcherProvider.io) {
+                try {
+                    sharedPreferencesManager.saveAccessToken(acessToken)
+                    Result.Success(Unit)
+                } catch (e: Exception) {
+                    Result.Error(
+                        ErrorMapper.mapLocalExceptionToLocalDataError(e),
+                    )
+                }
             }
         }
 
-        override fun saveRefreshToken(refreshToken: String): Result<Unit, DataError.Local> {
-            try {
-                sharedPreferencesManager.saveRefreshToken(refreshToken)
-                return Result.Success(Unit)
-            } catch (e: Exception) {
-                return Result.Error(
-                    ErrorMapper.mapLocalExceptionToLocalDataError(e),
-                )
+        override suspend fun saveRefreshToken(refreshToken: String): Result<Unit, DataError.Local> {
+            return withContext(dispatcherProvider.io) {
+                try {
+                    sharedPreferencesManager.saveRefreshToken(refreshToken)
+                    Result.Success(Unit)
+                } catch (e: Exception) {
+                    Result.Error(
+                        ErrorMapper.mapLocalExceptionToLocalDataError(e),
+                    )
+                }
             }
         }
 
-        override fun saveTokens(
+        override suspend fun saveTokens(
             accessToken: String,
             refreshToken: String,
         ): Result<Unit, DataError.Local> {
-            try {
-                sharedPreferencesManager.saveAccessToken(accessToken)
-                sharedPreferencesManager.saveRefreshToken(refreshToken)
-                return Result.Success(Unit)
-            } catch (e: Exception) {
-                return Result.Error(
-                    ErrorMapper.mapLocalExceptionToLocalDataError(e),
-                )
-            }
-        }
-
-        override fun getAccessToken(): Result<String, DataError.Local> {
-            return try {
-                val accessToken = sharedPreferencesManager.getAccessToken().orEmpty()
-
-                if (accessToken.isEmpty()) {
-                    return Result.Error(DataError.Local.EMPTY_RESULT)
+            return withContext(dispatcherProvider.io) {
+                try {
+                    sharedPreferencesManager.saveAccessToken(accessToken)
+                    sharedPreferencesManager.saveRefreshToken(refreshToken)
+                    Result.Success(Unit)
+                } catch (e: Exception) {
+                    Result.Error(
+                        ErrorMapper.mapLocalExceptionToLocalDataError(e),
+                    )
                 }
-
-                Result.Success(accessToken)
-            } catch (e: Exception) {
-                Result.Error(
-                    ErrorMapper.mapLocalExceptionToLocalDataError(e),
-                )
             }
         }
 
-        override fun getRefreshToken(): Result<String, DataError.Local> {
-            return try {
-                val refreshToken = sharedPreferencesManager.getRefreshToken().orEmpty()
+        override suspend fun getAccessToken(): Result<String, DataError.Local> {
+            return withContext(dispatcherProvider.io) {
+                try {
+                    val accessToken = sharedPreferencesManager.getAccessToken().orEmpty()
 
-                if (refreshToken.isEmpty()) {
-                    return Result.Error(DataError.Local.EMPTY_RESULT)
+                    if (accessToken.isEmpty()) {
+                        Result.Error(DataError.Local.EMPTY_RESULT)
+                    } else {
+                        Result.Success(accessToken)
+                    }
+                } catch (e: Exception) {
+                    Result.Error(
+                        ErrorMapper.mapLocalExceptionToLocalDataError(e),
+                    )
                 }
-
-                Result.Success(refreshToken)
-            } catch (e: Exception) {
-                Result.Error(
-                    ErrorMapper.mapLocalExceptionToLocalDataError(e),
-                )
             }
         }
 
-        override fun clearTokens(): Result<Unit, DataError.Local> {
-            try {
-                sharedPreferencesManager.clearAccessToken()
-                sharedPreferencesManager.clearRefreshToken()
-                return Result.Success(Unit)
-            } catch (e: Exception) {
-                return Result.Error(
-                    ErrorMapper.mapLocalExceptionToLocalDataError(e),
-                )
+        override suspend fun getRefreshToken(): Result<String, DataError.Local> {
+            return withContext(dispatcherProvider.io) {
+                try {
+                    val refreshToken = sharedPreferencesManager.getRefreshToken().orEmpty()
+
+                    if (refreshToken.isEmpty()) {
+                        Result.Error(DataError.Local.EMPTY_RESULT)
+                    } else {
+                        Result.Success(refreshToken)
+                    }
+                } catch (e: Exception) {
+                    Result.Error(
+                        ErrorMapper.mapLocalExceptionToLocalDataError(e),
+                    )
+                }
+            }
+        }
+
+        override suspend fun clearTokens(): Result<Unit, DataError.Local> {
+            return withContext(dispatcherProvider.io) {
+                try {
+                    sharedPreferencesManager.clearAccessToken()
+                    sharedPreferencesManager.clearRefreshToken()
+                    Result.Success(Unit)
+                } catch (e: Exception) {
+                    Result.Error(
+                        ErrorMapper.mapLocalExceptionToLocalDataError(e),
+                    )
+                }
             }
         }
     }

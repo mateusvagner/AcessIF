@@ -29,6 +29,7 @@ fun CustomButton(
     modifier: Modifier = Modifier,
     isLightColor: Boolean = true,
     color: Color = White,
+    isEnabled: Boolean = true,
     onClick: () -> Unit,
     content: @Composable RowScope.() -> Unit,
 ) {
@@ -58,6 +59,7 @@ fun CustomButton(
                 ButtonDefaults.buttonColors(
                     containerColor = color,
                 ),
+            enabled = isEnabled,
         ) {
             content()
         }

@@ -1,6 +1,5 @@
 package com.mv.acessif.presentation.home.home
 
-import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -16,6 +15,7 @@ import com.mv.acessif.presentation.asErrorUiText
 import com.mv.acessif.presentation.asUiText
 import com.mv.acessif.presentation.navigation.Navigator
 import com.mv.acessif.presentation.root.RootGraph
+import com.mv.acessif.util.FileReader
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -33,6 +33,7 @@ class HomeViewModel
         private val sharedPreferencesRepository: SharedPreferencesRepository,
         private val userRepository: UserRepository,
         private val transcriptionRepository: TranscriptionRepository,
+        private val fileReader: FileReader,
         navigator: Navigator,
     ) : ViewModel(), Navigator by navigator {
         private val _state =
@@ -89,18 +90,11 @@ class HomeViewModel
             }
         }
 
-        fun handleFileUri(
-            uri: Uri,
-            context: Context,
-        ) {
-            val inputStream = context.contentResolver.openInputStream(uri)
-            val file = File(context.cacheDir, "selected_audio_file")
-            inputStream?.use { input ->
-                file.outputStream().use { output ->
-                    input.copyTo(output)
-                }
+        fun handleFileUri(uri: Uri) {
+            viewModelScope.launch {
+                val file = fileReader.getFileFromUri(uri)
+                transcribeFile(file)
             }
-            transcribeFile(file)
         }
 
         private fun transcribeFile(file: File) {

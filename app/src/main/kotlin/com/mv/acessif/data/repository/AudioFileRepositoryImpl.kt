@@ -7,7 +7,7 @@ import com.mv.acessif.domain.repository.AudioFileRepository
 import com.mv.acessif.domain.returnModel.DataError
 import com.mv.acessif.domain.returnModel.Result
 import com.mv.acessif.network.service.AudioFileService
-import kotlinx.coroutines.Dispatchers
+import com.mv.acessif.util.DispatcherProvider
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -15,9 +15,10 @@ class AudioFileRepositoryImpl
     @Inject
     constructor(
         private val audioFileService: AudioFileService,
+        private val dispatcherProvider: DispatcherProvider,
     ) : AudioFileRepository {
         override suspend fun getAudioFiles(): Result<List<AudioFile>, DataError.Network> {
-            return withContext(Dispatchers.IO) {
+            return withContext(dispatcherProvider.io) {
                 try {
                     val audioFilesDto = audioFileService.getAudioFiles()
                     val audioFile = AudioFileMapper.mapAudioFilesDtoToAudioFiles(audioFilesDto)
