@@ -19,3 +19,9 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Missing
+-dontwarn org.slf4j.impl.StaticLoggerBinder
+
+# Keep kotlinx.serialization classes
+-keep @kotlinx.serialization.Serializable class *
