@@ -48,12 +48,14 @@ object HttpClientFactory {
                         val refreshToken = sharedPreferencesManager.getRefreshToken().orEmpty()
 
                         val result =
-                            refreshTokenClient.post {
-                                markAsRefreshTokenRequest()
-                                headers {
-                                    append(HttpHeaders.Authorization, "Bearer $refreshToken")
-                                }
-                            }.body<AccessTokenDto>()
+                            getRefreshTokenClient().use { client ->
+                                client.post {
+                                    markAsRefreshTokenRequest()
+                                    headers {
+                                        append(HttpHeaders.Authorization, "Bearer $refreshToken")
+                                    }
+                                }.body<AccessTokenDto>()
+                            }
 
                         sharedPreferencesManager.saveAccessToken(result.accessToken)
 
@@ -77,7 +79,7 @@ object HttpClientFactory {
                             Log.i("HttpClient", message)
                         }
                     }
-                level = LogLevel.ALL
+                level = LogLevel.BODY
             }
 
             install(ContentNegotiation) {
@@ -90,7 +92,7 @@ object HttpClientFactory {
         }
     }
 
-    private val refreshTokenClient =
+    private fun getRefreshTokenClient(): HttpClient =
         HttpClient(Android) {
             expectSuccess = true
 
@@ -103,7 +105,7 @@ object HttpClientFactory {
                             Log.i("HttpRefreshClient", message)
                         }
                     }
-                level = LogLevel.ALL
+                level = LogLevel.BODY
             }
 
             install(ContentNegotiation) {
