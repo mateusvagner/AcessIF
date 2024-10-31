@@ -11,7 +11,6 @@ import com.mv.acessif.domain.repository.TranscriptionRepository
 import com.mv.acessif.domain.repository.UserRepository
 import com.mv.acessif.domain.returnModel.DataError
 import com.mv.acessif.domain.returnModel.Result
-import com.mv.acessif.presentation.asErrorUiText
 import com.mv.acessif.presentation.asUiText
 import com.mv.acessif.presentation.navigation.Navigator
 import com.mv.acessif.presentation.root.RootGraph
@@ -90,7 +89,16 @@ class HomeViewModel
             }
         }
 
-        fun handleFileUri(uri: Uri) {
+        fun handleFileUri(uri: Uri?) {
+            if (uri == null) {
+                _state.value =
+                    _state.value.copy(
+                        isLoadingTranscription = false,
+                        errorTranscription = DataError.Local.FILE_NOT_FOUND.asUiText(),
+                    )
+                return
+            }
+
             viewModelScope.launch {
                 val file = fileReader.getFileFromUri(uri)
                 transcribeFile(file)
@@ -125,19 +133,11 @@ class HomeViewModel
                         _state.value =
                             _state.value.copy(
                                 isLoadingTranscription = false,
-                                errorTranscription = transcriptionResult.asErrorUiText(),
+                                errorTranscription = transcriptionResult.error.asUiText(),
                             )
                     }
                 }
             }
-        }
-
-        fun handleFileUriError() {
-            _state.value =
-                _state.value.copy(
-                    isLoadingTranscription = false,
-                    errorTranscription = DataError.Local.FILE_NOT_FOUND.asUiText(),
-                )
         }
 
         fun handleIntent(intent: HomeIntent) {

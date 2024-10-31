@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.mv.acessif.domain.Login
 import com.mv.acessif.domain.returnModel.Result
 import com.mv.acessif.domain.useCase.LoginUseCase
-import com.mv.acessif.presentation.asErrorUiText
+import com.mv.acessif.presentation.asUiText
 import com.mv.acessif.presentation.auth.commonState.EmailError
 import com.mv.acessif.presentation.auth.commonState.PasswordError
 import com.mv.acessif.presentation.home.home.HomeGraph
@@ -103,7 +103,7 @@ class LoginScreenViewModel
                             _state.value =
                                 _state.value.copy(
                                     isLoading = false,
-                                    signinError = userResult.asErrorUiText(),
+                                    signinError = userResult.error.asUiText(),
                                 )
                         }
                     }

@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.mv.acessif.domain.repository.TranscriptionRepository
 import com.mv.acessif.domain.returnModel.DataError
 import com.mv.acessif.domain.returnModel.Result
-import com.mv.acessif.presentation.asErrorUiText
 import com.mv.acessif.presentation.asUiText
 import com.mv.acessif.util.FileReader
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -33,7 +32,16 @@ class DemoTranscriptionViewModel
                     DemoTranscriptionScreenState(),
                 )
 
-        fun handleFileUri(uri: Uri) {
+        fun handleFileUri(uri: Uri?) {
+            if (uri == null) {
+                _state.value =
+                    _state.value.copy(
+                        isLoading = false,
+                        error = DataError.Local.FILE_NOT_FOUND.asUiText(),
+                    )
+                return
+            }
+
             viewModelScope.launch {
                 val file = fileReader.getFileFromUri(uri)
                 transcribeFile(file)
@@ -63,18 +71,10 @@ class DemoTranscriptionViewModel
                         _state.value =
                             _state.value.copy(
                                 isLoading = false,
-                                error = transcriptionResult.asErrorUiText(),
+                                error = transcriptionResult.error.asUiText(),
                             )
                     }
                 }
             }
-        }
-
-        fun handleFileUriError() {
-            _state.value =
-                _state.value.copy(
-                    isLoading = false,
-                    error = DataError.Local.FILE_NOT_FOUND.asUiText(),
-                )
         }
     }

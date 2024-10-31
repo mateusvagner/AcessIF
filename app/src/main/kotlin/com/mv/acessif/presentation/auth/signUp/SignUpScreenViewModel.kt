@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.mv.acessif.domain.SignUp
 import com.mv.acessif.domain.returnModel.Result
 import com.mv.acessif.domain.useCase.SignUpUseCase
-import com.mv.acessif.presentation.asErrorUiText
+import com.mv.acessif.presentation.asUiText
 import com.mv.acessif.presentation.auth.commonState.EmailError
 import com.mv.acessif.presentation.auth.commonState.NameError
 import com.mv.acessif.presentation.auth.commonState.PasswordError
@@ -191,7 +191,7 @@ class SignUpScreenViewModel
                         _state.value =
                             _state.value.copy(
                                 isLoading = false,
-                                signUpError = userResult.asErrorUiText(),
+                                signUpError = userResult.error.asUiText(),
                             )
                     }
                 }
