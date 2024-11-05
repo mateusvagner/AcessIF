@@ -7,7 +7,7 @@ interface FormFieldValidator {
     fun validate(value: String): Int?
 }
 
-object EmailValidator: FormFieldValidator {
+object EmailValidator : FormFieldValidator {
     override fun validate(value: String): Int? {
         return when {
             value.isEmpty() -> FormFieldError.EMAIL_EMPTY.errorMessage
@@ -19,7 +19,7 @@ object EmailValidator: FormFieldValidator {
     }
 }
 
-object NameValidator: FormFieldValidator {
+object NameValidator : FormFieldValidator {
     override fun validate(value: String): Int? {
         return when {
             value.isEmpty() -> FormFieldError.NAME_EMPTY.errorMessage
@@ -29,7 +29,7 @@ object NameValidator: FormFieldValidator {
     }
 }
 
-object PasswordValidator: FormFieldValidator {
+object PasswordValidator : FormFieldValidator {
     override fun validate(value: String): Int? {
         return if (value.isEmpty()) {
             FormFieldError.PASSWORD_EMPTY.errorMessage
@@ -48,5 +48,3 @@ enum class FormFieldError(
     EMAIL_INVALID(R.string.email_is_invalid),
     PASSWORD_EMPTY(R.string.password_is_required),
 }
-
-

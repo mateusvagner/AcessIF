@@ -205,9 +205,10 @@ fun MainContent(
                     email = screenState.emailTextFieldState.value,
                     isError = screenState.emailTextFieldState.errorMessage != null,
                     focusManager = focusManager,
-                    errorMessage = screenState.emailTextFieldState.errorMessage?.let {
-                        stringResource(it)
-                    },
+                    errorMessage =
+                        screenState.emailTextFieldState.errorMessage?.let {
+                            stringResource(it)
+                        },
                 ) {
                     onIntent(LoginScreenIntent.OnEmailChanged(it))
                 }
@@ -219,9 +220,10 @@ fun MainContent(
                     password = screenState.passwordTextFieldState.value,
                     isVisible = screenState.passwordTextFieldState.isVisible,
                     isError = screenState.passwordTextFieldState.errorMessage != null,
-                    errorMessage = screenState.passwordTextFieldState.errorMessage?.let {
-                        stringResource(it)
-                    },
+                    errorMessage =
+                        screenState.passwordTextFieldState.errorMessage?.let {
+                            stringResource(it)
+                        },
                     focusManager = focusManager,
                     onVisibilityChanged = {
                         onIntent(LoginScreenIntent.OnTogglePasswordVisibility)

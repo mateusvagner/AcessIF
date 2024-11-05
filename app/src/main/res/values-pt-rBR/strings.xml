@@ -25,8 +25,8 @@
     <string name="menu">Menu</string>
     <string name="see_all">Ver tudo</string>
     <string name="see_all_my_transcription">Ver todas as minhas transcrições</string>
-    <string name="increase_font">Aumentar fonte</string>
-    <string name="decrease_font">Diminuir fonte</string>
+    <string name="increase_font">Aumentar tamanho da fonte</string>
+    <string name="decrease_font">Diminuir tamanho da fonte</string>
 
     <string name="show_password">Mostrar senha</string>
     <string name="hide_password">Ocultar senha</string>
@@ -89,9 +89,6 @@
     <string name="your_summary_is_being_loaded">Seu resumo de transcrição está sendo carregado</string>
     <string name="your_transcription_is_being_deleting">Aguarde enquanto processamos seu pedido de exclusão.</string>
     <string name="your_transcription_is_being_favorited">Aguarde enquanto atualizamos suas transcrições.</string>
-
-    <string name="semantics_decrease_font_size">Diminuir tamanho da fonte</string>
-    <string name="semantics_increase_font_size">Aumentar tamanho da fonte</string>
 
     <string name="share_transcription">Compartilhar transcrição</string>
     <string name="share_summary">Compartilhar resumo</string>

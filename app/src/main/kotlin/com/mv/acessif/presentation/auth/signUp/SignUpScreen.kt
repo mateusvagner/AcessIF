@@ -184,9 +184,10 @@ fun MainContent(
                     label = stringResource(id = R.string.name),
                     value = screenState.nameTextFieldState.value,
                     isError = screenState.nameTextFieldState.errorMessage != null,
-                    errorMessage = screenState.nameTextFieldState.errorMessage?.let {
-                        stringResource(it)
-                    },
+                    errorMessage =
+                        screenState.nameTextFieldState.errorMessage?.let {
+                            stringResource(it)
+                        },
                     focusManager = focusManager,
                 ) {
                     onIntent(SignUpScreenIntent.OnNameChanged(it))
@@ -198,9 +199,10 @@ fun MainContent(
                     label = stringResource(id = R.string.email),
                     email = screenState.emailTextFieldState.value,
                     isError = screenState.emailTextFieldState.errorMessage != null,
-                    errorMessage = screenState.emailTextFieldState.errorMessage?.let {
-                        stringResource(it)
-                    },
+                    errorMessage =
+                        screenState.emailTextFieldState.errorMessage?.let {
+                            stringResource(it)
+                        },
                     focusManager = focusManager,
                 ) {
                     onIntent(SignUpScreenIntent.OnEmailChanged(it))
@@ -213,9 +215,10 @@ fun MainContent(
                     password = screenState.passwordTextFieldState.value,
                     isVisible = screenState.passwordTextFieldState.isVisible,
                     isError = screenState.passwordTextFieldState.errorMessage != null,
-                    errorMessage = screenState.passwordTextFieldState.errorMessage?.let {
-                        stringResource(it)
-                    },
+                    errorMessage =
+                        screenState.passwordTextFieldState.errorMessage?.let {
+                            stringResource(it)
+                        },
                     focusManager = focusManager,
                     onVisibilityChanged = {
                         onIntent(SignUpScreenIntent.OnTogglePasswordVisibility)

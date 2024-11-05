@@ -34,22 +34,22 @@ class LoginViewModel
                     initialValue = LoginScreenState(),
                 )
 
-    private fun fieldsAreValid(): Boolean {
-        _state.value =
-            _state.value.copy(
-                emailTextFieldState =
-                _state.value.emailTextFieldState.validate(
-                    EmailValidator,
-                ),
-                passwordTextFieldState =
-                _state.value.passwordTextFieldState.validate(
-                    PasswordValidator,
-                ),
-            )
+        private fun fieldsAreValid(): Boolean {
+            _state.value =
+                _state.value.copy(
+                    emailTextFieldState =
+                        _state.value.emailTextFieldState.validate(
+                            EmailValidator,
+                        ),
+                    passwordTextFieldState =
+                        _state.value.passwordTextFieldState.validate(
+                            PasswordValidator,
+                        ),
+                )
 
-        return _state.value.emailTextFieldState.errorMessage == null &&
+            return _state.value.emailTextFieldState.errorMessage == null &&
                 _state.value.passwordTextFieldState.errorMessage == null
-    }
+        }
 
         private fun onEmailChanged(email: String) {
             _state.value =
