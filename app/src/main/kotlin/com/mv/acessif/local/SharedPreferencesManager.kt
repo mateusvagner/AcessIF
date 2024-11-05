@@ -1,4 +1,4 @@
-package com.mv.acessif.data.local
+package com.mv.acessif.local
 
 interface SharedPreferencesManager {
     fun saveAccessToken(token: String)

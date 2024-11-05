@@ -1,6 +1,6 @@
 package com.mv.acessif.data.mapper
 
-import com.mv.acessif.domain.returnModel.DataError
+import com.mv.acessif.domain.result.DataError
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.RedirectResponseException
 import io.ktor.client.plugins.ResponseException

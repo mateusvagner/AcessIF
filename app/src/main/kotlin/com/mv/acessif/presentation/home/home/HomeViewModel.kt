@@ -6,15 +6,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.mv.acessif.R
-import com.mv.acessif.domain.repository.SharedPreferencesRepository
-import com.mv.acessif.domain.repository.TranscriptionRepository
-import com.mv.acessif.domain.repository.UserRepository
-import com.mv.acessif.domain.returnModel.DataError
-import com.mv.acessif.domain.returnModel.Result
+import com.mv.acessif.data.repository.FileRepository
+import com.mv.acessif.data.repository.SharedPreferencesRepository
+import com.mv.acessif.data.repository.TranscriptionRepository
+import com.mv.acessif.data.repository.UserRepository
+import com.mv.acessif.domain.result.DataError
+import com.mv.acessif.domain.result.Result
 import com.mv.acessif.presentation.asUiText
 import com.mv.acessif.presentation.navigation.Navigator
 import com.mv.acessif.presentation.root.RootGraph
-import com.mv.acessif.util.FileReader
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -32,7 +32,7 @@ class HomeViewModel
         private val sharedPreferencesRepository: SharedPreferencesRepository,
         private val userRepository: UserRepository,
         private val transcriptionRepository: TranscriptionRepository,
-        private val fileReader: FileReader,
+        private val fileRepository: FileRepository,
         navigator: Navigator,
     ) : ViewModel(), Navigator by navigator {
         private val _state =
@@ -100,7 +100,7 @@ class HomeViewModel
             }
 
             viewModelScope.launch {
-                val file = fileReader.getFileFromUri(uri)
+                val file = fileRepository.getFileFromUri(uri)
                 transcribeFile(file)
             }
         }

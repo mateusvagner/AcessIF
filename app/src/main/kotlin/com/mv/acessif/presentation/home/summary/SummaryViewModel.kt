@@ -4,8 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.mv.acessif.domain.repository.SummaryRepository
-import com.mv.acessif.domain.returnModel.Result
+import com.mv.acessif.data.repository.SummaryRepository
+import com.mv.acessif.domain.result.Result
 import com.mv.acessif.presentation.asUiText
 import com.mv.acessif.presentation.home.home.HomeGraph
 import com.mv.acessif.presentation.navigation.Navigator

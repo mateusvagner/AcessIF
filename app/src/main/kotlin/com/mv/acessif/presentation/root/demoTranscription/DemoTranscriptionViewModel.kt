@@ -3,11 +3,11 @@ package com.mv.acessif.presentation.root.demoTranscription
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mv.acessif.domain.repository.TranscriptionRepository
-import com.mv.acessif.domain.returnModel.DataError
-import com.mv.acessif.domain.returnModel.Result
+import com.mv.acessif.data.repository.FileRepository
+import com.mv.acessif.data.repository.TranscriptionRepository
+import com.mv.acessif.domain.result.DataError
+import com.mv.acessif.domain.result.Result
 import com.mv.acessif.presentation.asUiText
-import com.mv.acessif.util.FileReader
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -21,7 +21,7 @@ class DemoTranscriptionViewModel
     @Inject
     constructor(
         private val transcriptionRepository: TranscriptionRepository,
-        private val fileReader: FileReader,
+        private val fileRepository: FileRepository,
     ) : ViewModel() {
         private val _state = MutableStateFlow(DemoTranscriptionScreenState())
         val state =
@@ -43,7 +43,7 @@ class DemoTranscriptionViewModel
             }
 
             viewModelScope.launch {
-                val file = fileReader.getFileFromUri(uri)
+                val file = fileRepository.getFileFromUri(uri)
                 transcribeFile(file)
             }
         }

@@ -19,7 +19,6 @@ object EmailValidator: FormFieldValidator {
     }
 }
 
-
 object NameValidator: FormFieldValidator {
     override fun validate(value: String): Int? {
         return when {

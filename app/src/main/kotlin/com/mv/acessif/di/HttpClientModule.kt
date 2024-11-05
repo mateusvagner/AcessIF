@@ -1,6 +1,6 @@
 package com.mv.acessif.di
 
-import com.mv.acessif.data.local.SharedPreferencesManager
+import com.mv.acessif.local.SharedPreferencesManager
 import com.mv.acessif.network.HttpClientFactory
 import dagger.Module
 import dagger.Provides

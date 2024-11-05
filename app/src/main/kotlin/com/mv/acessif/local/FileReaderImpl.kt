@@ -1,15 +1,12 @@
-package com.mv.acessif.util
+package com.mv.acessif.local
 
 import android.content.Context
 import android.net.Uri
+import com.mv.acessif.util.DispatcherProvider
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.withContext
 import java.io.File
 import javax.inject.Inject
-
-interface FileReader {
-    suspend fun getFileFromUri(uri: Uri): File
-}
 
 class DefaultFileReader
     @Inject

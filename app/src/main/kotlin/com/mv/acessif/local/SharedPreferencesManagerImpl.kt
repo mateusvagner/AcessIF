@@ -1,4 +1,4 @@
-package com.mv.acessif.data.local
+package com.mv.acessif.local
 
 import android.content.Context
 import android.content.SharedPreferences

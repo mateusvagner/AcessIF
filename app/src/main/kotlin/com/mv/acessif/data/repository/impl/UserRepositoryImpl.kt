@@ -1,11 +1,11 @@
-package com.mv.acessif.data.repository
+package com.mv.acessif.data.repository.impl
 
 import com.mv.acessif.data.mapper.ErrorMapper
 import com.mv.acessif.data.mapper.UserMapper
+import com.mv.acessif.data.repository.UserRepository
 import com.mv.acessif.domain.User
-import com.mv.acessif.domain.repository.UserRepository
-import com.mv.acessif.domain.returnModel.DataError
-import com.mv.acessif.domain.returnModel.Result
+import com.mv.acessif.domain.result.DataError
+import com.mv.acessif.domain.result.Result
 import com.mv.acessif.network.service.UserService
 import com.mv.acessif.util.DispatcherProvider
 import kotlinx.coroutines.withContext

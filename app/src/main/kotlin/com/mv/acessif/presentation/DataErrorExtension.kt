@@ -1,8 +1,8 @@
 package com.mv.acessif.presentation
 
 import com.mv.acessif.R
-import com.mv.acessif.domain.returnModel.DataError
-import com.mv.acessif.domain.returnModel.Result
+import com.mv.acessif.domain.result.DataError
+import com.mv.acessif.domain.result.Result
 
 fun DataError.asUiText(): UiText {
     return when (this) {

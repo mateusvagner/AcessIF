@@ -1,12 +1,12 @@
 package com.mv.acessif.domain.useCase.impl
 
+import com.mv.acessif.data.repository.AuthRepository
+import com.mv.acessif.data.repository.SharedPreferencesRepository
+import com.mv.acessif.data.repository.UserRepository
 import com.mv.acessif.domain.AccessToken
 import com.mv.acessif.domain.User
-import com.mv.acessif.domain.repository.AuthRepository
-import com.mv.acessif.domain.repository.SharedPreferencesRepository
-import com.mv.acessif.domain.repository.UserRepository
-import com.mv.acessif.domain.returnModel.DataError
-import com.mv.acessif.domain.returnModel.Result
+import com.mv.acessif.domain.result.DataError
+import com.mv.acessif.domain.result.Result
 import com.mv.acessif.domain.useCase.RefreshTokenUseCase
 import javax.inject.Inject
 

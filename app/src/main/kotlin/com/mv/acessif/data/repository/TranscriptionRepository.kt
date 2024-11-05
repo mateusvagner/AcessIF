@@ -1,8 +1,8 @@
-package com.mv.acessif.domain.repository
+package com.mv.acessif.data.repository
 
 import com.mv.acessif.domain.Transcription
-import com.mv.acessif.domain.returnModel.DataError
-import com.mv.acessif.domain.returnModel.Result
+import com.mv.acessif.domain.result.DataError
+import com.mv.acessif.domain.result.Result
 import java.io.File
 
 interface TranscriptionRepository {

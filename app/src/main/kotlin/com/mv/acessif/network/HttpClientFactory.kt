@@ -1,7 +1,7 @@
 package com.mv.acessif.network
 
 import android.util.Log
-import com.mv.acessif.data.local.SharedPreferencesManager
+import com.mv.acessif.local.SharedPreferencesManager
 import com.mv.acessif.network.dto.AccessTokenDto
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
