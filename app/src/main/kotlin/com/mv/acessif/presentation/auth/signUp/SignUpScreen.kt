@@ -31,7 +31,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.mv.acessif.R
-import com.mv.acessif.domain.returnModel.DataError
+import com.mv.acessif.domain.result.DataError
 import com.mv.acessif.presentation.asUiText
 import com.mv.acessif.presentation.root.RootGraph
 import com.mv.acessif.ui.designSystem.components.DefaultScreenHeader
@@ -50,7 +50,7 @@ import com.mv.acessif.ui.theme.XXXL
 
 fun NavGraphBuilder.signUpRoute(modifier: Modifier) {
     composable<RootGraph.SignUpRoute> {
-        val viewModel: SignUpScreenViewModel = hiltViewModel()
+        val viewModel: SignUpViewModel = hiltViewModel()
         val state by viewModel.state.collectAsStateWithLifecycle()
 
         SignUpScreen(
@@ -183,13 +183,10 @@ fun MainContent(
                 SimpleTextField(
                     label = stringResource(id = R.string.name),
                     value = screenState.nameTextFieldState.value,
-                    isError = screenState.nameTextFieldState.isError,
-                    errorMessage =
-                        if (screenState.nameTextFieldState.nameError != null) {
-                            stringResource(screenState.nameTextFieldState.nameError.errorMessage)
-                        } else {
-                            null
-                        },
+                    isError = screenState.nameTextFieldState.errorMessage != null,
+                    errorMessage = screenState.nameTextFieldState.errorMessage?.let {
+                        stringResource(it)
+                    },
                     focusManager = focusManager,
                 ) {
                     onIntent(SignUpScreenIntent.OnNameChanged(it))
@@ -199,14 +196,11 @@ fun MainContent(
 
                 EmailTextField(
                     label = stringResource(id = R.string.email),
-                    email = screenState.emailTextFieldState.email,
-                    isError = screenState.emailTextFieldState.isError,
-                    errorMessage =
-                        if (screenState.emailTextFieldState.emailError != null) {
-                            stringResource(screenState.emailTextFieldState.emailError.errorMessage)
-                        } else {
-                            null
-                        },
+                    email = screenState.emailTextFieldState.value,
+                    isError = screenState.emailTextFieldState.errorMessage != null,
+                    errorMessage = screenState.emailTextFieldState.errorMessage?.let {
+                        stringResource(it)
+                    },
                     focusManager = focusManager,
                 ) {
                     onIntent(SignUpScreenIntent.OnEmailChanged(it))
@@ -216,15 +210,12 @@ fun MainContent(
 
                 PasswordTextField(
                     label = stringResource(id = R.string.password),
-                    password = screenState.passwordTextFieldState.password,
+                    password = screenState.passwordTextFieldState.value,
                     isVisible = screenState.passwordTextFieldState.isVisible,
-                    isError = screenState.passwordTextFieldState.isError,
-                    errorMessage =
-                        if (screenState.passwordTextFieldState.passwordError != null) {
-                            stringResource(screenState.passwordTextFieldState.passwordError.errorMessage)
-                        } else {
-                            null
-                        },
+                    isError = screenState.passwordTextFieldState.errorMessage != null,
+                    errorMessage = screenState.passwordTextFieldState.errorMessage?.let {
+                        stringResource(it)
+                    },
                     focusManager = focusManager,
                     onVisibilityChanged = {
                         onIntent(SignUpScreenIntent.OnTogglePasswordVisibility)
