@@ -43,8 +43,19 @@ class DemoTranscriptionViewModel
             }
 
             viewModelScope.launch {
-                val file = fileRepository.getFileFromUri(uri)
-                transcribeFile(file)
+                when (val fileResult = fileRepository.getFileFromUri(uri)) {
+                    is Result.Success -> {
+                        transcribeFile(fileResult.data)
+                    }
+
+                    is Result.Error -> {
+                        _state.value =
+                            _state.value.copy(
+                                isLoading = false,
+                                error = fileResult.error.asUiText(),
+                            )
+                    }
+                }
             }
         }
 
