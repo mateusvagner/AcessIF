@@ -112,7 +112,7 @@ fun TranscriptionsScreen(
             modifier =
                 Modifier
                     .background(color = MaterialTheme.colorScheme.primary),
-            origin = stringResource(id = R.string.home_screen),
+            origin = stringResource(id = R.string.beginning),
             onBackPressed = { onIntent(TranscriptionsIntent.OnNavigateBack) },
         )
 

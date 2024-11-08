@@ -134,7 +134,7 @@ class HomeViewModel
                         navigateTo(
                             HomeGraph.TranscriptionDetailRoute(
                                 transcriptionId = transcriptionResult.data,
-                                originScreen = R.string.home_screen,
+                                originScreen = R.string.beginning,
                             ),
                         )
                     }
@@ -178,7 +178,7 @@ class HomeViewModel
                         navigateTo(
                             HomeGraph.TranscriptionDetailRoute(
                                 transcriptionId = intent.transcription.id,
-                                originScreen = R.string.home_screen,
+                                originScreen = R.string.beginning,
                             ),
                         )
                     }

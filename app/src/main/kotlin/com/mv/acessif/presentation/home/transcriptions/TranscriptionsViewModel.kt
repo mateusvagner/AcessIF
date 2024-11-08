@@ -171,7 +171,7 @@ class TranscriptionsViewModel
                         navigator.navigateTo(
                             HomeGraph.TranscriptionDetailRoute(
                                 transcriptionId = intent.transcriptionId,
-                                originScreen = R.string.my_transcriptions_screen,
+                                originScreen = R.string.my_transcriptions,
                             ),
                         )
                     }
