@@ -109,7 +109,7 @@ fun DemoTranscriptionScreen(
             modifier =
                 Modifier
                     .background(color = MaterialTheme.colorScheme.primary),
-            origin = stringResource(id = R.string.home_screen),
+            origin = stringResource(id = R.string.beginning),
             supportIcon = {
                 if (state.transcription.isNotBlank()) {
                     Image(
