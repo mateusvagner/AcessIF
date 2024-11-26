@@ -6,8 +6,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.navigation.toRoute
-import com.mv.acessif.domain.repository.TranscriptionRepository
-import com.mv.acessif.domain.returnModel.Result
+import com.mv.acessif.data.repository.TranscriptionRepository
+import com.mv.acessif.domain.result.Result
 import com.mv.acessif.presentation.asUiText
 import com.mv.acessif.presentation.home.home.HomeGraph
 import dagger.hilt.android.lifecycle.HiltViewModel

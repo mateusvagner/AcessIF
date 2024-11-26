@@ -3,12 +3,12 @@ package com.mv.acessif.presentation.auth.signUp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mv.acessif.domain.SignUp
-import com.mv.acessif.domain.returnModel.Result
+import com.mv.acessif.domain.result.Result
 import com.mv.acessif.domain.useCase.SignUpUseCase
-import com.mv.acessif.presentation.asErrorUiText
-import com.mv.acessif.presentation.auth.commonState.EmailError
-import com.mv.acessif.presentation.auth.commonState.NameError
-import com.mv.acessif.presentation.auth.commonState.PasswordError
+import com.mv.acessif.presentation.asUiText
+import com.mv.acessif.presentation.auth.commonState.EmailValidator
+import com.mv.acessif.presentation.auth.commonState.NameValidator
+import com.mv.acessif.presentation.auth.commonState.PasswordValidator
 import com.mv.acessif.presentation.home.home.HomeGraph
 import com.mv.acessif.presentation.navigation.Navigator
 import com.mv.acessif.presentation.root.RootGraph
@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SignUpScreenViewModel
+class SignUpViewModel
     @Inject
     constructor(
         private val signUpUseCase: SignUpUseCase,
@@ -35,76 +35,26 @@ class SignUpScreenViewModel
                     initialValue = SignUpScreenState(),
                 )
 
-        private fun isNameValid(name: String): Boolean {
-            if (name.isEmpty()) {
-                _state.value =
-                    _state.value.copy(
-                        nameTextFieldState =
-                            _state.value.nameTextFieldState.copy(
-                                isError = true,
-                                nameError = NameError.EMPTY,
-                            ),
-                    )
-                return false
-            }
+        private fun fieldsAreValid(): Boolean {
+            _state.value =
+                _state.value.copy(
+                    emailTextFieldState =
+                        _state.value.emailTextFieldState.validate(
+                            EmailValidator,
+                        ),
+                    nameTextFieldState =
+                        _state.value.nameTextFieldState.validate(
+                            NameValidator,
+                        ),
+                    passwordTextFieldState =
+                        _state.value.passwordTextFieldState.validate(
+                            PasswordValidator,
+                        ),
+                )
 
-            if (name.length < 3) {
-                _state.value =
-                    _state.value.copy(
-                        nameTextFieldState =
-                            _state.value.nameTextFieldState.copy(
-                                isError = true,
-                                nameError = NameError.SHORT,
-                            ),
-                    )
-                return false
-            }
-
-            return true
-        }
-
-        private fun isEmailValid(email: String): Boolean {
-            if (email.isEmpty()) {
-                _state.value =
-                    _state.value.copy(
-                        emailTextFieldState =
-                            _state.value.emailTextFieldState.copy(
-                                isError = true,
-                                emailError = EmailError.EMPTY,
-                            ),
-                    )
-                return false
-            }
-
-            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                _state.value =
-                    _state.value.copy(
-                        emailTextFieldState =
-                            _state.value.emailTextFieldState.copy(
-                                isError = true,
-                                emailError = EmailError.INVALID,
-                            ),
-                    )
-                return false
-            }
-
-            return true
-        }
-
-        private fun isPasswordValid(password: String): Boolean {
-            if (password.isEmpty()) {
-                _state.value =
-                    _state.value.copy(
-                        passwordTextFieldState =
-                            _state.value.passwordTextFieldState.copy(
-                                isError = true,
-                                passwordError = PasswordError.EMPTY,
-                            ),
-                    )
-                return false
-            }
-
-            return true
+            return _state.value.emailTextFieldState.errorMessage == null &&
+                _state.value.nameTextFieldState.errorMessage == null &&
+                _state.value.passwordTextFieldState.errorMessage == null
         }
 
         private fun onNameChanged(name: String) {
@@ -113,7 +63,7 @@ class SignUpScreenViewModel
                     nameTextFieldState =
                         _state.value.nameTextFieldState.copy(
                             value = name,
-                            isError = false,
+                            errorMessage = null,
                         ),
                 )
         }
@@ -123,8 +73,8 @@ class SignUpScreenViewModel
                 _state.value.copy(
                     emailTextFieldState =
                         _state.value.emailTextFieldState.copy(
-                            email = email,
-                            isError = false,
+                            value = email,
+                            errorMessage = null,
                         ),
                 )
         }
@@ -134,8 +84,8 @@ class SignUpScreenViewModel
                 _state.value.copy(
                     passwordTextFieldState =
                         _state.value.passwordTextFieldState.copy(
-                            password = password,
-                            isError = false,
+                            value = password,
+                            errorMessage = null,
                         ),
                 )
         }
@@ -151,15 +101,12 @@ class SignUpScreenViewModel
         }
 
         private suspend fun onSignupPressed() {
-            if (isNameValid(_state.value.nameTextFieldState.value) &&
-                isEmailValid(_state.value.emailTextFieldState.email) &&
-                isPasswordValid(_state.value.passwordTextFieldState.password)
-            ) {
+            if (fieldsAreValid()) {
                 val signupBody =
                     SignUp(
                         name = _state.value.nameTextFieldState.value,
-                        email = _state.value.emailTextFieldState.email,
-                        password = _state.value.passwordTextFieldState.password,
+                        email = _state.value.emailTextFieldState.value,
+                        password = _state.value.passwordTextFieldState.value,
                     )
 
                 _state.value =
@@ -191,7 +138,7 @@ class SignUpScreenViewModel
                         _state.value =
                             _state.value.copy(
                                 isLoading = false,
-                                signUpError = userResult.asErrorUiText(),
+                                signUpError = userResult.error.asUiText(),
                             )
                     }
                 }

@@ -24,8 +24,8 @@
     <string name="menu">Menu</string>
     <string name="see_all">See all</string>
     <string name="see_all_my_transcription">See all my transcriptions</string>
-    <string name="increase_font">Increase font</string>
-    <string name="decrease_font">Decrease font</string>
+    <string name="increase_font">Increase font size</string>
+    <string name="decrease_font">Decrease font size</string>
 
     <string name="show_password">Show password</string>
     <string name="hide_password">Hide password</string>
@@ -88,9 +88,6 @@
     <string name="your_summary_is_being_loaded">Your transcription summary is being loaded</string>
     <string name="your_transcription_is_being_deleting">Please wait while we process your deletion request.</string>
     <string name="your_transcription_is_being_favorited">Please wait while we process your request.</string>
-
-    <string name="semantics_decrease_font_size">Decrease font size</string>
-    <string name="semantics_increase_font_size">Increase font size</string>
 
     <string name="share_transcription">Share transcription</string>
     <string name="share_summary">Share summary</string>

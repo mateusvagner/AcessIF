@@ -3,9 +3,9 @@ package com.mv.acessif.presentation.home.transcriptions
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mv.acessif.R
+import com.mv.acessif.data.repository.TranscriptionRepository
 import com.mv.acessif.domain.Transcription
-import com.mv.acessif.domain.repository.TranscriptionRepository
-import com.mv.acessif.domain.returnModel.Result
+import com.mv.acessif.domain.result.Result
 import com.mv.acessif.presentation.asUiText
 import com.mv.acessif.presentation.home.home.HomeGraph
 import com.mv.acessif.presentation.navigation.Navigator
@@ -171,7 +171,7 @@ class TranscriptionsViewModel
                         navigator.navigateTo(
                             HomeGraph.TranscriptionDetailRoute(
                                 transcriptionId = intent.transcriptionId,
-                                originScreen = R.string.my_transcriptions_screen,
+                                originScreen = R.string.my_transcriptions,
                             ),
                         )
                     }

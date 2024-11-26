@@ -1,6 +1,5 @@
 package com.mv.acessif.presentation.home.home
 
-import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
@@ -46,7 +45,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.mv.acessif.R
 import com.mv.acessif.domain.Language
@@ -70,26 +68,16 @@ import com.mv.acessif.ui.theme.XL
 import java.time.Instant
 import java.util.Date
 
-fun NavGraphBuilder.homeRoute(
-    modifier: Modifier,
-    navController: NavHostController,
-) {
+fun NavGraphBuilder.homeRoute(modifier: Modifier) {
     composable<HomeGraph.HomeRoute> {
         val viewModel: HomeViewModel = hiltViewModel()
         val state by viewModel.state.collectAsStateWithLifecycle()
 
-        val context = navController.context
-
         val filePickerLauncher =
             rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.OpenDocument(),
-            ) { uri: Uri? ->
-                if (uri != null) {
-                    viewModel.handleFileUri(uri)
-                } else {
-                    viewModel.handleFileUriError()
-                }
-            }
+                onResult = viewModel::handleFileUri,
+            )
 
         HomeScreen(
             modifier = modifier,
@@ -99,6 +87,7 @@ fun NavGraphBuilder.homeRoute(
                     HomeIntent.OnNewTranscription -> {
                         filePickerLauncher.launch(arrayOf("audio/*"))
                     }
+
                     else -> viewModel.handleIntent(intent)
                 }
             },

@@ -3,11 +3,11 @@ package com.mv.acessif.presentation.auth.login
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mv.acessif.domain.Login
-import com.mv.acessif.domain.returnModel.Result
+import com.mv.acessif.domain.result.Result
 import com.mv.acessif.domain.useCase.LoginUseCase
-import com.mv.acessif.presentation.asErrorUiText
-import com.mv.acessif.presentation.auth.commonState.EmailError
-import com.mv.acessif.presentation.auth.commonState.PasswordError
+import com.mv.acessif.presentation.asUiText
+import com.mv.acessif.presentation.auth.commonState.EmailValidator
+import com.mv.acessif.presentation.auth.commonState.PasswordValidator
 import com.mv.acessif.presentation.home.home.HomeGraph
 import com.mv.acessif.presentation.navigation.Navigator
 import com.mv.acessif.presentation.root.RootGraph
@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginScreenViewModel
+class LoginViewModel
     @Inject
     constructor(
         private val loginUseCase: LoginUseCase,
@@ -34,13 +34,30 @@ class LoginScreenViewModel
                     initialValue = LoginScreenState(),
                 )
 
+        private fun fieldsAreValid(): Boolean {
+            _state.value =
+                _state.value.copy(
+                    emailTextFieldState =
+                        _state.value.emailTextFieldState.validate(
+                            EmailValidator,
+                        ),
+                    passwordTextFieldState =
+                        _state.value.passwordTextFieldState.validate(
+                            PasswordValidator,
+                        ),
+                )
+
+            return _state.value.emailTextFieldState.errorMessage == null &&
+                _state.value.passwordTextFieldState.errorMessage == null
+        }
+
         private fun onEmailChanged(email: String) {
             _state.value =
                 _state.value.copy(
                     emailTextFieldState =
                         _state.value.emailTextFieldState.copy(
-                            email = email,
-                            isError = false,
+                            value = email,
+                            errorMessage = null,
                         ),
                 )
         }
@@ -50,8 +67,8 @@ class LoginScreenViewModel
                 _state.value.copy(
                     passwordTextFieldState =
                         _state.value.passwordTextFieldState.copy(
-                            password = password,
-                            isError = false,
+                            value = password,
+                            errorMessage = null,
                         ),
                 )
         }
@@ -67,13 +84,11 @@ class LoginScreenViewModel
         }
 
         private fun onSigninPressed() {
-            if (isEmailValid(_state.value.emailTextFieldState.email) &&
-                isPasswordValid(_state.value.passwordTextFieldState.password)
-            ) {
+            if (fieldsAreValid()) {
                 val loginBody =
                     Login(
-                        email = _state.value.emailTextFieldState.email,
-                        password = _state.value.passwordTextFieldState.password,
+                        email = _state.value.emailTextFieldState.value,
+                        password = _state.value.passwordTextFieldState.value,
                     )
 
                 viewModelScope.launch {
@@ -103,56 +118,12 @@ class LoginScreenViewModel
                             _state.value =
                                 _state.value.copy(
                                     isLoading = false,
-                                    signinError = userResult.asErrorUiText(),
+                                    signinError = userResult.error.asUiText(),
                                 )
                         }
                     }
                 }
             }
-        }
-
-        private fun isEmailValid(email: String): Boolean {
-            if (email.isEmpty()) {
-                _state.value =
-                    _state.value.copy(
-                        emailTextFieldState =
-                            _state.value.emailTextFieldState.copy(
-                                isError = true,
-                                emailError = EmailError.EMPTY,
-                            ),
-                    )
-                return false
-            }
-
-            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                _state.value =
-                    _state.value.copy(
-                        emailTextFieldState =
-                            _state.value.emailTextFieldState.copy(
-                                isError = true,
-                                emailError = EmailError.INVALID,
-                            ),
-                    )
-                return false
-            }
-
-            return true
-        }
-
-        private fun isPasswordValid(password: String): Boolean {
-            if (password.isEmpty()) {
-                _state.value =
-                    _state.value.copy(
-                        passwordTextFieldState =
-                            _state.value.passwordTextFieldState.copy(
-                                isError = true,
-                                passwordError = PasswordError.EMPTY,
-                            ),
-                    )
-                return false
-            }
-
-            return true
         }
 
         private fun onTryAgain() {

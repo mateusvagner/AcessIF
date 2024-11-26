@@ -41,7 +41,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.mv.acessif.R
-import com.mv.acessif.domain.returnModel.DataError
+import com.mv.acessif.domain.result.DataError
 import com.mv.acessif.presentation.asUiText
 import com.mv.acessif.presentation.root.RootGraph
 import com.mv.acessif.ui.designSystem.components.DefaultScreenHeader
@@ -62,7 +62,7 @@ import com.mv.acessif.ui.theme.XXXL
 
 fun NavGraphBuilder.loginRoute(modifier: Modifier) {
     composable<RootGraph.LoginRoute> {
-        val viewModel: LoginScreenViewModel = hiltViewModel()
+        val viewModel: LoginViewModel = hiltViewModel()
         val state by viewModel.state.collectAsStateWithLifecycle()
 
         LoginScreen(
@@ -202,14 +202,12 @@ fun MainContent(
 
                 EmailTextField(
                     label = stringResource(id = R.string.email),
-                    email = screenState.emailTextFieldState.email,
-                    isError = screenState.emailTextFieldState.isError,
+                    email = screenState.emailTextFieldState.value,
+                    isError = screenState.emailTextFieldState.errorMessage != null,
                     focusManager = focusManager,
                     errorMessage =
-                        if (screenState.emailTextFieldState.emailError != null) {
-                            stringResource(screenState.emailTextFieldState.emailError.errorMessage)
-                        } else {
-                            null
+                        screenState.emailTextFieldState.errorMessage?.let {
+                            stringResource(it)
                         },
                 ) {
                     onIntent(LoginScreenIntent.OnEmailChanged(it))
@@ -219,14 +217,12 @@ fun MainContent(
 
                 PasswordTextField(
                     label = stringResource(id = R.string.password),
-                    password = screenState.passwordTextFieldState.password,
+                    password = screenState.passwordTextFieldState.value,
                     isVisible = screenState.passwordTextFieldState.isVisible,
-                    isError = screenState.passwordTextFieldState.isError,
+                    isError = screenState.passwordTextFieldState.errorMessage != null,
                     errorMessage =
-                        if (screenState.passwordTextFieldState.passwordError != null) {
-                            stringResource(screenState.passwordTextFieldState.passwordError.errorMessage)
-                        } else {
-                            null
+                        screenState.passwordTextFieldState.errorMessage?.let {
+                            stringResource(it)
                         },
                     focusManager = focusManager,
                     onVisibilityChanged = {

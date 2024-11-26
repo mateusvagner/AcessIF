@@ -1,17 +1,17 @@
-package com.mv.acessif.data.repository
+package com.mv.acessif.data.repository.impl
 
 import com.mv.acessif.data.mapper.AccessTokenMapper
 import com.mv.acessif.data.mapper.AuthTokenMapper
 import com.mv.acessif.data.mapper.ErrorMapper
 import com.mv.acessif.data.mapper.LoginMapper
 import com.mv.acessif.data.mapper.SignUpMapper
+import com.mv.acessif.data.repository.AuthRepository
 import com.mv.acessif.domain.AccessToken
 import com.mv.acessif.domain.AuthToken
 import com.mv.acessif.domain.Login
 import com.mv.acessif.domain.SignUp
-import com.mv.acessif.domain.repository.AuthRepository
-import com.mv.acessif.domain.returnModel.DataError
-import com.mv.acessif.domain.returnModel.Result
+import com.mv.acessif.domain.result.DataError
+import com.mv.acessif.domain.result.Result
 import com.mv.acessif.network.service.AuthService
 import com.mv.acessif.util.DispatcherProvider
 import kotlinx.coroutines.withContext

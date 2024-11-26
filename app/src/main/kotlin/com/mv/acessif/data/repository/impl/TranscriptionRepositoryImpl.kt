@@ -1,11 +1,11 @@
-package com.mv.acessif.data.repository
+package com.mv.acessif.data.repository.impl
 
 import com.mv.acessif.data.mapper.ErrorMapper
 import com.mv.acessif.data.mapper.TranscriptionMapper
+import com.mv.acessif.data.repository.TranscriptionRepository
 import com.mv.acessif.domain.Transcription
-import com.mv.acessif.domain.repository.TranscriptionRepository
-import com.mv.acessif.domain.returnModel.DataError
-import com.mv.acessif.domain.returnModel.Result
+import com.mv.acessif.domain.result.DataError
+import com.mv.acessif.domain.result.Result
 import com.mv.acessif.network.dto.NewNameDto
 import com.mv.acessif.network.service.TranscriptionService
 import com.mv.acessif.util.DispatcherProvider

@@ -1,4 +1,4 @@
-package com.mv.acessif.domain.returnModel
+package com.mv.acessif.domain.result
 
 typealias RootError = Error
 

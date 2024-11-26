@@ -6,16 +6,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.mv.acessif.R
-import com.mv.acessif.domain.repository.SharedPreferencesRepository
-import com.mv.acessif.domain.repository.TranscriptionRepository
-import com.mv.acessif.domain.repository.UserRepository
-import com.mv.acessif.domain.returnModel.DataError
-import com.mv.acessif.domain.returnModel.Result
-import com.mv.acessif.presentation.asErrorUiText
+import com.mv.acessif.data.repository.FileRepository
+import com.mv.acessif.data.repository.SharedPreferencesRepository
+import com.mv.acessif.data.repository.TranscriptionRepository
+import com.mv.acessif.data.repository.UserRepository
+import com.mv.acessif.domain.result.DataError
+import com.mv.acessif.domain.result.Result
 import com.mv.acessif.presentation.asUiText
 import com.mv.acessif.presentation.navigation.Navigator
 import com.mv.acessif.presentation.root.RootGraph
-import com.mv.acessif.util.FileReader
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -33,7 +32,7 @@ class HomeViewModel
         private val sharedPreferencesRepository: SharedPreferencesRepository,
         private val userRepository: UserRepository,
         private val transcriptionRepository: TranscriptionRepository,
-        private val fileReader: FileReader,
+        private val fileRepository: FileRepository,
         navigator: Navigator,
     ) : ViewModel(), Navigator by navigator {
         private val _state =
@@ -90,10 +89,29 @@ class HomeViewModel
             }
         }
 
-        fun handleFileUri(uri: Uri) {
+        fun handleFileUri(uri: Uri?) {
+            if (uri == null) {
+                _state.value =
+                    _state.value.copy(
+                        isLoadingTranscription = false,
+                        errorTranscription = DataError.Local.FILE_NOT_FOUND.asUiText(),
+                    )
+                return
+            }
+
             viewModelScope.launch {
-                val file = fileReader.getFileFromUri(uri)
-                transcribeFile(file)
+                when (val fileResult = fileRepository.getFileFromUri(uri)) {
+                    is Result.Success -> {
+                        transcribeFile(fileResult.data)
+                    }
+                    is Result.Error -> {
+                        _state.value =
+                            _state.value.copy(
+                                isLoadingTranscription = false,
+                                errorTranscription = fileResult.error.asUiText(),
+                            )
+                    }
+                }
             }
         }
 
@@ -116,7 +134,7 @@ class HomeViewModel
                         navigateTo(
                             HomeGraph.TranscriptionDetailRoute(
                                 transcriptionId = transcriptionResult.data,
-                                originScreen = R.string.home_screen,
+                                originScreen = R.string.beginning,
                             ),
                         )
                     }
@@ -125,19 +143,11 @@ class HomeViewModel
                         _state.value =
                             _state.value.copy(
                                 isLoadingTranscription = false,
-                                errorTranscription = transcriptionResult.asErrorUiText(),
+                                errorTranscription = transcriptionResult.error.asUiText(),
                             )
                     }
                 }
             }
-        }
-
-        fun handleFileUriError() {
-            _state.value =
-                _state.value.copy(
-                    isLoadingTranscription = false,
-                    errorTranscription = DataError.Local.FILE_NOT_FOUND.asUiText(),
-                )
         }
 
         fun handleIntent(intent: HomeIntent) {
@@ -168,7 +178,7 @@ class HomeViewModel
                         navigateTo(
                             HomeGraph.TranscriptionDetailRoute(
                                 transcriptionId = intent.transcription.id,
-                                originScreen = R.string.home_screen,
+                                originScreen = R.string.beginning,
                             ),
                         )
                     }

@@ -3,12 +3,11 @@ package com.mv.acessif.presentation.root.demoTranscription
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mv.acessif.domain.repository.TranscriptionRepository
-import com.mv.acessif.domain.returnModel.DataError
-import com.mv.acessif.domain.returnModel.Result
-import com.mv.acessif.presentation.asErrorUiText
+import com.mv.acessif.data.repository.FileRepository
+import com.mv.acessif.data.repository.TranscriptionRepository
+import com.mv.acessif.domain.result.DataError
+import com.mv.acessif.domain.result.Result
 import com.mv.acessif.presentation.asUiText
-import com.mv.acessif.util.FileReader
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -22,7 +21,7 @@ class DemoTranscriptionViewModel
     @Inject
     constructor(
         private val transcriptionRepository: TranscriptionRepository,
-        private val fileReader: FileReader,
+        private val fileRepository: FileRepository,
     ) : ViewModel() {
         private val _state = MutableStateFlow(DemoTranscriptionScreenState())
         val state =
@@ -33,10 +32,30 @@ class DemoTranscriptionViewModel
                     DemoTranscriptionScreenState(),
                 )
 
-        fun handleFileUri(uri: Uri) {
+        fun handleFileUri(uri: Uri?) {
+            if (uri == null) {
+                _state.value =
+                    _state.value.copy(
+                        isLoading = false,
+                        error = DataError.Local.FILE_NOT_FOUND.asUiText(),
+                    )
+                return
+            }
+
             viewModelScope.launch {
-                val file = fileReader.getFileFromUri(uri)
-                transcribeFile(file)
+                when (val fileResult = fileRepository.getFileFromUri(uri)) {
+                    is Result.Success -> {
+                        transcribeFile(fileResult.data)
+                    }
+
+                    is Result.Error -> {
+                        _state.value =
+                            _state.value.copy(
+                                isLoading = false,
+                                error = fileResult.error.asUiText(),
+                            )
+                    }
+                }
             }
         }
 
@@ -63,18 +82,10 @@ class DemoTranscriptionViewModel
                         _state.value =
                             _state.value.copy(
                                 isLoading = false,
-                                error = transcriptionResult.asErrorUiText(),
+                                error = transcriptionResult.error.asUiText(),
                             )
                     }
                 }
             }
-        }
-
-        fun handleFileUriError() {
-            _state.value =
-                _state.value.copy(
-                    isLoading = false,
-                    error = DataError.Local.FILE_NOT_FOUND.asUiText(),
-                )
         }
     }

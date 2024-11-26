@@ -1,6 +1,5 @@
 package com.mv.acessif.presentation.root.demoTranscription
 
-import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -68,13 +67,8 @@ fun NavGraphBuilder.demoTranscriptionRoute(
         val filePickerLauncher =
             rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.OpenDocument(),
-            ) { uri: Uri? ->
-                if (uri != null) {
-                    viewModel.handleFileUri(uri)
-                } else {
-                    viewModel.handleFileUriError()
-                }
-            }
+                onResult = viewModel::handleFileUri,
+            )
 
         DemoTranscriptionScreen(
             modifier = modifier,
@@ -115,7 +109,7 @@ fun DemoTranscriptionScreen(
             modifier =
                 Modifier
                     .background(color = MaterialTheme.colorScheme.primary),
-            origin = stringResource(id = R.string.home_screen),
+            origin = stringResource(id = R.string.beginning),
             supportIcon = {
                 if (state.transcription.isNotBlank()) {
                     Image(
@@ -132,7 +126,10 @@ fun DemoTranscriptionScreen(
         Spacer(modifier = Modifier.height(L))
 
         CustomButton(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = XL),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = XL),
             isLightColor = isSystemInDarkTheme(),
             color = MaterialTheme.colorScheme.primary,
             isEnabled = state.isLoading.not(),
@@ -207,7 +204,10 @@ private fun MainContent(
             name = stringResource(R.string.transcription),
         ) {
             Text(
-                modifier = Modifier.verticalScroll(rememberScrollState()).padding(horizontal = L),
+                modifier =
+                    Modifier
+                        .verticalScroll(rememberScrollState())
+                        .padding(horizontal = L),
                 text = state.transcription.trim(),
                 color = MaterialTheme.colorScheme.onBackground,
                 fontSize = fontSize.sp,

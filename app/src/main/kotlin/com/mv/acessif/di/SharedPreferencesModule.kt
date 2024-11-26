@@ -1,7 +1,7 @@
 package com.mv.acessif.di
 
-import com.mv.acessif.data.local.SharedPreferencesManager
-import com.mv.acessif.data.local.SharedPreferencesManagerImpl
+import com.mv.acessif.local.SharedPreferencesManager
+import com.mv.acessif.local.SharedPreferencesManagerImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
